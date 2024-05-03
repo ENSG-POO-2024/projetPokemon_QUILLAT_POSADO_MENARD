@@ -1,2 +1,0 @@
-p
-rint("test")
