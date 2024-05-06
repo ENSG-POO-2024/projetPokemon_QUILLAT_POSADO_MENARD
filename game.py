@@ -17,8 +17,8 @@ class Game(QWidget):
         self.background_position_x = 0
         self.background_position_y = 0
 
-        self.setGeometry(0, 0, self.ecran_largeur, self.ecran_hauteur)
-        self.dresseur = Dresseur(self.ecran_largeur//2, self.ecran_hauteur//2, [starter])
+        self.setGeometry(self.map_largeur//2, self.map_hauteur//2, self.ecran_largeur, self.ecran_hauteur)
+        self.dresseur = Dresseur(-self.ecran_largeur//2, -self.ecran_hauteur//2, [starter])
         self.pokemons_sauvages = pokemons_sauvages
 
         self.combat = False
@@ -31,19 +31,20 @@ class Game(QWidget):
     def keyPressEvent(self, event):
 
         #### Vérifier si on n'est pas au bord du terrain en écrivant une méthode prenant event.key() en argument
+        print(self.background_position_x, self.background_position_y)
 
-        if event.key() == Qt.Key_Left and self.background_position_x < self.map_largeur - self.dresseur.speed:
-            self.dresseur.move_left()
-            self.background_position_x += self.dresseur.speed
-        elif event.key() == Qt.Key_Right and self.background_position_x >= 0:
-            self.dresseur.move_right()
+        if event.key() == Qt.Key_Right and self.background_position_x > -self.map_largeur + self.ecran_largeur + self.dresseur.speed:
+            #self.dresseur.move_right()
             self.background_position_x -= self.dresseur.speed
-        elif event.key() == Qt.Key_Up and self.background_position_y < self.map_hauteur - self.dresseur.speed:
-            self.dresseur.move_up()
-            self.background_position_y += self.dresseur.speed
-        elif event.key() == Qt.Key_Down and self.background_position_y >= 0:
-            self.dresseur.move_down()
+        elif event.key() == Qt.Key_Left and self.background_position_x < 0:
+            #self.dresseur.move_left()
+            self.background_position_x += self.dresseur.speed
+        elif event.key() == Qt.Key_Down and self.background_position_y > -self.map_hauteur + self.ecran_hauteur + self.dresseur.speed:
+            #self.dresseur.move_down()
             self.background_position_y -= self.dresseur.speed
+        elif event.key() == Qt.Key_Up and self.background_position_y < 0:
+            #self.dresseur.move_up()
+            self.background_position_y += self.dresseur.speed
         
         
         proche = self.dresseur.proche(self.pokemons_sauvages)
@@ -58,8 +59,8 @@ class Game(QWidget):
     def paintEvent(self, event):
         painter = QPainter(self)
         painter.drawPixmap(self.background_position_x, self.background_position_y, self.background_image)
-        painter.drawPixmap(self.dresseur.x, self.dresseur.y, self.image_dresseur)
-        print(self.combat)
+        painter.drawPixmap(-self.dresseur.x, -self.dresseur.y, self.image_dresseur)
+        print(self.dresseur.x)
         if self.combat:
             id_pk_rencontre = self.id_pok_rencontre
             painter.drawPixmap(self.pokemons_sauvages[id_pk_rencontre].x+30, self.pokemons_sauvages[id_pk_rencontre].y, QPixmap(self.img_pokemons_sauvages[id_pk_rencontre]))
