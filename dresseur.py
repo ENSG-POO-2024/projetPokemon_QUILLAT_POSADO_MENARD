@@ -12,16 +12,25 @@ class Dresseur:
 
     SIZE = 10
     DISTANCE_COMBAT = 3
+    VITESSE_DEPART = 10
     
     def __init__(self, x, y, lst_pokemons):
         self.x = x
         self.y = y
+        self.speed = self.VITESSE_DEPART
         self.pokedex = lst_pokemons
 
-    def deplacement(self, dx, dy):
-        # Change les coordonnées du dresseur
-        self.x = self.x + dx
-        self.y = self.y + dy
+    def move_left(self):
+        self.x -= self.speed
+
+    def move_right(self):
+        self.x += self.speed
+
+    def move_up(self):
+        self.y -= self.speed
+
+    def move_down(self):
+        self.y += self.speed
 
     def distance(self, pokemon):
         # Renvoie la distance du dresseur à un pokemon
