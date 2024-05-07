@@ -23,6 +23,9 @@ class Game(QWidget):
         self.setGeometry(800,0, self.ecran_largeur, self.ecran_hauteur) # Place la fenêtre à un endroit sur l'écran du joueur
         self.dresseur = Dresseur(self.ecran_largeur//2, self.ecran_hauteur//2, self.ecran_largeur//2, self.ecran_hauteur//2, [starter])
         self.pokemons_sauvages = pokemons_sauvages
+        self.nb_bloc = (self.ecran_hauteur//2) // self.dresseur.speed
+
+        
 
         self.combat = False
         self.id_pok_rencontre = -1
@@ -41,53 +44,54 @@ class Game(QWidget):
         bord_haut = 0
         bord_bas = self.map_hauteur - self.ecran_hauteur - self.dresseur.speed
 
-        if event.key() == Qt.Key_Right and -self.background_position_x <= bord_droit and np.abs(self.dresseur.X) >= (4 * self.dresseur.speed):
+        if event.key() == Qt.Key_Right and -self.background_position_x <= bord_droit and np.abs(self.dresseur.X) >= (self.nb_bloc * self.dresseur.speed):
             self.background_position_x -= self.dresseur.speed
             self.dresseur.X = self.dresseur.x - self.background_position_x # On met à jour la position du dresseur dans le background
 
-        elif event.key() == Qt.Key_Left and -self.background_position_x > bord_gauche and np.abs(self.dresseur.X) < (self.map_largeur - 3 * self.dresseur.speed):
+        elif event.key() == Qt.Key_Left and -self.background_position_x > bord_gauche and np.abs(self.dresseur.X) <= (self.map_largeur - self.nb_bloc * self.dresseur.speed):
             self.background_position_x += self.dresseur.speed
             self.dresseur.X = self.dresseur.x + self.background_position_x # On met à jour la position du dresseur dans le background
 
 
-        elif event.key() == Qt.Key_Down and -self.background_position_y <= bord_bas and np.abs(self.dresseur.Y) >= (4 * self.dresseur.speed):
+        elif event.key() == Qt.Key_Down and -self.background_position_y <= bord_bas and np.abs(self.dresseur.Y) >= (self.nb_bloc * self.dresseur.speed):
             self.background_position_y -= self.dresseur.speed
             self.dresseur.Y = self.dresseur.y - self.background_position_y # On met à jour la position du dresseur dans le background
 
-        elif event.key() == Qt.Key_Up and -self.background_position_y > bord_haut and np.abs(self.dresseur.Y) < (self.map_hauteur - 3 * self.dresseur.speed) :
+        elif event.key() == Qt.Key_Up and -self.background_position_y > bord_haut and np.abs(self.dresseur.Y) <= (self.map_hauteur - self.nb_bloc * self.dresseur.speed) :
+            print(self.nb_bloc)
             self.background_position_y += self.dresseur.speed
             self.dresseur.Y = self.dresseur.y + self.background_position_y # On met à jour la position du dresseur dans le background
     
         else:
-            if bord_droit <= self.dresseur.X < bord_droit + 8*self.dresseur.speed and event.key() == Qt.Key_Right:
+            if bord_droit <= self.dresseur.X < bord_droit + 2*self.nb_bloc*self.dresseur.speed and event.key() == Qt.Key_Right:
                 self.dresseur.move_right()
                 self.dresseur.X = self.dresseur.x - self.background_position_x
 
-            elif bord_droit <= self.dresseur.X <= bord_droit + 8*self.dresseur.speed and event.key() == Qt.Key_Left:
+            elif bord_droit <= self.dresseur.X <= bord_droit + 2*self.nb_bloc*self.dresseur.speed and event.key() == Qt.Key_Left:
                 self.dresseur.move_left()
                 self.dresseur.X = (-self.background_position_x + self.dresseur.x)
             
-            elif bord_gauche < self.dresseur.X <= bord_gauche + 4*self.dresseur.speed and event.key() == Qt.Key_Left:
+            elif bord_gauche < self.dresseur.X <= bord_gauche + self.nb_bloc*self.dresseur.speed and event.key() == Qt.Key_Left:
                 self.dresseur.move_left()
                 self.dresseur.X = (-self.background_position_x + self.dresseur.x)
             
-            elif bord_gauche <= self.dresseur.X <= bord_gauche + 4*self.dresseur.speed and event.key() == Qt.Key_Right:
+            elif bord_gauche <= self.dresseur.X <= bord_gauche + self.nb_bloc*self.dresseur.speed and event.key() == Qt.Key_Right:
                 self.dresseur.move_right()
                 self.dresseur.X = self.dresseur.x - self.background_position_x
 
-            elif bord_haut < self.dresseur.Y <= bord_haut + 4*self.dresseur.speed and event.key() == Qt.Key_Up:
+            elif bord_haut < self.dresseur.Y <= bord_haut + self.nb_bloc*self.dresseur.speed and event.key() == Qt.Key_Up:
                 self.dresseur.move_up()
                 self.dresseur.Y = (-self.background_position_y + self.dresseur.y)
             
-            elif bord_haut <= self.dresseur.Y <= bord_haut + 4*self.dresseur.speed and event.key() == Qt.Key_Down:
+            elif bord_haut <= self.dresseur.Y <= bord_haut + self.nb_bloc*self.dresseur.speed and event.key() == Qt.Key_Down:
                 self.dresseur.move_down()
                 self.dresseur.Y = self.dresseur.y - self.background_position_y
 
-            elif bord_bas <= self.dresseur.Y < (bord_bas + 8*self.dresseur.speed) and event.key() == Qt.Key_Down:
+            elif bord_bas <= self.dresseur.Y < (bord_bas + 2*self.nb_bloc*self.dresseur.speed) and event.key() == Qt.Key_Down:
                 self.dresseur.move_down()
                 self.dresseur.Y = self.dresseur.y - self.background_position_y
             
-            elif bord_bas <= self.dresseur.Y <= (bord_bas + 8*self.dresseur.speed) and event.key() == Qt.Key_Up:
+            elif bord_bas <= self.dresseur.Y <= (bord_bas + 2*self.nb_bloc*self.dresseur.speed) and event.key() == Qt.Key_Up:
                 self.dresseur.move_up()
                 self.dresseur.Y = (-self.background_position_y + self.dresseur.y)
 
@@ -111,6 +115,11 @@ class Game(QWidget):
         painter.drawPixmap(self.dresseur.x, self.dresseur.y, self.image_dresseur) # On dessine l'image "image_dresseur"
         print(f"dresseur X: {self.dresseur.X} dresseur Y: {self.dresseur.Y}")
         print(f"dresseur x: {self.dresseur.x} dresseur y: {self.dresseur.y}")
+        # Dessiner les buissons
+        painter = QPainter(self)
+        for buisson in self.buissons:
+            painter.drawPixmap(buisson.x - self.background_position_x, buisson.y - self.background_position_y, self.image_buisson)
+
         if self.combat:
             id_pk_rencontre = self.id_pok_rencontre
             painter.drawPixmap(self.pokemons_sauvages[id_pk_rencontre].x+30, self.pokemons_sauvages[id_pk_rencontre].y, QPixmap(self.img_pokemons_sauvages[id_pk_rencontre]))
