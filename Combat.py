@@ -102,8 +102,8 @@ class Combat:
 if __name__ == "__main__":
     # Création d'une équipe de joueur
     joueur = poke.InventaireJoueur()
-    magicarpe = poke.Pokemon.creer_pokemon("Magicarpe", 50, 60, 10, 35, 15, poke.Eau(), False)
-    florizard = poke.Pokemon.creer_pokemon("Fleurizard", 50, 45, 10, 35, 15, poke.Plante(), False)
+    magicarpe = poke.Pokemon.creer_pokemon("Magicarpe", 0, 0, 50, 60, 10, 35, 15, poke.Eau(), False)
+    florizard = poke.Pokemon.creer_pokemon("Fleurizard",0, 0, 50, 45, 10, 35, 15, poke.Plante(), False)
     joueur.inventory(magicarpe)
     joueur.inventory(florizard)
     equipe_joueur = joueur.creer_equipe()

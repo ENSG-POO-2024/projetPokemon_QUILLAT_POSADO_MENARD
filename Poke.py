@@ -12,8 +12,10 @@ from abc import *
 ####### Code #######
 
 class Pokemon:
-    def __init__(self, name, hp, attack, defense, sp_attack, sp_defense, type_, sauvage):
+    def __init__(self, name, x, y, hp, attack, defense, sp_attack, sp_defense, type_, sauvage):
         self.name = name
+        self.x = x
+        self.y = y
         self.hp = hp
         self.attack = attack
         self.defense = defense
@@ -23,8 +25,8 @@ class Pokemon:
         self.sauvage = sauvage 
 
     @classmethod
-    def creer_pokemon(cls, name, hp, attack, defense, sp_attack, sp_defense, type_, sauvage):
-        return cls(name, hp, attack, defense, sp_attack, sp_defense, type_, sauvage)
+    def creer_pokemon(cls, name, x, y, hp, attack, defense, sp_attack, sp_defense, type_, sauvage):
+        return cls(name, x, y, hp, attack, defense, sp_attack, sp_defense, type_, sauvage)
 
     # def attaquer(self, other_pokemon):
     #     print(f"{other_pokemon.name} a {other_pokemon.hp} hp et {other_pokemon.defense} point de defense et {self.name} a {self.attack} point d'attaque.")
@@ -72,7 +74,7 @@ class Pokemon:
 
 class Type(Pokemon):
     def __init__(self, name, fort=[], faible=[], neutre=[]):
-        super().__init__(name, None, None, None, None, None, None, None)
+        super().__init__(name, None, None, None, None, None, None, None, None, None)
         self.fort = fort
         self.faible = faible
         self.neutre = neutre
@@ -190,6 +192,8 @@ class Pokedex:
         data = pd.read_csv(chemin_fichier)
         for index, row in data.iterrows():
             name = row['Name']  
+            x = None
+            y = None
             hp = row['HP']
             attack = row['Attack']
             defense = row['Defense']
@@ -198,13 +202,15 @@ class Pokedex:
             type_name = row['Type 1'] 
             type_obj = globals()[type_name]()
             sauvage = False
-            pokemon = Pokemon(name, hp, attack, defense, sp_attack, sp_defense, type_obj, sauvage)
+            pokemon = Pokemon(name, x, y, hp, attack, defense, sp_attack, sp_defense, type_obj, sauvage)
             # On ajoute les Pokémons au dictionnaire avec leur nom comme clé
             self.pokedex[name] = pokemon
 
     def afficher_pokedex(self):
         for nom_pokemon, pokemon in self.pokedex.items():
             print(f"Nom: {pokemon.name}")
+            print(f"X: {pokemon.x}")
+            print(f"Y: {pokemon.y}")
             print(f"HP: {pokemon.hp}")
             print(f"Attaque: {pokemon.attack}")
             print(f"Défense: {pokemon.defense}")
@@ -233,9 +239,12 @@ class InventaireJoueur(Pokedex):
                 sequence += 1
                 new_name = f"{pokemon.name} {sequence}"
             # On crée une copie du Pokémon avec le nom modifié pour éviter d'écraser la précédente clé
-            pokemon_copie = Pokemon(new_name, pokemon.hp, pokemon.attack, pokemon.defense, pokemon.sp_attack, pokemon.sp_defense, pokemon.type, pokemon.sauvage)
+            pokemon_copie = Pokemon(new_name, pokemon.x, pokemon.y, pokemon.hp, pokemon.attack, pokemon.defense, pokemon.sp_attack, pokemon.sp_defense, pokemon.type, pokemon.sauvage)
             # On ajoute le Pokémon avec le nom modifié à l'inventaire du joueur
             self.pokedex[new_name] = pokemon_copie
+        
+        pokemon.x = None # Le pokemon est maintenant dans notre inventaire
+        pokemon.y = None # il n'a plus de coordonnées
 
     # def afficher_equipe(self, equipe):
     #     print("Équipe du joueur :\n")
@@ -275,13 +284,13 @@ if __name__ == '__main__':
     # Exemple d'utilisation
     pokedex = Pokedex()
     inventaire_joueur = InventaireJoueur()
-    magicarpe = Pokemon.creer_pokemon("Magicarpe", 50, 20, 10, 35, 15, Eau(), False)
-    #pokedex.charger_pokedex('pokemon_first_gen.csv')
-    #pokedex.afficher_pokedex()
+    magicarpe = Pokemon.creer_pokemon("Magicarpe", 0, 0, 50, 20, 10, 35, 15, Eau(), False)
+    pokedex.charger_pokedex('pokemon_first_gen.csv')
+    pokedex.afficher_pokedex()
     inventaire_joueur.inventory(magicarpe)
-    #inventaire_joueur.inventory(magicarpe)
-    inventaire_joueur.afficher_pokedex()
-    inventaire_joueur.creer_equipe()
+    # inventaire_joueur.inventory(magicarpe)
+    # inventaire_joueur.afficher_pokedex()
+    # inventaire_joueur.creer_equipe()
 
 
 

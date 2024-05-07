@@ -1,12 +1,6 @@
 #from mael import Pokemon
 import numpy as np
 
-########## A SUPPRIMER #########
-class Pokemon:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-########## A SUPPRIMER #########
 
 class Dresseur:
 
