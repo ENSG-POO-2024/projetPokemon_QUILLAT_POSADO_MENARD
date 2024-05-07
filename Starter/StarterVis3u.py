@@ -73,28 +73,21 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def enter_image1(self, event):
-        
         self.Bulbizarre.setPixmap(QPixmap("Starter/Bulbizarre_clic.png"))
         
-
     def enter_image2(self, event):
-
         self.Salameche.setPixmap(QPixmap("Starter/Salamèche_clic.png"))
 
     def enter_image3(self, event):
-
         self.Carapuce.setPixmap(QPixmap("Starter/Carapuce_clic.png"))
 
     def leave_image1(self, event):
         self.Bulbizarre.setPixmap(QPixmap("Starter/Bulbizarre_face.png"))
-        
 
     def leave_image2(self, event):
-
         self.Salameche.setPixmap(QPixmap("Starter/Salamèche_face.png"))
     
     def leave_image3(self, event):
-        
         self.Carapuce.setPixmap(QPixmap("Starter/Carapuce_face.png"))
 
     def retranslateUi(self, MainWindow):
