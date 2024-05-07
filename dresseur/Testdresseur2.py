@@ -18,11 +18,11 @@ class CharacterView(QGraphicsView):
         self.setScene(self.scene)
         
         self.character_images = {
-            "up": ["haut_move2.png", "haut_move.png"],
-            "down": ["bas_move2.png", "bas_move.png"],
-            "left": ["gauche_move.png", "gauche_statique.png"],
-            "right": ["droite_statique.png", "droite_move.png"],
-            "static": ["bas_statique.png"]
+            "up": ["dresseur/haut_move2.png", "dresseur/haut_move.png"],
+            "down": ["dresseur/bas_move2.png", "dresseur/bas_move.png"],
+            "left": ["dresseur/gauche_move.png", "dresseur/gauche_statique.png"],
+            "right": ["dresseur/droite_statique.png", "dresseur/droite_move.png"],
+            "static": ["dresseur/bas_statique.png"]
         }
         
         self.direction = None
