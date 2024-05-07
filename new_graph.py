@@ -2,10 +2,11 @@
 
 import sys
 import numpy as np
+import os
 from PyQt5.QtWidgets import QApplication, QWidget
 from PyQt5.QtGui import QPainter, QPixmap
 from PyQt5.QtCore import Qt
-from dresseur import Dresseur, Pokemon
+from dresseur import Dresseur
 import Poke as poke
 
 
@@ -26,19 +27,22 @@ class Game(QWidget):
         self.pokemons_sauvages = pokemons_sauvages
         self.nb_bloc = (self.ecran_hauteur//2) // self.dresseur.speed
 
-        
-        self.pika = poke.Pokemon("Pikachu", 550, 550, 0,0,0,0,0, poke.Electrik(), False)
-        self.img_pika = QPixmap(self.pika.name + "_face.png")
 
         self.combat = False
         self.id_pok_rencontre = -1
+
+        # Récupérer le chemin du répertoire du script Python en cours d'exécution
+        script_dir = os.path.dirname(__file__)  
+        pika = poke.Pokemon("Pikachu", 550, 550, 0,0,0,0,0, poke.Electrik(), False)
+        self.pika_x = pika.x
+        self.pika_y = pika.y
+        image_path = os.path.join(script_dir, "Pokémons/"+pika.name, pika.name + "_face.png")
+        self.img_pika = QPixmap(image_path)
 
         self.image_dresseur = QPixmap("utilisateur.png") # On charge l'image du dresseur
         self.img_pokemons_sauvages = img_pokemons_sauvages
 
         self.poke = QPixmap("alakasam.png")
-        self.poke_x = 550
-        self.poke_y = 550
 
 
     def keyPressEvent(self, event):
@@ -53,23 +57,23 @@ class Game(QWidget):
 
         if event.key() == Qt.Key_Right and -self.background_position_x <= bord_droit and np.abs(self.dresseur.X) >= (self.nb_bloc * self.dresseur.speed):
             self.background_position_x -= self.dresseur.speed
-            self.poke_x -= self.dresseur.speed
+            self.pika_x -= self.dresseur.speed
             self.dresseur.X = self.dresseur.x - self.background_position_x # On met à jour la position du dresseur dans le background
 
         elif event.key() == Qt.Key_Left and -self.background_position_x > bord_gauche and np.abs(self.dresseur.X) <= (self.map_largeur - self.nb_bloc * self.dresseur.speed):
             self.background_position_x += self.dresseur.speed
-            self.poke_x += self.dresseur.speed
+            self.pika_x += self.dresseur.speed
             self.dresseur.X = self.dresseur.x + self.background_position_x # On met à jour la position du dresseur dans le background
 
 
         elif event.key() == Qt.Key_Down and -self.background_position_y <= bord_bas and np.abs(self.dresseur.Y) >= (self.nb_bloc * self.dresseur.speed):
             self.background_position_y -= self.dresseur.speed
-            self.poke_y -= self.dresseur.speed
+            self.pika_y -= self.dresseur.speed
             self.dresseur.Y = self.dresseur.y - self.background_position_y # On met à jour la position du dresseur dans le background
 
         elif event.key() == Qt.Key_Up and -self.background_position_y > bord_haut and np.abs(self.dresseur.Y) <= (self.map_hauteur - self.nb_bloc * self.dresseur.speed) :
             self.background_position_y += self.dresseur.speed
-            self.poke_y += self.dresseur.speed
+            self.pika_y += self.dresseur.speed
             self.dresseur.Y = self.dresseur.y + self.background_position_y # On met à jour la position du dresseur dans le background
     
         # else:
@@ -118,17 +122,17 @@ class Game(QWidget):
         painter.drawPixmap(self.dresseur.x, self.dresseur.y, self.image_dresseur) # On dessine l'image "image_dresseur"
         #print(f"dresseur X: {self.dresseur.X} dresseur Y: {self.dresseur.Y}")
         #print(f"dresseur x: {self.dresseur.x} dresseur y: {self.dresseur.y}")
-        painter.drawPixmap(self.poke_x, self.poke_y, self.poke)
+        painter.drawPixmap(self.pika_x, self.pika_y, self.img_pika)
         
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     # Initialisation des pokemons
-    poke2 = Pokemon(70, 50)
-    poke3 = Pokemon(90, 50)
+    poke2 = poke.Pokemon(0,0,0,0,0,0,0,0,0,0)
+    poke3 = poke.Pokemon(0,0,0,0,0,0,0,0,0,0)
     pokemons_sauvages = [poke2, poke3]
     img_pk_sauvages = ["data/rattata_v1.png","data/dracaufeu_v1.jpeg"]
-    starter = Pokemon(-1,-1)
+    starter = poke.Pokemon(0,0,0,0,0,0,0,0,0,0)
 
     game = Game(starter, pokemons_sauvages, img_pk_sauvages, "fond2.png")
     game.show()
