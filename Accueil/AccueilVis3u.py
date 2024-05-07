@@ -20,7 +20,7 @@ class VideoPlayer(QMainWindow):
         self.setWindowTitle("Video Player")
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update_frame)
-        self.video_path = "Fonds/Pikachu Pixel Animated Loop.mp4"  # Replace with your video file path
+        self.video_path = "Accueil/Pikachu Pixel Animated Loop.mp4"  # Replace with your video file path
         self.cap = cv2.VideoCapture(self.video_path)
         self.start_video()
 
