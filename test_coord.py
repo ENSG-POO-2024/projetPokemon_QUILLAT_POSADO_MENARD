@@ -1,4 +1,3 @@
-
 import os
 import pandas as pd
 import numpy as np
@@ -8,13 +7,13 @@ import random
 def generer_coordonnees_uniques(nombre_lignes):
     coordonnees_uniques = set()
     while len(coordonnees_uniques) < nombre_lignes:
-        x = random.randint(4, 41) * 110
-        y = random.randint(4, 41) * 110
+        x = random.randint(4, 42) * 110
+        y = random.randint(4, 42) * 110
         coordonnees_uniques.add((int(x), int(y)))
     return list(coordonnees_uniques)
 
 
-def poke_coord(fichier_entree, fichier_sortie, nombre_lignes):
+def ecrire_lignes_aleatoires(fichier_entree, fichier_sortie, nombre_lignes):
     # Charger le fichier CSV dans un DataFrame
     # On prend le chemin du répertoire parent du script Python
     chemin_parent = os.path.dirname(os.path.abspath(__file__))
@@ -44,3 +43,5 @@ def poke_coord(fichier_entree, fichier_sortie, nombre_lignes):
     lignes_aleatoires.to_csv(chemin_fichier, index=False)
 
 
+# Utilisation : récupérer 5 lignes aléatoires du fichier 'donnees.csv' et les écrire dans 'donnees_aleatoires.csv'
+ecrire_lignes_aleatoires('pokemons_a_capturer.csv', 'pokemons_a_capturer2.csv', 50)

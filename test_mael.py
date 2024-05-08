@@ -194,7 +194,7 @@ class Game(QWidget):
         script_dir = os.path.dirname(__file__)
         for cle_pokemons, poke_sauvage in self.sauvages.pokedex.items(): # On affiche tous les pokémons sauvages
             base_name = poke_sauvage.name.split()[0] # Pour gérer le cas avec plusieurs fois le même pokémon
-            image_path = os.path.join(script_dir, "Pokémons/"+base_name, base_name + "_face.png")
+            image_path = os.path.join(script_dir, "Pokémons/" + base_name, base_name + "_face.png")
             pixmap = QPixmap(image_path)
             painter.drawPixmap(poke_sauvage.x, poke_sauvage.y, pixmap) 
              
@@ -254,13 +254,12 @@ class AccueilWindow(QWidget):
 if __name__ == "__main__":
     app = QApplication(sys.argv) 
 
-    #coo.coord_poke()
+    coo.poke_coord('pokemon_first_gen.csv', 'pokemons_a_capturer.csv', 100)
     poke_sauvages = "pokemons_a_capturer.csv"
     magicarpe = poke.Pokemon.creer_pokemon("Magicarpe", 550, 550, 50, 20, 10, 35, 15, poke.Eau(), False)
     sacha = poke.InventaireJoueur()
     sacha.inventory(magicarpe)
 
-    ## GERER LE CAS DE 2 MÊME POKEMONS
     
     # game = Game(sacha, poke_sauvages)
     # game.show()

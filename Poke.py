@@ -12,7 +12,7 @@ from abc import *
 ####### Code #######
 
 class Pokemon:
-    def __init__(self, name, x, y, hp, attack, defense, sp_attack, sp_defense, type_, sauvage_):
+    def __init__(self, name, x, y, hp, attack, defense, sp_attack, sp_defense, type_, sauvage):
         self.name = name
         self.x = x
         self.y = y
@@ -22,7 +22,7 @@ class Pokemon:
         self.sp_attack = sp_attack
         self.sp_defense = sp_defense
         self.type = type_ #pour eviter le type de python on met type_
-        self.sauvage = sauvage_ 
+        self.sauvage = sauvage 
 
     @classmethod
     def creer_pokemon(cls, name, x, y, hp, attack, defense, sp_attack, sp_defense, type_, sauvage):
@@ -190,15 +190,14 @@ class Pokedex:
         chemin_fichier = os.path.join(chemin_parent, 'data', fichier)
         # On charge le fichier CSV en tant que DataFrame avec Pandas
         data = pd.read_csv(chemin_fichier)
-        noms_existants = set()
+        noms_pokemon = {}
         for index, row in data.iterrows():
             name = row['Name']  
-            original_name = name
-            count = 2
-            while name in noms_existants:  # Tant que le nom existe déjà
-                name = f"{original_name} {count}"  # Ajouter un suffixe numérique au nom
-                count += 1
-            noms_existants.add(name)  # Ajouter le nom à l'ensemble
+            if name not in noms_pokemon:
+                noms_pokemon[name] = 1
+            else:
+                noms_pokemon[name] += 1
+                name += ' ' + str(noms_pokemon[name])
             x = row['X']
             y = row['Y']
             hp = row['HP']
@@ -267,34 +266,6 @@ class InventaireJoueur(Pokedex):
     #         print()  # Ajouter une ligne vide entre chaque Pokémon
 
 
-    # def poke_sauvage(self, fichier):
-    #     pokemons_sauvages = InventaireJoueur()
-    #     # On prend le chemin du répertoire parent du script Python
-    #     chemin_parent = os.path.dirname(os.path.abspath(__file__))
-    #     # On construit le chemin complet du fichier CSV en joignant le chemin du répertoire parent avec le répertoire "data" et le nom du fichier
-    #     chemin_fichier = os.path.join(chemin_parent, 'data', fichier)
-    #     # On charge le fichier CSV en tant que DataFrame avec Pandas
-    #     data = pd.read_csv(chemin_fichier)
-    #     for index, row in data.iterrows():
-    #         name = row['Name']  
-    #         x = row['X']
-    #         y = row['Y']
-    #         hp = row['HP']
-    #         attack = row['Attack']
-    #         defense = row['Defense']
-    #         sp_attack = row['Sp. Atk']
-    #         sp_defense = row['Sp. Def']
-    #         type_name = row['Type 1'] 
-    #         type_obj = globals()[type_name]()
-    #         sauvage = False
-    #         pokemon = Pokemon(name, x, y, hp, attack, defense, sp_attack, sp_defense, type_obj, sauvage)
-    #         # On ajoute les Pokémons au dictionnaire avec leur nom comme clé
-    #         pokemons_sauvages.inventory(pokemon)
-            
-    #     return pokemons_sauvages
-
-
-
     def creer_equipe(self):
         equipe = InventaireJoueur()
         pokemons_disponibles = list(self.pokedex.keys()) # Liste des noms de tous les pokémons disponibles
@@ -346,5 +317,3 @@ if __name__ == '__main__':
     # #     print(f"Le Pokémon '{nom_pokemon_test}' est présent dans le Pokédex.")
     # # else:
     # #     print(f"Le Pokémon '{nom_pokemon_test}' n'est pas présent dans le Pokédex.")
-
-
