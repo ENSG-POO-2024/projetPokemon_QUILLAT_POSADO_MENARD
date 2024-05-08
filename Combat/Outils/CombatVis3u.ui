@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1000</width>
+    <height>750</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QProgressBar" name="progressBarAllie">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>400</y>
+      <width>371</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="value">
+     <number>100</number>
+    </property>
+    <property name="format">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="Fond">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>1001</width>
+      <height>751</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>Combat/BackgroundCombat.png</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QProgressBar" name="progressBarEnemy">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>190</y>
+      <width>371</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="value">
+     <number>100</number>
+    </property>
+    <property name="format">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="AttaqueNormale">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>560</y>
+      <width>171</width>
+      <height>161</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="AttaqueSpeciale">
+    <property name="geometry">
+     <rect>
+      <x>570</x>
+      <y>560</y>
+      <width>171</width>
+      <height>161</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Pokedex">
+    <property name="geometry">
+     <rect>
+      <x>780</x>
+      <y>560</y>
+      <width>171</width>
+      <height>161</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Fuite">
+    <property name="geometry">
+     <rect>
+      <x>840</x>
+      <y>10</y>
+      <width>141</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <zorder>Fond</zorder>
+   <zorder>progressBarAllie</zorder>
+   <zorder>progressBarEnemy</zorder>
+   <zorder>AttaqueNormale</zorder>
+   <zorder>AttaqueSpeciale</zorder>
+   <zorder>Pokedex</zorder>
+   <zorder>Fuite</zorder>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
