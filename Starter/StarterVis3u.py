@@ -9,18 +9,28 @@
 
 
 import sys
+import os
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QPushButton, QMainWindow, QApplication
 from PyQt5.QtGui import QPixmap
 
-class Ui_MainWindow(object):
+current_dir = os.path.dirname(__file__)
+parent_dir = os.path.abspath(os.path.join(current_dir, ".."))
+sys.path.append(parent_dir)
+
+import Poke as poke
+import test_graph as t #MODIFIER QUAND FICHIER DEFINITIF
+
+class Starter(object):
+
     def setupUi(self, MainWindow):
-        MainWindow.setObjectName("MainWindow")
+        #MainWindow.setObjectName("Choix starter")
+        MainWindow.setWindowTitle("Choix du starter")
         MainWindow.resize(1000, 750)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.Fond = QtWidgets.QLabel(self.centralwidget)
-        self.Fond.setGeometry(QtCore.QRect(0, 0, 1001, 751))
+        self.Fond.setGeometry(QtCore.QRect(0, 0, 1000, 750))
         self.Fond.setText("")
         self.Fond.setPixmap(QtGui.QPixmap("Starter/ChoIx du starter.png"))
         self.Fond.setScaledContents(True)
@@ -69,8 +79,7 @@ class Ui_MainWindow(object):
         self.Carapuce.enterEvent = self.enter_image3
         self.Carapuce.leaveEvent = self.leave_image3
 
-        self.retranslateUi(MainWindow)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        #QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def enter_image1(self, event):
         self.Bulbizarre.setPixmap(QPixmap("Starter/Bulbizarre_clic.png"))
@@ -90,20 +99,65 @@ class Ui_MainWindow(object):
     def leave_image3(self, event):
         self.Carapuce.setPixmap(QPixmap("Starter/Carapuce_face.png"))
 
-    def retranslateUi(self, MainWindow):
-        _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
 
 
-class XXXXWindow (QMainWindow, Ui_MainWindow):
+class StarterWindow (QMainWindow, Starter):
     def __init__(self, parent=None):
-        super(XXXXWindow, self).__init__(parent)
+        super(StarterWindow, self).__init__(parent)
         self.setupUi(self)
-# ...
+
+    def mousePressEvent(self, event):
+        """
+        Fonction qui permet de gérer l'évenement: clic gauche
+        """
+        # On récupère les coordonnées du clic de la souris
+        mouse_x = event.x()
+        mouse_y = event.y()
+
+        if self.bulbizarre(mouse_x, mouse_y): 
+            self.poke = poke.Pokemon('Bulbizarre',None, None,45,49,49,65,65,poke.Plante(), False) 
+            self.map_window = t.Map(self.poke, "pokemons_a_capturer.csv")
+            self.map_window.show()
+            self.close()     
+
+        if self.salameche(mouse_x, mouse_y): 
+            self.poke = poke.Pokemon('Salamèche',None, None,39,52,43,60,50,poke.Feu(), False) 
+            self.map_window = t.Map(self.poke, "pokemons_a_capturer.csv")
+            self.map_window.show()
+            self.close()  
+
+        if self.carapuce(mouse_x, mouse_y): 
+            self.poke = poke.Pokemon('Carapuce',None, None,44,48,65,50,64,poke.Eau(), False) 
+            self.map_window = t.Map(self.poke, "pokemons_a_capturer.csv")
+            self.map_window.show()
+            self.close()  
+            
+
+    def bulbizarre(self, x, y):
+        """
+        Fonction qui teste si le clic est sur le bulbizarre
+        """
+        if 80 <= x <= 311 and 310 <= y <= 551:
+            return True  
+        
+    def carapuce(self, x, y):
+        """
+        Fonction qui teste si le clic est sur le carapuce
+        """
+        if 680 <= x <= 911 and 300 <= y <= 541:
+            return True 
+        
+    def salameche(self, x, y):
+        """
+        Fonction qui teste si le clic est sur le salamèche
+        """
+        if 390 <= x <= 621 and 290 <= y <= 531:
+            return True 
+     
 if __name__ == "__main__":
     def run_app():
         app = QApplication(sys.argv)
-        mainWin = XXXXWindow()
+        mainWin = StarterWindow()
         mainWin.show()
         app.exec_()
     run_app()

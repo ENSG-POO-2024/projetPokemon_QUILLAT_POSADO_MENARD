@@ -15,118 +15,64 @@ from PyQt5.QtCore import Qt, QTimer
 import Poke as poke
 from dresseur import Dresseur
 import coord_pokemon as coo
+import Starter.StarterVis3u as s
 
 ### Import du chemin d'accès au fichier python actuel ###
 script_dir = os.path.dirname(__file__)
 
 
-class PokemonWindow(QWidget): # Fenêtre de rencontre des pokémons sauvages
 
-    def __init__(self, pokemon):
+class AccueilWindow(QWidget): # On arrive sur la page d'acceuil et on peut cliquer sur Jouer ou Règles
+    def __init__(self, video_path):
         super().__init__()
 
-        self.pokemon = pokemon # Pokémon sauvage rencontré
-
-        nom_poke = pokemon.name.split()[0]
-
-        self.setWindowTitle("Rencontre avec un Pokémon") # On crée la fenêtre
-        self.setGeometry(300, 100, 1000, 750) # On la place
-
+        self.setWindowTitle("Accueil")
+        self.setGeometry(300, 100, 1000, 700)
 
         self.label = QLabel(self)
-        image_path = os.path.join(script_dir, "Image", "test.png")
-        pixmap = QPixmap(image_path) # On charge l'image de fond
-        self.label.setPixmap(pixmap)
-        self.label.setAlignment(Qt.AlignCenter)
-        # Ajoutez du contenu à votre fenêtre, par exemple un QLabel avec le nom du Pokémon
-        self.text_label = QLabel("Vous avez rencontré " + nom_poke + " !", self)
-        self.text_label.setAlignment(Qt.AlignCenter)
-        self.text_label.setStyleSheet("color: red;")
+        self.label.setGeometry(0, 0, 1000, 700)
+
+        self.video_path = video_path
+        self.cap = cv2.VideoCapture(video_path)
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.update_frame)
+        self.timer.start(30)  # Mettez à jour la vidéo toutes les 30 millisecondes
+
+        self.mouse_clicked = False  # Pour suivre si le clic de souris a eu lieu
+        self.label.mousePressEvent = self.mousePressEvent  # Redéfinition de la méthode mousePressEvent
+
+
+    def update_frame(self):
+        ret, frame = self.cap.read()
+        if ret:
+            frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            h, w, ch = frame_rgb.shape
+            bytes_per_line = ch * w
+            q_image = QImage(frame_rgb.data, w, h, bytes_per_line, QImage.Format_RGB888)
+            pixmap = QPixmap.fromImage(q_image)
+            self.label.setPixmap(pixmap)
+
+    def open_game_window(self):
+        self.timer.stop()  # Arrêter la mise à jour de la vidéo avant d'ouvrir la fenêtre de jeu
+        self.cap.release()  # Libérer la ressource vidéo
+        self.game_window = Map(sacha, poke_sauvages)
+        self.game_window.show()
+        self.close()
 
     def mousePressEvent(self, event):
-        """
-        Fonction qui permet de gérer l'évenement: clic gauche
-        """
-        # On récupère les coordonnées du clic de la souris
-        mouse_x = event.x()
-        mouse_y = event.y()
-
-        if self.bouton_sortie(mouse_x, mouse_y):  # On vérifie si il est dans une certaine zone
-            self.close()                                    # Si oui on ferme la fenêtre
-        if self.bouton_combat(mouse_x, mouse_y): # Si il est dans une autre zone défini
-            self.close()                                    # On ferme la fenêtre
-            self.open_combat_window()                       # Puis on ouvre la fenêtre Combat
-            
-
-    def bouton_sortie(self, x, y):
-        """
-        Fonction qui teste si le clic est dans la zone pour fermer la fenêtre
-        """
-        zone_sortie_x = 90
-        zone_sortie_y = 260
-        if zone_sortie_x <= x <= (zone_sortie_x + 275) and zone_sortie_y <= y <= (zone_sortie_y + 200):
-            return True 
-        
-    def bouton_combat(self, x, y):
-        """
-        Fonction qui teste si le clic est dans la zone pour lancer le combat
-        """
-        zone_sortie_x = 636
-        zone_sortie_y = 260
-        if zone_sortie_x <= x <= (zone_sortie_x + 275) and zone_sortie_y <= y <= (zone_sortie_y + 200):
-            return True 
-        
-    def open_combat_window(self):
-        """
-        Fonction qui ouvre la fenêtre de combat
-        """
-        self.combat_window = CombatWindow(self.pokemon) # On crée cette fenêtre
-        self.combat_window.show()                       # On l'affiche
+        # Si le clic de souris a eu lieu dans une certaine zone de la fenêtre on arrive sur la map
+        if event.x() >= 0 and event.x() <= 200 and event.y() >= 0 and event.y() <= 200:
+            self.timer.stop()  # On arrête la mise à jour de la vidéo avant d'ouvrir la fenêtre de jeu
+            self.cap.release()  
+            self.game_window = Map(sacha, poke_sauvages)
+            self.game_window.show()
+            self.close()
 
 
-class CombatWindow(QWidget): # Fenêtre de combat
+class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
 
-    def __init__(self, pokemon):
-        super().__init__()
-
-        nom_poke = pokemon.name.split()[0]
-
-        self.setWindowTitle("Combat contre " + nom_poke) 
-        self.setGeometry(300, 100, 1000, 750) # On place notre fenêtre
-
-
-        self.label = QLabel(self)
-        image_path = os.path.join(script_dir, "Image", "combat.png")
-        pixmap = QPixmap(image_path) # On charge l'image de fond pour le combat
-        self.label.setPixmap(pixmap)
-        self.label.setAlignment(Qt.AlignCenter)
-
-    def mousePressEvent(self, event):
-        """
-        Fonction qui permet de gérer l'évenement: clic gauche
-        """
-        # On récupère les coordonnées du clic de la souris
-        mouse_x = event.x()
-        mouse_y = event.y()
-
-        if self.bouton_sortie(mouse_x, mouse_y): # On vérifie si le joueur quitte le combat
-            self.close()                         # Si oui: on ferme la fenêtre
-            
-
-    def bouton_sortie(self, x, y):
-        """
-        Fonction qui teste si le clic est dans la zone pour quitter le combat et donc fermer la fenêtre
-        """
-        zone_sortie_x = 778
-        zone_sortie_y = 23
-        if zone_sortie_x <= x <= (zone_sortie_x + 200) and zone_sortie_y <= y <= (zone_sortie_y + 150):
-            return True 
-        
-        
-
-class Game(QWidget):
-    def __init__(self, sacha, sauvages_csv):
-        super().__init__()
+    def __init__(self, sacha, sauvages_csv): # Sacha représente le pokedex du joueur
+        super().__init__()                   # sauvages_csv est le fichier csv avec les pokemons sauvages présents au début du jeu
 
         self.ecran_largeur = 880 
         self.ecran_hauteur = 880 
@@ -208,67 +154,120 @@ class Game(QWidget):
         self.pokemon_window = PokemonWindow(pokemon_name)
         self.pokemon_window.show()
 
+class PokemonWindow(QWidget): # Si on rencontre un Pokemon sauvage on arrive sur la fenêtre Rencontre, on peut fuir ou combattre
 
-class AccueilWindow(QWidget):
-    def __init__(self, video_path):
+    def __init__(self, pokemon):
         super().__init__()
 
-        self.setWindowTitle("Accueil")
-        self.setGeometry(300, 100, 1000, 700)
+        self.pokemon = pokemon # Pokémon sauvage rencontré
+
+        nom_poke = pokemon.name.split()[0]
+
+        self.setWindowTitle("Rencontre avec un Pokémon") # On crée la fenêtre
+        self.setGeometry(300, 100, 1000, 750) # On la place
+
 
         self.label = QLabel(self)
-        self.label.setGeometry(0, 0, 1000, 700)
-
-        self.video_path = video_path
-        self.cap = cv2.VideoCapture(video_path)
-        self.timer = QTimer(self)
-        self.timer.timeout.connect(self.update_frame)
-        self.timer.start(30)  # Mettez à jour la vidéo toutes les 30 millisecondes
-
-        self.mouse_clicked = False  # Pour suivre si le clic de souris a eu lieu
-        self.label.mousePressEvent = self.mousePressEvent  # Redéfinition de la méthode mousePressEvent
-
-
-    def update_frame(self):
-        ret, frame = self.cap.read()
-        if ret:
-            frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            h, w, ch = frame_rgb.shape
-            bytes_per_line = ch * w
-            q_image = QImage(frame_rgb.data, w, h, bytes_per_line, QImage.Format_RGB888)
-            pixmap = QPixmap.fromImage(q_image)
-            self.label.setPixmap(pixmap)
-
-    def open_game_window(self):
-        self.timer.stop()  # Arrêter la mise à jour de la vidéo avant d'ouvrir la fenêtre de jeu
-        self.cap.release()  # Libérer la ressource vidéo
-        self.game_window = Game(sacha, poke_sauvages)
-        self.game_window.show()
-        self.close()
+        image_path = os.path.join(script_dir, "Image", "test.png")
+        pixmap = QPixmap(image_path) # On charge l'image de fond
+        self.label.setPixmap(pixmap)
+        self.label.setAlignment(Qt.AlignCenter)
+        # Ajoutez du contenu à votre fenêtre, par exemple un QLabel avec le nom du Pokémon
+        self.text_label = QLabel("Vous avez rencontré " + nom_poke + " !", self)
+        self.text_label.setAlignment(Qt.AlignCenter)
+        self.text_label.setStyleSheet("color: red;")
 
     def mousePressEvent(self, event):
-        # Si le clic de souris a eu lieu dans une certaine zone de la fenêtre, commencez le jeu
-        if event.x() >= 0 and event.x() <= 200 and event.y() >= 0 and event.y() <= 200:
-            self.timer.stop()  # Arrêter la mise à jour de la vidéo avant d'ouvrir la fenêtre de jeu
-            self.cap.release()  # Libérer la ressource vidéo
-            self.game_window = Game(sacha, poke_sauvages)
-            self.game_window.show()
-            self.close()
+        """
+        Fonction qui permet de gérer l'évenement: clic gauche
+        """
+        # On récupère les coordonnées du clic de la souris
+        mouse_x = event.x()
+        mouse_y = event.y()
+
+        if self.bouton_sortie(mouse_x, mouse_y):  # On vérifie si il est dans une certaine zone
+            self.close()                                    # Si oui on ferme la fenêtre
+        if self.bouton_combat(mouse_x, mouse_y): # Si il est dans une autre zone défini
+            self.close()                                    # On ferme la fenêtre
+            self.open_combat_window()                       # Puis on ouvre la fenêtre Combat
+            
+
+    def bouton_sortie(self, x, y):
+        """
+        Fonction qui teste si le clic est dans la zone pour fermer la fenêtre
+        """
+        zone_sortie_x = 90
+        zone_sortie_y = 260
+        if zone_sortie_x <= x <= (zone_sortie_x + 275) and zone_sortie_y <= y <= (zone_sortie_y + 200):
+            return True 
+        
+    def bouton_combat(self, x, y):
+        """
+        Fonction qui teste si le clic est dans la zone pour lancer le combat
+        """
+        zone_sortie_x = 636
+        zone_sortie_y = 260
+        if zone_sortie_x <= x <= (zone_sortie_x + 275) and zone_sortie_y <= y <= (zone_sortie_y + 200):
+            return True 
+        
+    def open_combat_window(self):
+        """
+        Fonction qui ouvre la fenêtre de combat
+        """
+        self.combat_window = CombatWindow(self.pokemon) # On crée cette fenêtre
+        self.combat_window.show()                       # On l'affiche
 
 
+class CombatWindow(QWidget): # Si on a choisit le comba on arrive sur la fenêtre Combat
+
+    def __init__(self, pokemon):
+        super().__init__()
+
+        nom_poke = pokemon.name.split()[0]
+
+        self.setWindowTitle("Combat contre " + nom_poke) 
+        self.setGeometry(300, 100, 1000, 750) # On place notre fenêtre
+
+
+        self.label = QLabel(self)
+        image_path = os.path.join(script_dir, "Image", "combat.png")
+        pixmap = QPixmap(image_path) # On charge l'image de fond pour le combat
+        self.label.setPixmap(pixmap)
+        self.label.setAlignment(Qt.AlignCenter)
+
+    def mousePressEvent(self, event):
+        """
+        Fonction qui permet de gérer l'évenement: clic gauche
+        """
+        # On récupère les coordonnées du clic de la souris
+        mouse_x = event.x()
+        mouse_y = event.y()
+
+        if self.bouton_sortie(mouse_x, mouse_y): # On vérifie si le joueur quitte le combat
+            self.close()                         # Si oui: on ferme la fenêtre
+            
+
+    def bouton_sortie(self, x, y):
+        """
+        Fonction qui teste si le clic est dans la zone pour quitter le combat et donc fermer la fenêtre
+        """
+        zone_sortie_x = 778
+        zone_sortie_y = 23
+        if zone_sortie_x <= x <= (zone_sortie_x + 200) and zone_sortie_y <= y <= (zone_sortie_y + 150):
+            return True 
+        
+
+        
 if __name__ == "__main__":
     app = QApplication(sys.argv) 
 
-    coo.poke_coord('pokemon_first_gen.csv', 'pokemons_a_capturer.csv', 100)
-    poke_sauvages = "pokemons_a_capturer.csv"
+    coo.poke_coord('pokemon_first_gen.csv', 'pokemons_a_capturer.csv', 100) # Les pokémons apparaissent aléatoirement 
+    poke_sauvages = "pokemons_a_capturer.csv"                               # à chaque début de partie
     magicarpe = poke.Pokemon.creer_pokemon("Magicarpe", 550, 550, 50, 20, 10, 35, 15, poke.Eau(), False)
     sacha = poke.InventaireJoueur()
     sacha.inventory(magicarpe)
 
     
-    # game = Game(sacha, poke_sauvages)
-    # game.show()
-
     video_path = os.path.join(script_dir, "Image", "video.mp4")  # Remplacez ceci par le chemin vers votre fichier vidéo
     accueil = AccueilWindow(video_path)
     accueil.show()
