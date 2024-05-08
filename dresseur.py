@@ -17,6 +17,8 @@ class Dresseur:
         self.speed = self.VITESSE_DEPART # Vitesse du dresseur (vitesse du background aussi)
         self.sacha = sacha # Représente le pokedex du joueur 
 
+        
+
     def move_left(self):
         self.x -= self.speed
 

@@ -8,14 +8,18 @@ import os
 import cv2
 
 ### Import des objets PyQt ###
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QPushButton
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QGraphicsView, QGraphicsScene
 from PyQt5.QtGui import QPainter, QPixmap, QImage
-from PyQt5.QtCore import Qt, Qt, QTimer
+from PyQt5.QtCore import Qt, QTimer
 
 ### Import des fichiers ###
 import Poke as poke
 from dresseur import Dresseur
 import coord_pokemon as coo
+
+### Import du chemin d'accès au fichier python actuel ###
+script_dir = os.path.dirname(__file__)
+
 
 class PokemonWindow(QWidget): # Fenêtre de rencontre des pokémons sauvages
 
@@ -31,7 +35,8 @@ class PokemonWindow(QWidget): # Fenêtre de rencontre des pokémons sauvages
 
 
         self.label = QLabel(self)
-        pixmap = QPixmap("test.png") # On charge l'image de fond
+        image_path = os.path.join(script_dir, "Image", "test.png")
+        pixmap = QPixmap(image_path) # On charge l'image de fond
         self.label.setPixmap(pixmap)
         self.label.setAlignment(Qt.AlignCenter)
         # Ajoutez du contenu à votre fenêtre, par exemple un QLabel avec le nom du Pokémon
@@ -92,7 +97,8 @@ class CombatWindow(QWidget): # Fenêtre de combat
 
 
         self.label = QLabel(self)
-        pixmap = QPixmap("combat.png") # On charge l'image de fond pour le combat
+        image_path = os.path.join(script_dir, "Image", "combat.png")
+        pixmap = QPixmap(image_path) # On charge l'image de fond pour le combat
         self.label.setPixmap(pixmap)
         self.label.setAlignment(Qt.AlignCenter)
 
@@ -128,7 +134,8 @@ class Game(QWidget):
         self.map_largeur = 4950 
         self.map_hauteur = 4950 
         
-        self.background_image = QPixmap("fond2.png") # On charge notre image de fond
+        image_path = os.path.join(script_dir, "Image", "fond2.png")
+        self.background_image = QPixmap(image_path) # On charge notre image de fond
         self.background_position_x = 0 # On initialise sa position
         self.background_position_y = 0 
 
@@ -141,7 +148,8 @@ class Game(QWidget):
         self.dresseur_pos = self.ecran_largeur//2 # On place le dresseur au milieu de l'écran
         self.dresseur = Dresseur(self.dresseur_pos, self.dresseur_pos, self.dresseur_pos, self.dresseur_pos, sacha)
         self.nb_bloc = (self.ecran_hauteur//2) // self.dresseur.speed
-        self.image_dresseur = QPixmap("utilisateur.png") 
+        image_path = os.path.join(script_dir, "Image", "utilisateur.png")
+        self.image_dresseur = QPixmap(image_path) 
 
 
 
@@ -175,8 +183,6 @@ class Game(QWidget):
                 pokemon.y += self.dresseur.speed
 
 
-        if self.dresseur.proche(self.sauvages)[0]:
-            print(True)
 
 
         if self.dresseur.proche(self.sauvages)[0]:
@@ -264,7 +270,7 @@ if __name__ == "__main__":
     # game = Game(sacha, poke_sauvages)
     # game.show()
 
-    video_path = "video.mp4"  # Remplacez ceci par le chemin vers votre fichier vidéo
+    video_path = os.path.join(script_dir, "Image", "video.mp4")  # Remplacez ceci par le chemin vers votre fichier vidéo
     accueil = AccueilWindow(video_path)
     accueil.show()
 
