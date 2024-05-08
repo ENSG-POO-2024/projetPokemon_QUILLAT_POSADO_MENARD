@@ -190,10 +190,16 @@ class Pokedex:
         chemin_fichier = os.path.join(chemin_parent, 'data', fichier)
         # On charge le fichier CSV en tant que DataFrame avec Pandas
         data = pd.read_csv(chemin_fichier)
+        noms_pokemon = {}
         for index, row in data.iterrows():
             name = row['Name']  
-            x = None
-            y = None
+            if name not in noms_pokemon:
+                noms_pokemon[name] = 1
+            else:
+                noms_pokemon[name] += 1
+                name += ' ' + str(noms_pokemon[name])
+            x = row['X']
+            y = row['Y']
             hp = row['HP']
             attack = row['Attack']
             defense = row['Defense']
@@ -311,5 +317,3 @@ if __name__ == '__main__':
     # #     print(f"Le Pokémon '{nom_pokemon_test}' est présent dans le Pokédex.")
     # # else:
     # #     print(f"Le Pokémon '{nom_pokemon_test}' n'est pas présent dans le Pokédex.")
-
-
