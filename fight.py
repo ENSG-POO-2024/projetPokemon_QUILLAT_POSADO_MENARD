@@ -19,29 +19,6 @@ class Combat:
         self.tour_avant_attaque_speciale = 0  # Nombre de tours depuis la dernière attaque spéciale
 
 
-    # def attaquer(self, attaquant, defenseur):
-    #     degats = attaquant.attack - defenseur.defense
-    #     defenseur.hp -= degats
-    #     if defenseur.hp < 0:
-    #             defenseur.hp = 0
-    #     print(f"{attaquant.name} attaque {defenseur.name} et lui inflige {degats} dégâts.")
-    #     print(f"Il reste {defenseur.hp} points de vie à {defenseur.name}.")
-
-    # def attaque_speciale_joueur(self, attaquant, defenseur):
-    #     # Vérifie si l'attaque spéciale est disponible
-    #     if self.tour_avant_attaque_speciale == 0:
-    #         # Utilise l'attaque spéciale
-    #         degats = attaquant.sp_attack - defenseur.sp_defense
-    #         defenseur.hp -= degats  
-    #         if defenseur.hp < 0:
-    #             defenseur.hp = 0
-    #         print(f"{attaquant.name} utilise son attaque spéciale sur {defenseur.name} et lui inflige {degats} dégâts.")
-    #         print(f"Il reste {defenseur.hp} points de vie à {defenseur.name}.")
-    #         # Réinitialise le compteur de tours avant la prochaine attaque spéciale
-    #         self.tour_avant_attaque_speciale = 2
-    #     else:
-    #         print("L'attaque spéciale n'est pas encore disponible.")
-
     def changer_pokemon(self, pokemon_a_envoyer, pokemon_a_recevoir):
         print(f"Le joueur change {pokemon_a_envoyer.name} pour {pokemon_a_recevoir.name}")
         self.pokemon_utilise = pokemon_a_recevoir

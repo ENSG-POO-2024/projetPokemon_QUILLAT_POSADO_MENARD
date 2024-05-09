@@ -18,6 +18,7 @@ import Poke as poke
 from dresseur import Dresseur
 import coord_pokemon as coo
 import Starter.StarterVis3u as s
+import Combat.CombatVis3u as c
 
 ### Import du chemin d'accès au fichier python actuel ###
 script_dir = os.path.dirname(__file__)
@@ -28,17 +29,19 @@ class AccueilWindow(QWidget): # On arrive sur la page d'acceuil et on peut cliqu
     def __init__(self, video_path):
         super().__init__()
 
+        ## Création de la fenêtre d'acceuil
         self.setWindowTitle("Accueil")
-        self.setGeometry(300, 100, 1000, 700)
+        self.setGeometry(250, 100, 1000, 720)
 
+        ## Affichage de la vidéo d'acceuil
         self.label = QLabel(self)
-        self.label.setGeometry(0, 0, 1000, 700)
+        self.label.setGeometry(-120, 0, 1280, 720)
 
         self.video_path = video_path
         self.cap = cv2.VideoCapture(video_path)
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update_frame)
-        self.timer.start(30)  # Mettez à jour la vidéo toutes les 30 millisecondes
+        self.timer.start(30)  
 
         self.mouse_clicked = False  # Pour suivre si le clic de souris a eu lieu
         self.label.mousePressEvent = self.mousePressEvent  # Redéfinition de la méthode mousePressEvent
@@ -66,8 +69,8 @@ class AccueilWindow(QWidget): # On arrive sur la page d'acceuil et on peut cliqu
 
 class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
 
-    def __init__(self, starter, sauvages_csv): # Sacha représente le pokedex du joueur
-        super().__init__()                   # sauvages_csv est le fichier csv avec les pokemons sauvages présents au début du jeu
+    def __init__(self, starter, sauvages_csv): # Starter représente le premier pokémon du joueur
+        super().__init__()                     # sauvages_csv est le fichier csv avec les pokemons sauvages présents au début du jeu
 
         self.ecran_largeur = 880 
         self.ecran_hauteur = 880 
@@ -93,8 +96,21 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
         self.dresseur_pos = self.ecran_largeur//2 # On place le dresseur au milieu de l'écran
         self.dresseur = Dresseur(self.dresseur_pos, self.dresseur_pos, self.dresseur_pos, self.dresseur_pos, self.sacha)
         self.nb_bloc = (self.ecran_hauteur//2) // self.dresseur.speed
-        image_path = os.path.join(script_dir, "Image", "utilisateur.png")
-        self.image_dresseur = QPixmap(image_path) 
+
+        self.image_dresseur = {
+            "up": [QPixmap("dresseur/haut_move.png"), QPixmap("dresseur/haut_move2.png")],
+            "down": [QPixmap("dresseur/bas_statique.png"), QPixmap("dresseur/bas_move.png"), QPixmap("dresseur/bas_move2.png")],
+            "left": [QPixmap("dresseur/gauche_move.png"), QPixmap("dresseur/gauche_statique.png")],
+            "right": [QPixmap("dresseur/droite_move.png"), QPixmap("dresseur/droite_statique.png")],
+        }
+
+        self.current_direction = None
+        self.current_image_index = 0
+        self.delay_timer = QTimer(self)
+        self.delay_timer.timeout.connect(self.reset_direction)
+
+        #image_path = os.path.join(script_dir, "Image", "utilisateur.png")
+        #self.image_dresseur = QPixmap(image_path) 
 
 
 
@@ -110,56 +126,81 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
             self.background_position_x -= self.dresseur.speed
             for nom_pokemon, pokemon in self.sauvages.pokedex.items():
                 pokemon.x -= self.dresseur.speed
+                self.current_direction = "right"
 
         elif event.key() == Qt.Key_Left and -self.background_position_x > bord_gauche and np.abs(self.dresseur.X) <= (self.map_largeur - self.nb_bloc * self.dresseur.speed):
             self.background_position_x += self.dresseur.speed
             for nom_pokemon, pokemon in self.sauvages.pokedex.items():
                 pokemon.x += self.dresseur.speed
+                self.current_direction = "left"
 
         elif event.key() == Qt.Key_Down and -self.background_position_y <= bord_bas and np.abs(self.dresseur.Y) >= (self.nb_bloc * self.dresseur.speed):
             self.background_position_y -= self.dresseur.speed
             for nom_pokemon, pokemon in self.sauvages.pokedex.items():
                 pokemon.y -= self.dresseur.speed
+                self.current_direction = "down"
 
         elif event.key() == Qt.Key_Up and -self.background_position_y > bord_haut and np.abs(self.dresseur.Y) <= (self.map_hauteur - self.nb_bloc * self.dresseur.speed):
             self.background_position_y += self.dresseur.speed
             for nom_pokemon, pokemon in self.sauvages.pokedex.items():
                 pokemon.y += self.dresseur.speed
+                self.current_direction = "up"
 
 
 
 
         if self.dresseur.proche(self.sauvages)[0]:
-            pokemon_name = self.dresseur.proche(self.sauvages)[1]
-            self.pokemon_window = PokemonWindow(pokemon_name)
+            self.pokemon_sauvage = self.dresseur.proche(self.sauvages)[1]
+            self.pokemon_window = PokemonWindow(self.pokemon_sauvage, self.sacha)
             self.pokemon_window.show()
 
-
         self.update()
+        self.delay_timer.start(750)
 
 
 
     def paintEvent(self, event): # Fonction pour afficher les images 
         painter = QPainter(self)
         painter.drawPixmap(self.background_position_x, self.background_position_y, self.background_image) # Affichage map
-        painter.drawPixmap(self.dresseur.x, self.dresseur.y, self.image_dresseur) # Affichage dresseur
+        #painter.drawPixmap(self.dresseur.x, self.dresseur.y, self.image_dresseur) # Affichage dresseur
         for cle_pokemons, poke_sauvage in self.sauvages.pokedex.items(): # On affiche tous les pokémons sauvages
             base_name = poke_sauvage.name.split()[0] # Pour gérer le cas avec plusieurs fois le même pokémon
             image_path = os.path.join(script_dir, "Pokémons/" + base_name, base_name + "_face.png")
             pixmap = QPixmap(image_path)
             painter.drawPixmap(poke_sauvage.x, poke_sauvage.y, pixmap) 
         
+        painter.setRenderHint(QPainter.SmoothPixmapTransform)
+
+        if self.current_direction:
+            pixmap = self.image_dresseur[self.current_direction][self.current_image_index]
+        else:
+            pixmap = self.image_dresseur["down"][0]  # Utilisez l'image vers le bas par défaut lorsque le joueur ne se déplace pas
+
+        painter.drawPixmap(self.dresseur.x+10, self.dresseur.y, pixmap.scaled(90,90))
+        
+
+    def update(self):
+        if self.current_direction:
+            self.current_image_index = (self.current_image_index + 1) % len(self.image_dresseur[self.current_direction])
+        else:
+            self.current_image_index = 0
+        self.repaint()
+
+    def reset_direction(self):
+        self.current_direction = None
+        self.update()
              
 
 
 class PokemonWindow(QWidget): # Si on rencontre un Pokemon sauvage on arrive sur la fenêtre Rencontre, on peut fuir ou combattre
 
-    def __init__(self, pokemon):
+    def __init__(self, pokemon_sauvage, sacha):
         super().__init__()
 
-        self.pokemon = pokemon # Pokémon sauvage rencontré
+        self.pokemon_sauvage = pokemon_sauvage # Pokémon sauvage rencontré
+        self.sacha = sacha # Pokedex du joueur                      
 
-        nom_poke = pokemon.name.split()[0]
+        self.nom_poke = self.pokemon_sauvage.name.split()[0]
 
         self.setWindowTitle("Rencontre avec un Pokémon") # On crée la fenêtre
         self.setGeometry(300, 100, 1000, 750) # On la place
@@ -171,7 +212,7 @@ class PokemonWindow(QWidget): # Si on rencontre un Pokemon sauvage on arrive sur
         self.label.setPixmap(pixmap)
         self.label.setAlignment(Qt.AlignCenter)
         # Ajoutez du contenu à votre fenêtre, par exemple un QLabel avec le nom du Pokémon
-        self.text_label = QLabel("Vous avez rencontré " + nom_poke + " !", self)
+        self.text_label = QLabel("Vous avez rencontré " + self.nom_poke + " !", self)
         self.text_label.setAlignment(Qt.AlignCenter)
         self.text_label.setStyleSheet("color: red;")
 
@@ -183,12 +224,12 @@ class PokemonWindow(QWidget): # Si on rencontre un Pokemon sauvage on arrive sur
         mouse_x = event.x()
         mouse_y = event.y()
 
-        if self.clic(mouse_x, mouse_y, 90, 365, 260, 460):  # On vérifie si il est dans une certaine zone
-            self.close()                                    # Si oui on ferme la fenêtre
-        if self.clic(mouse_x, mouse_y, 636, 911, 260, 460): # Si il est dans une autre zone défini
-            self.close()                                    # On ferme la fenêtre
-            self.combat_window = CombatWindow(self.pokemon) # On crée la fenêtre Combat
-            self.combat_window.show()                       # On l'affiche                      
+        if self.clic(mouse_x, mouse_y, 90, 365, 260, 460):                       # On vérifie si il est dans une certaine zone
+            self.close()                                                         # Si oui on ferme la fenêtre
+        if self.clic(mouse_x, mouse_y, 636, 911, 260, 460):                      # Si il est dans une autre zone défini
+            self.close()                                                         # On ferme la fenêtre
+            self.combat_window = c.FightWindow(self.pokemon_sauvage, self.sacha) # On crée la fenêtre Combat
+            self.combat_window.show()                                            # On l'affiche                      
             
 
     def clic(self, x, y, x_inf, x_sup, y_inf, y_sup):
@@ -199,41 +240,41 @@ class PokemonWindow(QWidget): # Si on rencontre un Pokemon sauvage on arrive sur
             return True
 
 
-class CombatWindow(QWidget): # Si on a choisit le comba on arrive sur la fenêtre Combat
+# class CombatWindow(QWidget): # Si on a choisit le comba on arrive sur la fenêtre Combat
 
-    def __init__(self, pokemon):
-        super().__init__()
+#     def __init__(self, pokemon):
+#         super().__init__()
 
-        nom_poke = pokemon.name.split()[0]
+#         nom_poke = pokemon.name.split()[0]
 
-        self.setWindowTitle("Combat contre " + nom_poke) 
-        self.setGeometry(300, 100, 1000, 750) # On place notre fenêtre
+#         self.setWindowTitle("Combat contre " + nom_poke) 
+#         self.setGeometry(300, 100, 1000, 750) # On place notre fenêtre
 
 
-        self.label = QLabel(self)
-        image_path = os.path.join(script_dir, "Image", "combat.png")
-        pixmap = QPixmap(image_path) # On charge l'image de fond pour le combat
-        self.label.setPixmap(pixmap)
-        self.label.setAlignment(Qt.AlignCenter)
+#         self.label = QLabel(self)
+#         image_path = os.path.join(script_dir, "Image", "combat.png")
+#         pixmap = QPixmap(image_path) # On charge l'image de fond pour le combat
+#         self.label.setPixmap(pixmap)
+#         self.label.setAlignment(Qt.AlignCenter)
 
-    def mousePressEvent(self, event):
-        """
-        Fonction qui permet de gérer l'évenement: clic gauche
-        """
-        # On récupère les coordonnées du clic de la souris
-        mouse_x = event.x()
-        mouse_y = event.y()
+#     def mousePressEvent(self, event):
+#         """
+#         Fonction qui permet de gérer l'évenement: clic gauche
+#         """
+#         # On récupère les coordonnées du clic de la souris
+#         mouse_x = event.x()
+#         mouse_y = event.y()
 
-        if self.clic(mouse_x, mouse_y, 778, 978, 23, 183): # On vérifie si le joueur quitte le combat
-            self.close()                                   # Si oui: on ferme la fenêtre
+#         if self.clic(mouse_x, mouse_y, 778, 978, 23, 183): # On vérifie si le joueur quitte le combat
+#             self.close()                                   # Si oui: on ferme la fenêtre
             
 
-    def clic(self, x, y, x_inf, x_sup, y_inf, y_sup):
-        """
-        Fonction qui teste si le clic est dans la zone entre x_inf et x_sup et entre y_inf et y_sup
-        """
-        if x_inf <= x <= x_sup and y_inf <= y <= y_sup:
-            return True
+#     def clic(self, x, y, x_inf, x_sup, y_inf, y_sup):
+#         """
+#         Fonction qui teste si le clic est dans la zone entre x_inf et x_sup et entre y_inf et y_sup
+#         """
+#         if x_inf <= x <= x_sup and y_inf <= y <= y_sup:
+#             return True
 
         
         

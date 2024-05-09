@@ -21,32 +21,43 @@ sys.path.append(parent_dir)
 import Poke as poke
 import test_graph as t #MODIFIER QUAND FICHIER DEFINITIF
 
+
 class Starter(object):
 
     def setupUi(self, MainWindow):
-        #MainWindow.setObjectName("Choix starter")
+        
+        # Création de la fenêtre du starter
         MainWindow.setWindowTitle("Choix du starter")
         MainWindow.resize(1000, 750)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+
+        # Création de l'objet fond
         self.Fond = QtWidgets.QLabel(self.centralwidget)
         self.Fond.setGeometry(QtCore.QRect(0, 0, 1000, 750))
         self.Fond.setText("")
         self.Fond.setPixmap(QtGui.QPixmap("Starter/ChoIx du starter.png"))
         self.Fond.setScaledContents(True)
         self.Fond.setObjectName("Fond")
+
+        # Création de l'objet Bulbizarre
         self.ButtonBul = QtWidgets.QPushButton(self.centralwidget)
-        self.ButtonBul.setGeometry(QtCore.QRect(110, 320, 161, 201))
+        self.ButtonBul.setGeometry(QtCore.QRect(80, 310, 231, 241))
         self.ButtonBul.setText("")
         self.ButtonBul.setObjectName("ButtonBul")
+
+        # Création de l'objet Salamèche
         self.ButtonSal = QtWidgets.QPushButton(self.centralwidget)
         self.ButtonSal.setGeometry(QtCore.QRect(420, 320, 161, 201))
         self.ButtonSal.setText("")
         self.ButtonSal.setObjectName("ButtonSal")
+
+        # Création de l'objet Carapuce
         self.ButtonCar = QtWidgets.QPushButton(self.centralwidget)
         self.ButtonCar.setGeometry(QtCore.QRect(710, 320, 161, 201))
         self.ButtonCar.setText("")
         self.ButtonCar.setObjectName("ButtonCar")
+
         self.Salameche = QtWidgets.QLabel(self.centralwidget)
         self.Salameche.setGeometry(QtCore.QRect(390, 290, 231, 241))
         self.Salameche.setText("")
@@ -68,7 +79,7 @@ class Starter(object):
         
         MainWindow.setCentralWidget(self.centralwidget)
 
-        self.ButtonBul.setStyleSheet("background-color: rgba(255, 255, 255, 0); border: none;")
+        self.ButtonBul.setStyleSheet("background-color: rgba(0, 0, 0, 0); border: none;")
         self.ButtonSal.setStyleSheet("background-color: rgba(255, 255, 255, 0); border: none;")
         self.ButtonCar.setStyleSheet("background-color: rgba(255, 255, 255, 0); border: none;")
 
@@ -78,6 +89,7 @@ class Starter(object):
         self.Salameche.leaveEvent = self.leave_image2
         self.Carapuce.enterEvent = self.enter_image3
         self.Carapuce.leaveEvent = self.leave_image3
+
 
 
     def enter_image1(self, event):
@@ -100,7 +112,7 @@ class Starter(object):
 
 
 
-class StarterWindow (QMainWindow, Starter):
+class StarterWindow(QMainWindow, Starter):
     def __init__(self, parent=None):
         super(StarterWindow, self).__init__(parent)
         self.setupUi(self)
