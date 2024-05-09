@@ -21,20 +21,13 @@ class Pokemon:
         self.defense = defense
         self.sp_attack = sp_attack
         self.sp_defense = sp_defense
-        self.type = type_ #pour eviter le type de python on met type_
+        self.type = type_ #pour eviter le type déjà existant en python on met type_ mais il devient l'attribut type dans la suite
         self.sauvage = sauvage 
 
     @classmethod
     def creer_pokemon(cls, name, x, y, hp, attack, defense, sp_attack, sp_defense, type_, sauvage):
         return cls(name, x, y, hp, attack, defense, sp_attack, sp_defense, type_, sauvage)
 
-    # def attaquer(self, other_pokemon):
-    #     print(f"{other_pokemon.name} a {other_pokemon.hp} hp et {other_pokemon.defense} point de defense et {self.name} a {self.attack} point d'attaque.")
-    #     new_att = self.new_attack(other_pokemon.type)
-    #     degats = new_att - other_pokemon.defense 
-    #     other_pokemon.hp -= degats
-    #     print(f"{self.name} attaque {other_pokemon.name} et lui inflige {degats} dégâts.")
-    #     print(f"Il reste {other_pokemon.hp} point de vie à {other_pokemon.name}")
 
     def modifier(self, type_adversaire):
         if type_adversaire.name in self.type.fort:
@@ -252,18 +245,6 @@ class InventaireJoueur(Pokedex):
         pokemon.x = None # Le pokemon est maintenant dans notre inventaire
         pokemon.y = None # il n'a plus de coordonnées
 
-    # def afficher_equipe(self, equipe):
-    #     print("Équipe du joueur :\n")
-    #     for nom_pokemon, pokemon in equipe.items():
-    #         print(f"Nom: {pokemon.name}")
-    #         print(f"HP: {pokemon.hp}")
-    #         print(f"Attaque: {pokemon.attack}")
-    #         print(f"Défense: {pokemon.defense}")
-    #         print(f"Sp. Attaque: {pokemon.sp_attack}")
-    #         print(f"Sp. Défense: {pokemon.sp_defense}")
-    #         print(f"Type: {pokemon.type.name}")
-    #         print(f"Sauvage: {pokemon.sauvage}")
-    #         print()  # Ajouter une ligne vide entre chaque Pokémon
 
 
     def creer_equipe(self):

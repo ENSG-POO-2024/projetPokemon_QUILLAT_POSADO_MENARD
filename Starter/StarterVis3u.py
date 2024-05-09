@@ -79,7 +79,6 @@ class Starter(object):
         self.Carapuce.enterEvent = self.enter_image3
         self.Carapuce.leaveEvent = self.leave_image3
 
-        #QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def enter_image1(self, event):
         self.Bulbizarre.setPixmap(QPixmap("Starter/Bulbizarre_clic.png"))
@@ -114,45 +113,32 @@ class StarterWindow (QMainWindow, Starter):
         mouse_x = event.x()
         mouse_y = event.y()
 
-        if self.bulbizarre(mouse_x, mouse_y): 
+        if self.clic(mouse_x, mouse_y, 80, 311, 310, 551): 
             self.poke = poke.Pokemon('Bulbizarre',None, None,45,49,49,65,65,poke.Plante(), False) 
             self.map_window = t.Map(self.poke, "pokemons_a_capturer.csv")
             self.map_window.show()
             self.close()     
 
-        if self.salameche(mouse_x, mouse_y): 
+        if self.clic(mouse_x, mouse_y, 390, 621, 290, 531): 
             self.poke = poke.Pokemon('Salamèche',None, None,39,52,43,60,50,poke.Feu(), False) 
             self.map_window = t.Map(self.poke, "pokemons_a_capturer.csv")
             self.map_window.show()
             self.close()  
 
-        if self.carapuce(mouse_x, mouse_y): 
+        if self.clic(mouse_x, mouse_y, 680, 911, 300, 541): 
             self.poke = poke.Pokemon('Carapuce',None, None,44,48,65,50,64,poke.Eau(), False) 
             self.map_window = t.Map(self.poke, "pokemons_a_capturer.csv")
             self.map_window.show()
             self.close()  
+
+    def clic(self, x, y, x_inf, x_sup, y_inf, y_sup):
+        """
+        Fonction qui teste si le clic est dans la zone entre x_inf et x_sup et entre y_inf et y_sup
+        """
+        if x_inf <= x <= x_sup and y_inf <= y <= y_sup:
+            return True
             
 
-    def bulbizarre(self, x, y):
-        """
-        Fonction qui teste si le clic est sur le bulbizarre
-        """
-        if 80 <= x <= 311 and 310 <= y <= 551:
-            return True  
-        
-    def carapuce(self, x, y):
-        """
-        Fonction qui teste si le clic est sur le carapuce
-        """
-        if 680 <= x <= 911 and 300 <= y <= 541:
-            return True 
-        
-    def salameche(self, x, y):
-        """
-        Fonction qui teste si le clic est sur le salamèche
-        """
-        if 390 <= x <= 621 and 290 <= y <= 531:
-            return True 
      
 if __name__ == "__main__":
     def run_app():
