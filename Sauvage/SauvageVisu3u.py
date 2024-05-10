@@ -17,9 +17,7 @@ import Combat.CombatVis3u as c
 
 class Sauvage_ui(object):
 
-        
     def setupUi(self, MainWindow):
-
 
         # Création de l'objet MainWindow
         MainWindow.setObjectName("MainWindow")
@@ -41,12 +39,11 @@ class Sauvage_ui(object):
         self.image_poke.setGeometry(QtCore.QRect(320, 10, 400, 400))
         self.image_poke.setText("")
         self.image_poke.setPixmap(QtGui.QPixmap("Pokémons/"+self.pokemon_sauvage.name.split()[0]+"/"+self.pokemon_sauvage.name.split()[0]+"_face.png"))
-        #self.image_poke.setPixmap(QtGui.QPixmap("Pokémons/Pikachu/Pikachu_face.png"))
         self.image_poke.setScaledContents(True)
         self.image_poke.setObjectName("Pokemon rencontré")
 
 
-        # Bouton pour fuir
+        # Bouton pour combattre
         self.fight_buton = QtWidgets.QPushButton(self.centralwidget)
         self.fight_buton.setGeometry(QtCore.QRect(630, 365, 260, 460))
         self.fight_buton.setText("")
@@ -64,29 +61,26 @@ class Sauvage_ui(object):
         self.fuite.raise_()
         self.fight_buton.raise_()
 
-
+        # On rend les boutons invisibles
         self.fight_buton.setStyleSheet("background-color: rgba(255, 255, 255, 0); border: none;")
         self.fuite.setStyleSheet("background-color: rgba(255, 255, 255, 0); border: none;")
 
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.fuite.clicked.connect(MainWindow.close)
-
         self.fight_buton.clicked.connect(MainWindow.close)
         self.fight_buton.clicked.connect(self.open_fight_window)
 
     def open_fight_window(self):
-        self.fight_window = c.FightWindow(self.pokemon_sauvage, self.sacha)
+        self.fight_window = c.FightWindow(self.pokemon_sauvage, self.inventaire_joueur, self.pokedex_sauvages)
         self.fight_window.show()
 
 
 
-
-
-
 class SauvageWindow(QMainWindow, Sauvage_ui):
-    def __init__(self, pokemon_sauvage, sacha, parent=None):
-        self.pokemon_sauvage = pokemon_sauvage
-        self.sacha = sacha
+    def __init__(self, pokemon_sauvage, inventaire_joueur, pokedex_sauvages, parent=None):
+        self.pokemon_sauvage = pokemon_sauvage # Le pokémon qu'on a rencontré
+        self.inventaire_joueur = inventaire_joueur # L'inventaire du joueur avec ses pokémons
+        self.pokedex_sauvages = pokedex_sauvages # Le pokedex avec tous les pokemons sauvages
         super(SauvageWindow, self).__init__(parent)
         self.setupUi(self)

@@ -73,31 +73,25 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
     def __init__(self, starter, sauvages_csv): # Starter représente le premier pokémon du joueur
         super().__init__()                     # sauvages_csv est le fichier csv avec les pokemons sauvages présents au début du jeu
 
+
+        # Les pokémons apparaissent aléatoirement à chaque début de partie
+        coo.poke_coord('pokemon_first_gen.csv', 'pokemons_a_capturer.csv', 100) # 100 pokémons seront sur la map
+
+        # Initialisation des constantes visuelles
         self.ecran_largeur = 880 
         self.ecran_hauteur = 880 
         self.map_largeur = 4950 
         self.map_hauteur = 4950 
 
-        self.sacha = poke.InventaireJoueur()
-        self.sacha.inventory(starter)
-        #self.sacha.afficher_pokedex() # On affiche le pokedex du joueur
-        
+        # Mise en place de l'affichage de la map
         image_path = os.path.join(script_dir, "Image", "fond2.png")
         self.background_image = QPixmap(image_path) # On charge notre image de fond
         self.background_position_x = 0 # On initialise sa position
         self.background_position_y = 0 
-
         self.setWindowTitle("Votre pokémon starter est " + starter.name)
         self.setGeometry(800, 0, self.ecran_largeur, self.ecran_hauteur)  # On place notre fenêtre principale
 
-        self.sauvages = poke.Pokedex() # On initialise le pokedex des pokemons sauvages qui seront présents sur la map
-        self.sauvages.charger_pokedex(sauvages_csv) # On le remplit avec notre fichier 
-        #self.sauvages.afficher_pokedex() # On affiche les pokemons sauvages
-
-        self.dresseur_pos = self.ecran_largeur//2 # On place le dresseur au milieu de l'écran
-        self.dresseur = Dresseur(self.dresseur_pos, self.dresseur_pos, self.dresseur_pos, self.dresseur_pos, self.sacha)
-        self.nb_bloc = (self.ecran_hauteur//2) // self.dresseur.speed
-
+        # Mise en place de l'affichage du dresseur
         self.image_dresseur = {
             "up": [QPixmap("dresseur/haut_move.png"), QPixmap("dresseur/haut_move2.png")],
             "down": [QPixmap("dresseur/bas_statique.png"), QPixmap("dresseur/bas_move.png"), QPixmap("dresseur/bas_move2.png")],
@@ -105,13 +99,24 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
             "right": [QPixmap("dresseur/droite_move.png"), QPixmap("dresseur/droite_statique.png")],
         }
 
+
+        # Création de l'inventaire du joueur
+        self.inventaire_joueur = poke.InventaireJoueur()
+        self.inventaire_joueur.inventory(starter) # Ajout du starter à son inventaire
+        
+        # Création du pokedex contenant les pokémons sauvages de la map
+        self.pokedex_sauvages = poke.Pokedex()
+        self.pokedex_sauvages.charger_pokedex(sauvages_csv) # On le remplit avec notre fichier 
+
+        # Création de notre dresseur
+        self.dresseur_pos = self.ecran_largeur//2 # On place le dresseur au milieu de l'écran
+        self.dresseur = Dresseur(self.dresseur_pos, self.dresseur_pos, self.dresseur_pos, self.dresseur_pos, self.inventaire_joueur)
+        self.nb_bloc = (self.ecran_hauteur//2) // self.dresseur.speed
         self.current_direction = None
         self.current_image_index = 0
         self.delay_timer = QTimer(self)
         self.delay_timer.timeout.connect(self.reset_direction)
 
-        #image_path = os.path.join(script_dir, "Image", "utilisateur.png")
-        #self.image_dresseur = QPixmap(image_path) 
 
 
     def mousePressEvent(self, event):
@@ -133,34 +138,35 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
 
         if event.key() == Qt.Key_Right and -self.background_position_x <= bord_droit and np.abs(self.dresseur.X) >= (self.nb_bloc * self.dresseur.speed):
             self.background_position_x -= self.dresseur.speed
-            for nom_pokemon, pokemon in self.sauvages.pokedex.items():
+            for nom_pokemon, pokemon in self.pokedex_sauvages.pokedex.items():
                 pokemon.x -= self.dresseur.speed
                 self.current_direction = "right"
 
         elif event.key() == Qt.Key_Left and -self.background_position_x > bord_gauche and np.abs(self.dresseur.X) <= (self.map_largeur - self.nb_bloc * self.dresseur.speed):
             self.background_position_x += self.dresseur.speed
-            for nom_pokemon, pokemon in self.sauvages.pokedex.items():
+            for nom_pokemon, pokemon in self.pokedex_sauvages.pokedex.items():
                 pokemon.x += self.dresseur.speed
                 self.current_direction = "left"
 
         elif event.key() == Qt.Key_Down and -self.background_position_y <= bord_bas and np.abs(self.dresseur.Y) >= (self.nb_bloc * self.dresseur.speed):
             self.background_position_y -= self.dresseur.speed
-            for nom_pokemon, pokemon in self.sauvages.pokedex.items():
+            for nom_pokemon, pokemon in self.pokedex_sauvages.pokedex.items():
                 pokemon.y -= self.dresseur.speed
                 self.current_direction = "down"
 
         elif event.key() == Qt.Key_Up and -self.background_position_y > bord_haut and np.abs(self.dresseur.Y) <= (self.map_hauteur - self.nb_bloc * self.dresseur.speed):
             self.background_position_y += self.dresseur.speed
-            for nom_pokemon, pokemon in self.sauvages.pokedex.items():
+            for nom_pokemon, pokemon in self.pokedex_sauvages.pokedex.items():
                 pokemon.y += self.dresseur.speed
                 self.current_direction = "up"
 
 
 
 
-        if self.dresseur.proche(self.sauvages)[0]:
-            self.pokemon_sauvage = self.dresseur.proche(self.sauvages)[1]
-            self.pokemon_window = sau.SauvageWindow(self.pokemon_sauvage, self.sacha)
+        if self.dresseur.proche(self.pokedex_sauvages)[0]:
+            self.inventaire_joueur.afficher_pokedex()
+            self.pokemon_sauvage = self.dresseur.proche(self.pokedex_sauvages)[1]
+            self.pokemon_window = sau.SauvageWindow(self.pokemon_sauvage, self.inventaire_joueur, self.pokedex_sauvages)
             self.pokemon_window.show()
 
         self.update()
@@ -170,9 +176,8 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
 
     def paintEvent(self, event): # Fonction pour afficher les images 
         painter = QPainter(self)
-        painter.drawPixmap(self.background_position_x, self.background_position_y, self.background_image) # Affichage map
-        #painter.drawPixmap(self.dresseur.x, self.dresseur.y, self.image_dresseur) # Affichage dresseur
-        for cle_pokemons, poke_sauvage in self.sauvages.pokedex.items(): # On affiche tous les pokémons sauvages
+        painter.drawPixmap(self.background_position_x, self.background_position_y, self.background_image) # Affichage de la map
+        for cle_pokemons, poke_sauvage in self.pokedex_sauvages.pokedex.items(): # On affiche tous les pokémons sauvages
             if self.dresseur.proche_affichage(poke_sauvage):
                 base_name = poke_sauvage.name.split()[0] # Pour gérer le cas avec plusieurs fois le même pokémon
                 image_path = os.path.join(script_dir, "Pokémons/" + base_name, base_name + "_face.png")
@@ -206,15 +211,6 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
 if __name__ == "__main__":
     app = QApplication(sys.argv) 
 
-    coo.poke_coord('pokemon_first_gen.csv', 'pokemons_a_capturer.csv', 100) # Les pokémons apparaissent aléatoirement à chaque début de partie
-    
-    
-    # poke_sauvages = "pokemons_a_capturer.csv"                             
-    # magicarpe = poke.Pokemon.creer_pokemon("Magicarpe", 550, 550, 50, 20, 10, 35, 15, poke.Eau(), False)
-    # starter = poke.InventaireJoueur()
-    # sacha.inventory(magicarpe)
-
-    
     video_path = os.path.join(script_dir, "Image", "video.mp4")
     accueil = AccueilWindow(video_path)
     accueil.show()
