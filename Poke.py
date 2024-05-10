@@ -41,6 +41,8 @@ class Pokemon:
         
     def attaquer(self, adversaire):
         degats = self.attack * self.modifier(adversaire.type) - adversaire.defense
+        if degats <= 0:
+            degats = 0
         adversaire.hp -= degats
         if adversaire.hp < 0:
                 adversaire.hp = 0
@@ -52,6 +54,8 @@ class Pokemon:
         if tour_avant_attaque_speciale == 0:
             # Utilise l'attaque spéciale
             degats = self.sp_attack * self.modifier(adversaire.type) - adversaire.sp_defense
+            if degats <= 0:
+                degats = 0
             adversaire.hp -= degats  
             if adversaire.hp < 0:
                 adversaire.hp = 0

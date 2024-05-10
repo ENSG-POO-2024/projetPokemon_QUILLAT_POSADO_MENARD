@@ -12,8 +12,9 @@ import sys
 import os
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QPushButton, QMainWindow, QApplication, QLabel
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QColor, QFont, QPainter, QPixmap
+from PyQt5 import *
 
 current_dir = os.path.dirname(__file__)
 parent_dir = os.path.abspath(os.path.join(current_dir, ".."))
@@ -27,12 +28,14 @@ import fight as f
 class Combat_ui(object):
 
         
-    def setupUi(self, MainWindow):
+    def setupUi(self, MainWindow, cmp):
 
         self.poke_sacha = list(self.sacha.pokedex.values())[0]
         self.adversaire = self.pokemon_sauvage
         HP = self.poke_sacha.hp
         HP_adv = self.adversaire.hp
+
+        
 
 
         # Création de l'objet MainWindow
@@ -107,11 +110,13 @@ class Combat_ui(object):
         self.progressBarEnemy.setValue(self.adversaire.hp)
         self.progressBarEnemy.setFormat("")
         self.progressBarEnemy.setObjectName("progressBarEnemy")
-        self.label2 = QLabel(MainWindow)
-        self.label2.setGeometry(115, 184, 30, 30)  # Définir la géométrie du QLabel
-        self.label2.setText(str(self.adversaire.hp))  # Définir le texte à afficher
-        # Changer la couleur du texte avec la méthode setPalette
-        palette2 = self.label2.palette()
+
+        # Créer une étiquette pour afficher les points de vie de l'adversaire
+        self.label_hp_adversaire = QtWidgets.QLabel(self.centralwidget)
+        self.label_hp_adversaire.setGeometry(QtCore.QRect(113, 189, 371, 23))
+        self.label_hp_adversaire.setObjectName("label_hp_adversaire")
+        self.label_hp_adversaire.setStyleSheet("color: black; font-size: 16px;")
+        
 
         if self.adversaire.hp <= 0.25 * self.progressBarEnemy.maximum():
             self.progressBarEnemy.setStyleSheet("""                                                                
@@ -125,7 +130,6 @@ class Combat_ui(object):
                     background-color: #FF0000; /* Couleur de la barre de progression */
                 }                                
             """)
-            palette2.setColor(self.label2.foregroundRole(), QColor("dark"))  
             
         else:
             self.progressBarEnemy.setStyleSheet("""   
@@ -140,9 +144,9 @@ class Combat_ui(object):
                     background-color: #00FF00; /* Couleur de la barre de progression */
                 }                                                             
             """)
-            palette2.setColor(self.label2.foregroundRole(), QColor("yellow")) 
-
-        self.label2.setPalette(palette2)
+        # Mettre à jour le texte de l'étiquette des points de vie de l'adversaire
+        self.label_hp_adversaire.setText(str(self.adversaire.hp))
+        self.label_hp_adversaire.raise_()
 
         # Affichage de notre pokémon
         self.image_poke = QtWidgets.QLabel(self.centralwidget)
@@ -212,6 +216,7 @@ class Combat_ui(object):
         self.AttaqueSpeciale.raise_()
         self.Pokedex.raise_()
         self.Fuite.raise_()
+        self.label_hp_adversaire.raise_()
 
 
         self.AttaqueNormale.setStyleSheet("background-color: rgba(255, 255, 255, 0); border: none;")
@@ -224,14 +229,73 @@ class Combat_ui(object):
 
         self.Fuite.clicked.connect(MainWindow.close)
 
-        self.AttaqueNormale.clicked.connect(self.print_ok)
+        self.tour_joueur = True  # Variable pour suivre l'état du tour
 
-        self.AttaqueSpeciale.clicked.connect(self.print_spe)
+        # Connectez le signal clicked du bouton à la méthode correspondante
+        self.AttaqueNormale.clicked.connect(self.on_attaque_normale_clicked)
+
+    def on_attaque_normale_clicked(self):
+        if self.tour_joueur:
+            # Action du joueur (par exemple, attaque normale)
+            self.poke_sacha.attaquer(self.adversaire)
+            self.progressBarEnemy.setValue(self.adversaire.hp)
+            if self.adversaire.hp <= 0.25 * self.progressBarEnemy.maximum():
+                self.progressBarEnemy.setStyleSheet("""                                                                
+                    QProgressBar {
+                        border: 2px solid grey;
+                        border-radius: 5px;
+                        background-color: #FFFFFF; /* Couleur de fond de la barre de progression */
+                    }
+                        
+                    QProgressBar::chunk {
+                        background-color: #FF0000; /* Couleur de la barre de progression */
+                    }                                
+                """)
+                
+            else:
+                self.progressBarEnemy.setStyleSheet("""   
+                    QProgressBar { color: red;}                                                            
+                    QProgressBar {                            
+                        border: 2px solid grey;
+                        border-radius: 5px;
+                        background-color: #FFFFFF; /* Couleur de fond de la barre de progression */
+                    }
+
+                    QProgressBar::chunk {
+                        background-color: #00FF00; /* Couleur de la barre de progression */
+                    }                                                             
+                """)
+
+            # Mettre à jour le texte de l'étiquette des points de vie de l'adversaire
+            self.label_hp_adversaire.setText(str(self.adversaire.hp))
+            self.label_hp_adversaire.raise_()
+
+
+            # Désactivez le bouton pour empêcher les attaques multiples dans le même tour
+            self.AttaqueNormale.setEnabled(False)
+
+            # Passez au tour de l'ordinateur
+            self.tour_joueur = False
+
+            # Délai avant l'attaque de l'ordinateur (par exemple, 2 secondes)
+            QTimer.singleShot(2000, self.attaque_ordinateur)
+
+    def attaque_ordinateur(self):
+        # Action de l'ordinateur (à remplacer par votre logique d'attaque de l'ordinateur)
+        print("Attaque de l'ordinateur")
+
+        # Après l'attaque de l'ordinateur, réactivez le bouton pour permettre au joueur de jouer au prochain tour
+        self.AttaqueNormale.setEnabled(True)
+
+        # Passez au tour du joueur
+        self.tour_joueur = True
 
     def print_ok(self):
+        cmp = False
         print("ok")
 
     def print_spe(self):
+        cmp = False
         print("spe")
 
 
@@ -241,8 +305,9 @@ class FightWindow(QMainWindow, Combat_ui):
     def __init__(self, pokemon_sauvage, sacha, parent=None):
         self.pokemon_sauvage = pokemon_sauvage
         self.sacha = sacha
+        cmp = True
         super(FightWindow, self).__init__(parent)
-        self.setupUi(self)
+        self.setupUi(self, cmp)
         
 
 # if __name__ == "__main__":
