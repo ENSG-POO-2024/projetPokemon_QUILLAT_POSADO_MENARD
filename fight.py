@@ -7,6 +7,7 @@ import pandas as pd
 import os
 from abc import *
 import Poke as poke  # Importer les classes nécessaires depuis Pokemon.py
+import Combat.CombatVis3u as c 
 
 ####### Code #######
 

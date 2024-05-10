@@ -13,7 +13,7 @@ import os
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QPushButton, QMainWindow, QApplication, QLabel
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QColor
+from PyQt5.QtGui import QColor, QFont, QPainter, QPixmap
 
 current_dir = os.path.dirname(__file__)
 parent_dir = os.path.abspath(os.path.join(current_dir, ".."))
@@ -25,7 +25,14 @@ import fight as f
 
 
 class Combat_ui(object):
+
+        
     def setupUi(self, MainWindow):
+
+        self.poke_sacha = list(self.sacha.pokedex.values())[0]
+        self.adversaire = self.pokemon_sauvage
+        HP = self.poke_sacha.hp
+        HP_adv = self.adversaire.hp
 
 
         # Création de l'objet MainWindow
@@ -35,22 +42,30 @@ class Combat_ui(object):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
 
+        # Création de l'arrière plan
+        self.Fond = QtWidgets.QLabel(self.centralwidget)
+        self.Fond.setGeometry(QtCore.QRect(0, 0, 1000, 750))
+        self.Fond.setText("")
+        self.Fond.setPixmap(QtGui.QPixmap("Combat/BackgroundCombat.png"))
+        self.Fond.setScaledContents(True)
+        self.Fond.setObjectName("Fond")
+
 
         #Création de l'objet barre de vie de notre pokemon
         self.progressBarAllie = QtWidgets.QProgressBar(self.centralwidget)
         self.progressBarAllie.setGeometry(QtCore.QRect(620, 397, 371, 23))
-        self.progressBarAllie.setMaximum(200)
-        self.progressBarAllie.setValue(self.pokemon_sauvage.hp)
+        self.progressBarAllie.setMaximum(HP)
+        self.progressBarAllie.setValue(self.poke_sacha.hp)
         self.progressBarAllie.setFormat("")
         self.progressBarAllie.setObjectName("progressBarAllie")
         self.label = QLabel(MainWindow)
         self.label.setGeometry(625, 392, 30, 30)  # Définir la géométrie du QLabel
-        self.label.setText(str(self.pokemon_sauvage.hp))  # Définir le texte à afficher
+        self.label.setText(str(self.poke_sacha.hp))  # Définir le texte à afficher
         # Changer la couleur du texte avec la méthode setPalette
         palette = self.label.palette()
     
 
-        if self.pokemon_sauvage.hp <= 0.25 * self.progressBarAllie.maximum():
+        if self.poke_sacha.hp <= 0.25 * self.progressBarAllie.maximum():
             self.progressBarAllie.setStyleSheet("""                                                                
                 QProgressBar {
                     border: 2px solid grey;
@@ -78,37 +93,90 @@ class Combat_ui(object):
                 }                                                             
             """)
             palette.setColor(self.label.foregroundRole(), QColor("yellow")) 
-            
+
         self.label.setPalette(palette)
+            
+        
         
 
-
-        # Création de l'arrière plan
-        self.Fond = QtWidgets.QLabel(self.centralwidget)
-        self.Fond.setGeometry(QtCore.QRect(0, 0, 1001, 751))
-        self.Fond.setText("")
-        self.Fond.setPixmap(QtGui.QPixmap("Combat/BackgroundCombat.png"))
-        self.Fond.setScaledContents(True)
-        self.Fond.setObjectName("Fond")
 
         # Création de la barre de vie de m'adversaire
         self.progressBarEnemy = QtWidgets.QProgressBar(self.centralwidget)
         self.progressBarEnemy.setGeometry(QtCore.QRect(110, 189, 371, 23))
-        self.progressBarEnemy.setMaximum(100)
-        self.progressBarEnemy.setValue(40)
+        self.progressBarEnemy.setMaximum(HP_adv)
+        self.progressBarEnemy.setValue(self.adversaire.hp)
         self.progressBarEnemy.setFormat("")
         self.progressBarEnemy.setObjectName("progressBarEnemy")
-        self.progressBarEnemy.setStyleSheet("""
-            QProgressBar {
-                border: 2px solid grey;
-                border-radius: 5px;
-                background-color: #FFFFFF; /* Couleur de fond de la barre de progression */
-            }
+        self.label2 = QLabel(MainWindow)
+        self.label2.setGeometry(115, 184, 30, 30)  # Définir la géométrie du QLabel
+        self.label2.setText(str(self.adversaire.hp))  # Définir le texte à afficher
+        # Changer la couleur du texte avec la méthode setPalette
+        palette2 = self.label2.palette()
 
-            QProgressBar::chunk {
-                background-color: #00FF00; /* Couleur de la barre de progression */
-            }
-        """)
+        if self.adversaire.hp <= 0.25 * self.progressBarEnemy.maximum():
+            self.progressBarEnemy.setStyleSheet("""                                                                
+                QProgressBar {
+                    border: 2px solid grey;
+                    border-radius: 5px;
+                    background-color: #FFFFFF; /* Couleur de fond de la barre de progression */
+                }
+                    
+                QProgressBar::chunk {
+                    background-color: #FF0000; /* Couleur de la barre de progression */
+                }                                
+            """)
+            palette2.setColor(self.label2.foregroundRole(), QColor("dark"))  
+            
+        else:
+            self.progressBarEnemy.setStyleSheet("""   
+                QProgressBar { color: red;}                                                            
+                QProgressBar {                            
+                    border: 2px solid grey;
+                    border-radius: 5px;
+                    background-color: #FFFFFF; /* Couleur de fond de la barre de progression */
+                }
+
+                QProgressBar::chunk {
+                    background-color: #00FF00; /* Couleur de la barre de progression */
+                }                                                             
+            """)
+            palette2.setColor(self.label2.foregroundRole(), QColor("yellow")) 
+
+        self.label2.setPalette(palette2)
+
+        # Affichage de notre pokémon
+        self.image_poke = QtWidgets.QLabel(self.centralwidget)
+        self.image_poke.setGeometry(QtCore.QRect(60, 230, 400, 400))
+        self.image_poke.setText("")
+        self.image_poke.setPixmap(QtGui.QPixmap("Pokémons/"+self.poke_sacha.name.split()[0]+"/"+self.poke_sacha.name.split()[0]+"_dos.png"))
+        self.image_poke.setScaledContents(True)
+        self.image_poke.setObjectName("Pokemon Sacha")
+
+        # Affichage pokémon adverse
+        self.image_adv = QtWidgets.QLabel(self.centralwidget)
+        self.image_adv.setGeometry(QtCore.QRect(550, 40, 400, 400))
+        self.image_adv.setText("")
+        self.image_adv.setPixmap(QtGui.QPixmap("Pokémons/"+self.adversaire.name.split()[0]+"/"+self.adversaire.name.split()[0]+"_face.png"))
+        self.image_adv.setScaledContents(True)
+        self.image_adv.setObjectName("Pokemon adverse")
+
+
+
+        # Point d'attaque et de défense de notre pokémon
+        self.label = QLabel(str(self.poke_sacha.attack), self)
+        self.label.setGeometry(145, 583, 200, 50)
+        self.label.setStyleSheet("color: black; font-size: 25px;")  
+        self.label = QLabel(str(self.poke_sacha.defense), self)
+        self.label.setGeometry(145, 657, 200, 50)
+        self.label.setStyleSheet("color: black; font-size: 25px;")
+
+        # Point d'attaque et de défense de l'adversaire
+        self.label = QLabel(str(self.adversaire.attack), self)
+        self.label.setGeometry(323, -2, 200, 50)
+        self.label.setStyleSheet("color: red; font-size: 20px;")  
+        self.label = QLabel(str(self.adversaire.defense), self)
+        self.label.setGeometry(339, 34, 200, 50)
+        self.label.setStyleSheet("color: red; font-size: 20px;")
 
         # Bouton de l'attaque normale
         self.AttaqueNormale = QtWidgets.QPushButton(self.centralwidget)
@@ -130,12 +198,14 @@ class Combat_ui(object):
 
         # Bouton pour fuir
         self.Fuite = QtWidgets.QPushButton(self.centralwidget)
-        self.Fuite.setGeometry(QtCore.QRect(840, 10, 141, 61))
+        self.Fuite.setGeometry(QtCore.QRect(800, 0, 300, 300))
         self.Fuite.setText("")
         self.Fuite.setObjectName("Fuite")
 
         # On met tout en avant (dans le bon ordre) pour que les objets soient au premier plan 
         self.Fond.raise_()
+        self.image_poke.raise_()
+        self.image_adv.raise_()
         self.progressBarAllie.raise_()
         self.progressBarEnemy.raise_()
         self.AttaqueNormale.raise_()
@@ -154,6 +224,16 @@ class Combat_ui(object):
 
         self.Fuite.clicked.connect(MainWindow.close)
 
+        self.AttaqueNormale.clicked.connect(self.print_ok)
+
+        self.AttaqueSpeciale.clicked.connect(self.print_spe)
+
+    def print_ok(self):
+        print("ok")
+
+    def print_spe(self):
+        print("spe")
+
 
 
 
@@ -164,8 +244,6 @@ class FightWindow(QMainWindow, Combat_ui):
         super(FightWindow, self).__init__(parent)
         self.setupUi(self)
         
-
-
 
 # if __name__ == "__main__":
 #     def run_app():
