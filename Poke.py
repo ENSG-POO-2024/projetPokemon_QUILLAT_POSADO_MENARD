@@ -40,7 +40,7 @@ class Pokemon:
             return 1
         
     def attaquer(self, adversaire):
-        degats = self.attack * self.modifier(adversaire.type) - adversaire.defense
+        degats = int(self.attack * self.modifier(adversaire.type) - adversaire.defense)
         if degats <= 0:
             degats = 0
         adversaire.hp -= degats
@@ -49,22 +49,16 @@ class Pokemon:
         print(f"{self.name} attaque {adversaire.name} et lui inflige {degats} dégâts.")
         print(f"Il reste {adversaire.hp} points de vie à {adversaire.name}.")
 
-    def attaque_speciale_joueur(self, adversaire, tour_avant_attaque_speciale):
-        # Vérifie si l'attaque spéciale est disponible
-        if tour_avant_attaque_speciale == 0:
-            # Utilise l'attaque spéciale
-            degats = self.sp_attack * self.modifier(adversaire.type) - adversaire.sp_defense
-            if degats <= 0:
-                degats = 0
-            adversaire.hp -= degats  
-            if adversaire.hp < 0:
-                adversaire.hp = 0
-            print(f"{self.name} utilise son attaque spéciale sur {adversaire.name} et lui inflige {degats} dégâts.")
-            print(f"Il reste {adversaire.hp} points de vie à {adversaire.name}.")
-            # Réinitialise le compteur de tours avant la prochaine attaque spéciale
-            tour_avant_attaque_speciale = 2
-        else:
-            print("L'attaque spéciale n'est pas encore disponible.")
+    def attaque_speciale_joueur(self, adversaire):
+        # Utilise l'attaque spéciale
+        degats = int(self.sp_attack * self.modifier(adversaire.type) - adversaire.sp_defense)
+        if degats <= 0:
+            degats = 0
+        adversaire.hp -= degats  
+        if adversaire.hp < 0:
+            adversaire.hp = 0
+        print(f"{self.name} utilise son attaque spéciale sur {adversaire.name} et lui inflige {degats} dégâts.")
+        print(f"Il reste {adversaire.hp} points de vie à {adversaire.name}.")
         
 
         
@@ -248,6 +242,13 @@ class InventaireJoueur(Pokedex):
         
         pokemon.x = None # Le pokemon est maintenant dans notre inventaire
         pokemon.y = None # il n'a plus de coordonnées
+
+    def capturer_pokemon(self, adversaire, pokedex_sauvage, pokedex):
+        pokedex_sauvage.pokedex.pop(adversaire.name)
+        adversaire.hp = pokedex.pokedex[adversaire.name.split()[0]].hp
+        adversaire.x = None
+        adversaire.y = None
+        self.inventory(adversaire)
 
 
 

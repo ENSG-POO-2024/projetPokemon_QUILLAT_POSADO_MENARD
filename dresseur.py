@@ -7,6 +7,7 @@ class Dresseur:
 
     SIZE = 10
     DISTANCE_COMBAT = 3
+    DISTANCE_AFFICHAGE = 430 # Affiche les pokémons dans un carré de 3 blocs
     VITESSE_DEPART = 110
     
     def __init__(self, x, y, X, Y, sacha):
@@ -46,5 +47,9 @@ class Dresseur:
                 return (True, pokemon)
             
         return (False, pokemon)
+    
+    def proche_affichage(self, pokemon):
+        if self.distance(pokemon) <= self.DISTANCE_AFFICHAGE:
+            return True
     
 
