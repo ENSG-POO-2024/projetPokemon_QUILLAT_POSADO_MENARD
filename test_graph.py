@@ -214,7 +214,7 @@ if __name__ == "__main__":
     # sacha.inventory(magicarpe)
 
     
-    video_path = os.path.join(script_dir, "Image", "video.mp4")  # Remplacez ceci par le chemin vers votre fichier vidéo
+    video_path = os.path.join(script_dir, "Image", "video.mp4")
     accueil = AccueilWindow(video_path)
     accueil.show()
 

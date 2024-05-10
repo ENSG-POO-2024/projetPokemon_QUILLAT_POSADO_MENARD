@@ -35,9 +35,6 @@ class Combat_ui(object):
         HP = self.poke_sacha.hp
         HP_adv = self.adversaire.hp
 
-        
-
-
         # Création de l'objet MainWindow
         MainWindow.setObjectName("MainWindow")
         MainWindow.setWindowTitle("Combat contre " + self.pokemon_sauvage.name.split()[0])
@@ -61,46 +58,20 @@ class Combat_ui(object):
         self.progressBarAllie.setValue(self.poke_sacha.hp)
         self.progressBarAllie.setFormat("")
         self.progressBarAllie.setObjectName("progressBarAllie")
-        self.label = QLabel(MainWindow)
-        self.label.setGeometry(625, 392, 30, 30)  # Définir la géométrie du QLabel
-        self.label.setText(str(self.poke_sacha.hp))  # Définir le texte à afficher
+        #self.label = QLabel(MainWindow)
+        #self.label.setGeometry(625, 392, 30, 30)  # Définir la géométrie du QLabel
+        #self.label.setText(str(self.poke_sacha.hp))  # Définir le texte à afficher
         # Changer la couleur du texte avec la méthode setPalette
-        palette = self.label.palette()
+        #palette = self.label.palette()
+
+        # Créer une étiquette pour afficher les points de vie de notre pokemon
+        self.label_hp_allie = QtWidgets.QLabel(self.centralwidget)
+        self.label_hp_allie.setGeometry(QtCore.QRect(623, 397, 371, 23))
+        self.label_hp_allie.setObjectName("label_hp_allie")
+        self.label_hp_allie.setStyleSheet("color: black; font-size: 16px;")
     
-
-        if self.poke_sacha.hp <= 0.25 * self.progressBarAllie.maximum():
-            self.progressBarAllie.setStyleSheet("""                                                                
-                QProgressBar {
-                    border: 2px solid grey;
-                    border-radius: 5px;
-                    background-color: #FFFFFF; /* Couleur de fond de la barre de progression */
-                }
-                    
-                QProgressBar::chunk {
-                    background-color: #FF0000; /* Couleur de la barre de progression */
-                }                                
-            """)
-            palette.setColor(self.label.foregroundRole(), QColor("dark"))  
-            
-        else:
-            self.progressBarAllie.setStyleSheet("""   
-                QProgressBar { color: red;}                                                            
-                QProgressBar {                            
-                    border: 2px solid grey;
-                    border-radius: 5px;
-                    background-color: #FFFFFF; /* Couleur de fond de la barre de progression */
-                }
-
-                QProgressBar::chunk {
-                    background-color: #00FF00; /* Couleur de la barre de progression */
-                }                                                             
-            """)
-            palette.setColor(self.label.foregroundRole(), QColor("yellow")) 
-
-        self.label.setPalette(palette)
-            
-        
-        
+        # Affichage de la bar d'hp de notre pokemon
+        self.affiche_progress_bar(self.progressBarAllie, self.label_hp_allie, self.poke_sacha.hp)
 
 
         # Création de la barre de vie de m'adversaire
@@ -117,36 +88,8 @@ class Combat_ui(object):
         self.label_hp_adversaire.setObjectName("label_hp_adversaire")
         self.label_hp_adversaire.setStyleSheet("color: black; font-size: 16px;")
         
-
-        if self.adversaire.hp <= 0.25 * self.progressBarEnemy.maximum():
-            self.progressBarEnemy.setStyleSheet("""                                                                
-                QProgressBar {
-                    border: 2px solid grey;
-                    border-radius: 5px;
-                    background-color: #FFFFFF; /* Couleur de fond de la barre de progression */
-                }
-                    
-                QProgressBar::chunk {
-                    background-color: #FF0000; /* Couleur de la barre de progression */
-                }                                
-            """)
-            
-        else:
-            self.progressBarEnemy.setStyleSheet("""   
-                QProgressBar { color: red;}                                                            
-                QProgressBar {                            
-                    border: 2px solid grey;
-                    border-radius: 5px;
-                    background-color: #FFFFFF; /* Couleur de fond de la barre de progression */
-                }
-
-                QProgressBar::chunk {
-                    background-color: #00FF00; /* Couleur de la barre de progression */
-                }                                                             
-            """)
-        # Mettre à jour le texte de l'étiquette des points de vie de l'adversaire
-        self.label_hp_adversaire.setText(str(self.adversaire.hp))
-        self.label_hp_adversaire.raise_()
+        # Affichage de la bar d'hp de l'adversaire
+        self.affiche_progress_bar(self.progressBarEnemy, self.label_hp_adversaire, self.adversaire.hp)
 
         # Affichage de notre pokémon
         self.image_poke = QtWidgets.QLabel(self.centralwidget)
@@ -217,6 +160,7 @@ class Combat_ui(object):
         self.Pokedex.raise_()
         self.Fuite.raise_()
         self.label_hp_adversaire.raise_()
+        self.label_hp_allie.raise_()
 
 
         self.AttaqueNormale.setStyleSheet("background-color: rgba(255, 255, 255, 0); border: none;")
@@ -239,36 +183,7 @@ class Combat_ui(object):
             # Action du joueur (par exemple, attaque normale)
             self.poke_sacha.attaquer(self.adversaire)
             self.progressBarEnemy.setValue(self.adversaire.hp)
-            if self.adversaire.hp <= 0.25 * self.progressBarEnemy.maximum():
-                self.progressBarEnemy.setStyleSheet("""                                                                
-                    QProgressBar {
-                        border: 2px solid grey;
-                        border-radius: 5px;
-                        background-color: #FFFFFF; /* Couleur de fond de la barre de progression */
-                    }
-                        
-                    QProgressBar::chunk {
-                        background-color: #FF0000; /* Couleur de la barre de progression */
-                    }                                
-                """)
-                
-            else:
-                self.progressBarEnemy.setStyleSheet("""   
-                    QProgressBar { color: red;}                                                            
-                    QProgressBar {                            
-                        border: 2px solid grey;
-                        border-radius: 5px;
-                        background-color: #FFFFFF; /* Couleur de fond de la barre de progression */
-                    }
-
-                    QProgressBar::chunk {
-                        background-color: #00FF00; /* Couleur de la barre de progression */
-                    }                                                             
-                """)
-
-            # Mettre à jour le texte de l'étiquette des points de vie de l'adversaire
-            self.label_hp_adversaire.setText(str(self.adversaire.hp))
-            self.label_hp_adversaire.raise_()
+            self.affiche_progress_bar(self.progressBarEnemy, self.label_hp_adversaire, self.adversaire.hp)
 
 
             # Désactivez le bouton pour empêcher les attaques multiples dans le même tour
@@ -283,12 +198,48 @@ class Combat_ui(object):
     def attaque_ordinateur(self):
         # Action de l'ordinateur (à remplacer par votre logique d'attaque de l'ordinateur)
         print("Attaque de l'ordinateur")
-
+        self.adversaire.attaquer(self.poke_sacha)
+        self.progressBarAllie.setValue(self.poke_sacha.hp)
+        self.affiche_progress_bar(self.progressBarAllie, self.label_hp_allie, self.poke_sacha.hp)
+        
         # Après l'attaque de l'ordinateur, réactivez le bouton pour permettre au joueur de jouer au prochain tour
         self.AttaqueNormale.setEnabled(True)
 
         # Passez au tour du joueur
         self.tour_joueur = True
+
+    def affiche_progress_bar(self, bar, label, hp):
+        #if bar == "allie": # Affiche nouvelle bar de progression alliée
+            if hp <= 0.25 * bar.maximum():
+                bar.setStyleSheet("""                                                                
+                    QProgressBar {
+                        border: 2px solid grey;
+                        border-radius: 5px;
+                        background-color: #FFFFFF; /* Couleur de fond de la barre de progression */
+                    }
+                        
+                    QProgressBar::chunk {
+                        background-color: #FF0000; /* Couleur de la barre de progression */
+                    }                                
+                """) 
+            
+            else:
+                bar.setStyleSheet("""   
+                    QProgressBar { color: red;}                                                            
+                    QProgressBar {                            
+                        border: 2px solid grey;
+                        border-radius: 5px;
+                        background-color: #FFFFFF; /* Couleur de fond de la barre de progression */
+                    }
+
+                    QProgressBar::chunk {
+                        background-color: #00FF00; /* Couleur de la barre de progression */
+                    }                                                             
+                """)
+            # Mettre à jour le texte de l'étiquette des points de vie de notre pokemon
+            label.setText(str(hp))
+            label.raise_()
+
 
     def print_ok(self):
         cmp = False
