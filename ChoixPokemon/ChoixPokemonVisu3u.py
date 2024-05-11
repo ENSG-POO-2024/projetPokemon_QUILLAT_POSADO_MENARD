@@ -58,7 +58,7 @@ class ChoixPokemon_ui(object):
         for nom_poke, pokemon in self.inventaire_joueur.pokedex.items():
             base_name = pokemon.name.split()[0] # Pour gérer le cas avec plusieurs fois le même pokémon
             self.label = QLabel(self)
-            self.label.setGeometry(self.x, self.y, 100, 100)  # Position et taille de l'image
+            self.label.setGeometry(self.x, self.y-10, self.largeur, self.hauteur)  # Position et taille de l'image
             self.pixmap = QPixmap("Pokémons/"+base_name+"/"+base_name+"_face.png")
             self.label.setPixmap(self.pixmap)
             self.label.setScaledContents(True)
@@ -75,18 +75,25 @@ class ChoixPokemon_ui(object):
 
 
     def creer_bouton(self, pokemon):
-        self.boutons[pokemon.name] = QPushButton(pokemon.name, self)
+        self.boutons[pokemon.name] = QPushButton(self)
         self.boutons[pokemon.name].setGeometry(self.x, self.y, self.largeur, self.hauteur)
-        self.boutons[pokemon.name].setStyleSheet("background-color: rgba(0, 255, 255, 0.7); border: 2px solid black;")
+        self.boutons[pokemon.name].setStyleSheet("background-color: rgba(0, 0, 0, 0); border: 2px solid black;")
+        self.label_nom = QtWidgets.QLabel(self)
+        self.label_nom.setGeometry(QtCore.QRect(self.x, self.y+33, self.largeur, self.hauteur))
+        self.label_nom.setObjectName("label_nom_pokémon")
+        self.label_nom.setStyleSheet("color: black; font-size: 16px;")
+        self.label_nom.setText(str(pokemon.name))
+        self.label_nom.setAlignment(Qt.AlignCenter)  # Centrer le texte dans le QLabel
+        self.label_nom.raise_()
         self.boutons[pokemon.name].raise_()
 
-         # Incrémentation de la position x
-        self.x += 200
+         # Incrémentation de la position x et X
+        self.x += 110
 
         # Si la position x dépasse la largeur de la fenêtre, réinitialisation de x et incrémentation de y
         if self.x >= self.width():
-            self.x = 0
-            self.y += 200
+            self.x = 50
+            self.y += 120
 
 
 

@@ -224,10 +224,12 @@ class InventaireJoueur(Pokedex):
         self.inventaire_joueur = {}
 
     def inventory(self, pokemon): 
-        if pokemon.name not in self.pokedex:
+        if pokemon.name.split()[0] not in self.pokedex:
             # Si le nom du Pokémon n'existe pas dans l'inventaire du joueur, on l'ajoute directement
+            pokemon.name = pokemon.name.split()[0]
             self.pokedex[pokemon.name] = pokemon
         else:
+            pokemon.name = pokemon.name.split()[0]
             # Si le nom du Pokémon existe déjà, on trouve le prochain numéro de séquence disponible 
             # pour que deux pokémons n'aient pas le même nom
             sequence = 2

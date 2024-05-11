@@ -25,6 +25,7 @@ sys.path.append(parent_dir)
 import Poke as poke
 import test_graph as t #MODIFIER QUAND FICHIER DEFINITIF
 import fight as f
+import ChoixPokemon.ChoixPokemonVisu3u as ch
 
 
 class Combat_ui(object):
@@ -194,10 +195,18 @@ class Combat_ui(object):
         self.AttaqueNormale.clicked.connect(self.on_attaque_normale_clicked)
         self.AttaqueSpeciale.clicked.connect(self.on_attaque_speciale_clicked)
 
-        
+        self.Pokedex.clicked.connect(self.open_pokedex)
+
+
+    def open_pokedex(self): # A revoir
+        self.close()
+        self.pokedex_window = ch.ChoixPokemonWindow(self.adversaire, self.inventaire_joueur, self.pokedex_sauvages)  
+        self.pokedex_window.show()
+
 
     def fuite_buton(self):
         self.pokemon_utilise.hp = self.pokedex.pokedex[self.pokemon_utilise.name.split()[0]].hp
+        self.adversaire.hp = self.pokedex.pokedex[self.adversaire.name.split()[0]].hp
         self.close() 
 
     def on_attaque_normale_clicked(self):
@@ -242,7 +251,7 @@ class Combat_ui(object):
 
             if self.adversaire.hp <= 0: # On vérifie si l'adversaire est battu
                 QTimer.singleShot(2000, self.close)
-                self.pokemon_utilise.hp = self.pokedex.pokedex[self.pokemon_utilise.name].hp
+                self.pokemon_utilise.hp = self.pokedex.pokedex[self.pokemon_utilise.name.split()[0]].hp
                 self.inventaire_joueur.capturer_pokemon(self.adversaire, self.pokedex_sauvages, self.pokedex)
             else:
                 # On attend 2 secondes puis l'adversaire attaque
@@ -291,7 +300,7 @@ class Combat_ui(object):
 
         if self.pokemon_utilise.hp <= 0: # On vérifie si le joueur a perdu
                 QTimer.singleShot(2000, self.close)
-                self.pokemon_utilise.hp = self.pokedex.pokedex[self.pokemon_utilise.name].hp
+                self.pokemon_utilise.hp = self.pokedex.pokedex[self.pokemon_utilise.name.split()[0]].hp
                 self.adversaire.hp = self.pokedex.pokedex[self.adversaire.name.split()[0]].hp
 
 
