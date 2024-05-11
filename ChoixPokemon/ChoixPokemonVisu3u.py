@@ -50,7 +50,7 @@ class ChoixPokemon_ui(object):
         # self.bouton_2.raise_()
 
         self.boutons = {} # Pour pouvoir créer plusieurs boutons avec chacun son noms
-        self.x = 50  # Position x initiale du premier bouton
+        self.x = 65  # Position x initiale du premier bouton
         self.y = 50  # Position y initiale du premier bouton
         self.largeur = 100  # Largeur des boutons
         self.hauteur = 100  # Hauteur des boutons
@@ -91,8 +91,8 @@ class ChoixPokemon_ui(object):
         self.x += 110
 
         # Si la position x dépasse la largeur de la fenêtre, réinitialisation de x et incrémentation de y
-        if self.x >= self.width():
-            self.x = 50
+        if self.x >= self.width()-65:
+            self.x = 65
             self.y += 120
 
 
