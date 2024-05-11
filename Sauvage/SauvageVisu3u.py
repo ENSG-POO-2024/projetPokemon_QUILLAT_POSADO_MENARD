@@ -13,6 +13,7 @@ sys.path.append(parent_dir)
 import Poke as poke
 import test_graph as t #MODIFIER QUAND FICHIER DEFINITIF
 import Combat.CombatVis3u as c
+import ChoixPokemon.ChoixPokemonVisu3u as ch
 
 
 class Sauvage_ui(object):
@@ -69,11 +70,11 @@ class Sauvage_ui(object):
 
         self.fuite.clicked.connect(MainWindow.close)
         self.fight_buton.clicked.connect(MainWindow.close)
-        self.fight_buton.clicked.connect(self.open_fight_window)
+        self.fight_buton.clicked.connect(self.open_choix_pokemon)
 
-    def open_fight_window(self):
-        self.fight_window = c.FightWindow(self.pokemon_sauvage, self.inventaire_joueur, self.pokedex_sauvages)
-        self.fight_window.show()
+    def open_choix_pokemon(self):
+        self.choix = ch.ChoixPokemonWindow(self.pokemon_sauvage, self.inventaire_joueur, self.pokedex_sauvages)
+        self.choix.show()
 
 
 

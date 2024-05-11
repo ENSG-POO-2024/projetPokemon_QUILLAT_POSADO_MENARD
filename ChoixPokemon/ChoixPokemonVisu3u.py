@@ -1,9 +1,17 @@
+
 import sys
+import os
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QApplication, QPushButton, QHBoxLayout, QWidget, QLabel, QMainWindow
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
+
+current_dir = os.path.dirname(__file__)
+parent_dir = os.path.abspath(os.path.join(current_dir, ".."))
+sys.path.append(parent_dir)
+
 import Poke as poke
+import Combat.CombatVis3u as c
 
 
   ###OKKKKKK
@@ -41,23 +49,29 @@ class ChoixPokemon_ui(object):
         # self.bouton_1.raise_()
         # self.bouton_2.raise_()
 
-        self.pokemon = list(self.inventaire_joueur.pokedex.values())[0]
-        self.poke2 = poke.Pokemon("bulbi",10,10,10,10,10,10,10,poke.Eau(),False)
         self.boutons = {} # Pour pouvoir créer plusieurs boutons avec chacun son noms
         self.x = 50  # Position x initiale du premier bouton
         self.y = 50  # Position y initiale du premier bouton
         self.largeur = 100  # Largeur des boutons
-        self.hauteur = 50  # Hauteur des boutons
+        self.hauteur = 100  # Hauteur des boutons
 
-        self.creer_bouton(self.pokemon)
-        self.creer_bouton(self.poke2)
+        for nom_poke, pokemon in self.inventaire_joueur.pokedex.items():
+            base_name = pokemon.name.split()[0] # Pour gérer le cas avec plusieurs fois le même pokémon
+            self.label = QLabel(self)
+            self.label.setGeometry(self.x, self.y, 100, 100)  # Position et taille de l'image
+            self.pixmap = QPixmap("Pokémons/"+base_name+"/"+base_name+"_face.png")
+            self.label.setPixmap(self.pixmap)
+            self.label.setScaledContents(True)
+            self.creer_bouton(pokemon)
 
         for nom_bouton, bouton in self.boutons.items():
-            bouton.clicked.connect(lambda checked, nom=nom_bouton: self.afficher_message(nom))
+            bouton.clicked.connect(lambda checked, nom=nom_bouton: MainWindow.close())
+            bouton.clicked.connect(lambda checked, nom=nom_bouton: self.open_combat(self.inventaire_joueur.pokedex[nom]))
 
 
-    def afficher_message(self, nom_bouton):
-        print(f"Vous avez cliqué sur {nom_bouton}")
+    def open_combat(self, pokemon_choisi):
+        self.fight_window = c.FightWindow(self.pokemon_sauvage, pokemon_choisi, self.pokedex_sauvages, self.inventaire_joueur)
+        self.fight_window.show()
 
 
     def creer_bouton(self, pokemon):
@@ -65,6 +79,7 @@ class ChoixPokemon_ui(object):
         self.boutons[pokemon.name].setGeometry(self.x, self.y, self.largeur, self.hauteur)
         self.boutons[pokemon.name].setStyleSheet("background-color: rgba(0, 255, 255, 0.7); border: 2px solid black;")
         self.boutons[pokemon.name].raise_()
+
          # Incrémentation de la position x
         self.x += 200
 
@@ -76,16 +91,24 @@ class ChoixPokemon_ui(object):
 
 
 class ChoixPokemonWindow(QMainWindow, ChoixPokemon_ui):
-    def __init__(self, inventaire_joueur, parent=None):
-        self.inventaire_joueur = inventaire_joueur
+    def __init__(self, pokemon_sauvage, inventaire_joueur, pokedex_sauvages, parent=None):
+        self.pokemon_sauvage = pokemon_sauvage # Le pokémon rencontré
+        self.inventaire_joueur = inventaire_joueur # L'inventaire du joueur avec ses pokémons
+        self.pokedex_sauvages = pokedex_sauvages # Le pokedex avec tous les pokémons sauvages
         super(ChoixPokemonWindow, self).__init__(parent)
         self.setupUi(self)
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     inventaire = poke.InventaireJoueur()
-    inventaire.inventory(poke.Pokemon("pika",10,10,10,10,10,10,10,poke.Eau(),False))
-    fenetre = ChoixPokemonWindow(inventaire)
+    inventaire.inventory(poke.Pokemon("Pikachu",15,12,15,12,10,10,10,poke.Eau(),False))
+    inventaire.inventory(poke.Pokemon("Bulbizarre",10,10,10,10,10,10,10,poke.Eau(),False))
+    inventaire.inventory(poke.Pokemon("Bulbizarre",10,10,10,10,10,10,10,poke.Eau(),False))
+    poke_sauvge = poke.Pokemon("Rattata",15,12,15,12,10,10,10,poke.Eau(),False)
+    pokedex_sauvages = poke.Pokedex()
+    pokedex_sauvages.charger_pokedex('pokemons_a_capturer.csv') # On le remplit avec notre fichier 
+    fenetre = ChoixPokemonWindow(poke_sauvge, inventaire, pokedex_sauvages)
     fenetre.setWindowTitle("Exemple de fenêtre avec boutons par-dessus une image de fond")
     fenetre.show()
     sys.exit(app.exec_())

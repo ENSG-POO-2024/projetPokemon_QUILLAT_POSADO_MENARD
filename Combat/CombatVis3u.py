@@ -32,7 +32,7 @@ class Combat_ui(object):
         
     def setupUi(self, MainWindow):
 
-        self.pokemon_utilise = list(self.inventaire_joueur.pokedex.values())[0]
+        #self.pokemon_utilise = list(self.inventaire_joueur.pokedex.values())[0]
         self.adversaire = self.pokemon_sauvage
         HP = self.pokemon_utilise.hp
         HP_adv = self.adversaire.hp
@@ -49,11 +49,11 @@ class Combat_ui(object):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
 
-        # # Ajout du son
-        # self.musique = QMediaPlayer(self.centralwidget)
-        # self.musique.setMedia(QMediaContent(QUrl.fromLocalFile("battle.mp4")))
-        # self.musique.setVolume(100)
-        # self.musique.play()
+        # Ajout du son
+        self.musique = QMediaPlayer(self.centralwidget)
+        self.musique.setMedia(QMediaContent(QUrl.fromLocalFile("battle.mp3")))
+        self.musique.setVolume(100)
+        self.musique.play()
 
         # Création de l'arrière plan
         self.Fond = QtWidgets.QLabel(self.centralwidget)
@@ -334,11 +334,11 @@ class Combat_ui(object):
 
 
 class FightWindow(QMainWindow, Combat_ui):
-    def __init__(self, pokemon_sauvage, inventaire_joueur, pokedex_sauvages, parent=None):
+    def __init__(self, pokemon_sauvage, pokemon_utilise, pokedex_sauvages, inventaire_joueur, parent=None):
         self.pokemon_sauvage = pokemon_sauvage # Le pokémon rencontré
         self.inventaire_joueur = inventaire_joueur # L'inventaire du joueur avec ses pokémons
+        self.pokemon_utilise = pokemon_utilise # Le pokémon qu'il utilise
         self.pokedex_sauvages = pokedex_sauvages # Le pokedex avec tous les pokémons sauvages
-        cmp = True
         super(FightWindow, self).__init__(parent)
         self.setupUi(self)
         
