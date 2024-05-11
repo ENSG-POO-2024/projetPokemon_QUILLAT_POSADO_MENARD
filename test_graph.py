@@ -11,7 +11,8 @@ import cv2
 ### Import des objets PyQt ###
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QGraphicsView, QGraphicsScene
 from PyQt5.QtGui import QPainter, QPixmap, QImage
-from PyQt5.QtCore import Qt, QTimer
+from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent, QSoundEffect
+from PyQt5.QtCore import Qt, QTimer, QUrl
 
 ### Import des fichiers ###
 import Poke as poke

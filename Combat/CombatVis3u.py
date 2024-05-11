@@ -10,10 +10,12 @@
 
 import sys
 import os
+import cv2
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QPushButton, QMainWindow, QApplication, QLabel
-from PyQt5.QtCore import Qt, QTimer
-from PyQt5.QtGui import QColor, QFont, QPainter, QPixmap
+from PyQt5.QtCore import Qt, QTimer, QUrl
+from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent, QSoundEffect
+from PyQt5.QtGui import QColor, QFont, QPainter, QPixmap, QImage
 from PyQt5 import *
 
 current_dir = os.path.dirname(__file__)
@@ -38,12 +40,20 @@ class Combat_ui(object):
         self.pokedex = poke.Pokedex()
         self.pokedex.charger_pokedex("pokemon_first_gen.csv")
 
+
+
         # Création de l'objet MainWindow
         MainWindow.setObjectName("MainWindow")
         MainWindow.setWindowTitle("Combat contre " + self.pokemon_sauvage.name.split()[0])
         MainWindow.resize(1000, 750)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+
+        # # Ajout du son
+        # self.musique = QMediaPlayer(self.centralwidget)
+        # self.musique.setMedia(QMediaContent(QUrl.fromLocalFile("battle.mp4")))
+        # self.musique.setVolume(100)
+        # self.musique.play()
 
         # Création de l'arrière plan
         self.Fond = QtWidgets.QLabel(self.centralwidget)
@@ -57,7 +67,7 @@ class Combat_ui(object):
         #Création de l'objet barre de vie de notre pokemon
         self.progressBarAllie = QtWidgets.QProgressBar(self.centralwidget)
         self.progressBarAllie.setGeometry(QtCore.QRect(620, 397, 371, 23))
-        self.progressBarAllie.setMaximum(HP)
+        self.progressBarAllie.setMaximum(self.pokemon_utilise.hp)
         self.progressBarAllie.setValue(self.pokemon_utilise.hp)
         self.progressBarAllie.setFormat("")
         self.progressBarAllie.setObjectName("progressBarAllie")
@@ -174,7 +184,7 @@ class Combat_ui(object):
 
         MainWindow.setCentralWidget(self.centralwidget)
 
-        self.Fuite.clicked.connect(MainWindow.close)
+        self.Fuite.clicked.connect(self.fuite_buton)
 
         self.tour_joueur = True
         self.tours_depuis_attaque_joueur = 2  # Tours écoulés depuis la dernière attaque spéciale du joueur
@@ -183,6 +193,12 @@ class Combat_ui(object):
         # Connectez le signal clicked du bouton à la méthode correspondante
         self.AttaqueNormale.clicked.connect(self.on_attaque_normale_clicked)
         self.AttaqueSpeciale.clicked.connect(self.on_attaque_speciale_clicked)
+
+        
+
+    def fuite_buton(self):
+        self.pokemon_utilise.hp = self.pokedex.pokedex[self.pokemon_utilise.name.split()[0]].hp
+        self.close() 
 
     def on_attaque_normale_clicked(self):
         if self.tour_joueur:
@@ -194,19 +210,20 @@ class Combat_ui(object):
             # On désactive le bouton d'attaque pour empêcher les attaques multiples dans le même tour
             self.AttaqueNormale.setEnabled(False)
 
-            # On incrémente le nombre de tour depuis l'ataque spéciale
+            # On incrémente le nombre de tour depuis l'ataque spéciale du joueur
             self.tours_depuis_attaque_joueur += 1
 
             # On passe au tour de l'ordi
             self.tour_joueur = False
 
-            if self.adversaire.hp <= 0:
-                self.close()
-                self.pokemon_utilise.hp = self.pokedex.pokedex[self.pokemon_utilise.name].hp
+            if self.adversaire.hp <= 0: # On vérifie si l'adversaire est battu
+                QTimer.singleShot(2000, self.close)
+                self.pokemon_utilise.hp = self.pokedex.pokedex[self.pokemon_utilise.name.split()[0]].hp
                 self.inventaire_joueur.capturer_pokemon(self.adversaire, self.pokedex_sauvages, self.pokedex)
 
+            else:
                 # L'ordi peut attaquer
-            QTimer.singleShot(2000, self.tour_ordi)
+                QTimer.singleShot(2000, self.tour_ordi)
         
 
     def on_attaque_speciale_clicked(self):
@@ -221,91 +238,95 @@ class Combat_ui(object):
             self.AttaqueSpeciale.setStyleSheet("background-color: rgba(128, 128, 128, 128)")
 
             # On met à jour la disponibilité de l'attaque spéciale
-            self.tours_depuis_attaque_joueur = 0  # Réinitialisez le compteur de tours depuis l'attaque spéciale
+            self.tours_depuis_attaque_joueur = 0  # On réinitialise le compteur de tours après l'attaque spéciale du joueur
 
-            if self.adversaire.hp <= 0:
-                self.close()
+            if self.adversaire.hp <= 0: # On vérifie si l'adversaire est battu
+                QTimer.singleShot(2000, self.close)
                 self.pokemon_utilise.hp = self.pokedex.pokedex[self.pokemon_utilise.name].hp
                 self.inventaire_joueur.capturer_pokemon(self.adversaire, self.pokedex_sauvages, self.pokedex)
-
-            # Délai avant l'attaque de l'ordinateur (par exemple, 2 secondes)
-            QTimer.singleShot(2000, self.tour_ordi)
+            else:
+                # On attend 2 secondes puis l'adversaire attaque
+                QTimer.singleShot(2000, self.tour_ordi)
 
         
 
     def tour_ordi(self):
-        # Vérifiez si l'attaque spéciale de l'ordinateur est disponible et si suffisamment de tours se sont écoulés depuis la dernière attaque spéciale
+        # On vérifie si l'ordi a son attaque spéciale de prête 
         if self.tours_depuis_attaque_ordi >= 2:
-            # Action de l'ordinateur (à remplacer par votre logique d'attaque de l'ordinateur)
-            print("Attaque de l'ordinateur")
+            # Si oui alors il l'utilise
             self.adversaire.attaque_speciale_joueur(self.pokemon_utilise)
             self.progressBarAllie.setValue(self.pokemon_utilise.hp)
             self.affiche_progress_bar(self.progressBarAllie, self.label_hp_allie, self.pokemon_utilise.hp)
         
-            # Après l'attaque de l'ordinateur, réactivez le bouton pour permettre au joueur de jouer au prochain tour
+            # On récative le bouton d'attaque du joueur
             self.AttaqueNormale.setEnabled(True)
 
-            # Passez au tour du joueur
+            # On passe au tour du joueur
             self.tour_joueur = True
 
             # Mettez à jour l'état de disponibilité de l'attaque spéciale de l'ordinateur
             self.tours_depuis_attaque_ordi = 0  # Réinitialisez le compteur de tours depuis l'attaque spéciale
 
 
+
         else:
-            # Action de l'ordinateur (à remplacer par votre logique d'attaque de l'ordinateur)
-            print("Attaque de l'ordinateur")
+            # Si l'attaque spéciale n'est pas disponible alors l'adversaire attaque normalement 
             self.adversaire.attaquer(self.pokemon_utilise)
             self.progressBarAllie.setValue(self.pokemon_utilise.hp)
             self.affiche_progress_bar(self.progressBarAllie, self.label_hp_allie, self.pokemon_utilise.hp)
         
-            # Après l'attaque de l'ordinateur, réactivez le bouton pour permettre au joueur de jouer au prochain tour
+            # On récative le bouton d'attaque du joueur
             self.AttaqueNormale.setEnabled(True)
 
-            # Passez au tour du joueur
+            # On incrémente le compteur de tours depuis la dernière attaque spéciale de l'adversaire
+            self.tours_depuis_attaque_ordi += 1
+
+            # On passe au tour du joueur
             self.tour_joueur = True
-        if self.tours_depuis_attaque_joueur >= 2:
+
+
+        if self.tours_depuis_attaque_joueur >= 2: # On met à jour si besoin le bouton d'attaque spéciale
             self.AttaqueSpeciale.setEnabled(True)
             self.AttaqueSpeciale.setStyleSheet("background-color: rgba(255, 255, 255, 0); border: none;")
 
-        # Incrémentez le compteur de tours depuis la dernière attaque spéciale de l'ordinateur
-        self.tours_depuis_attaque_ordi += 1
+        if self.pokemon_utilise.hp <= 0: # On vérifie si le joueur a perdu
+                QTimer.singleShot(2000, self.close)
+                self.pokemon_utilise.hp = self.pokedex.pokedex[self.pokemon_utilise.name].hp
+                self.adversaire.hp = self.pokedex.pokedex[self.adversaire.name.split()[0]].hp
+
 
 
     def affiche_progress_bar(self, bar, label, hp):
-        #if bar == "allie": # Affiche nouvelle bar de progression alliée
-            if hp <= 0.25 * bar.maximum():
-                bar.setStyleSheet("""                                                                
-                    QProgressBar {
-                        border: 2px solid grey;
-                        border-radius: 5px;
-                        background-color: #FFFFFF; /* Couleur de fond de la barre de progression */
-                    }
-                        
-                    QProgressBar::chunk {
-                        background-color: #FF0000; /* Couleur de la barre de progression */
-                    }                                
-                """) 
-            
-            else:
-                bar.setStyleSheet("""   
-                    QProgressBar { color: red;}                                                            
-                    QProgressBar {                            
-                        border: 2px solid grey;
-                        border-radius: 5px;
-                        background-color: #FFFFFF; /* Couleur de fond de la barre de progression */
-                    }
+        if hp <= 0.25 * bar.maximum():
+            bar.setStyleSheet("""                                                                
+                QProgressBar {
+                    border: 2px solid grey;
+                    border-radius: 5px;
+                    background-color: #FFFFFF; /* Couleur de fond de la barre de progression */
+                }
+                    
+                QProgressBar::chunk {
+                    background-color: #FF0000; /* Couleur de la barre de progression */
+                }                                
+            """) 
+        
+        else:
+            bar.setStyleSheet("""   
+                QProgressBar { color: red;}                                                            
+                QProgressBar {                            
+                    border: 2px solid grey;
+                    border-radius: 5px;
+                    background-color: #FFFFFF; /* Couleur de fond de la barre de progression */
+                }
 
-                    QProgressBar::chunk {
-                        background-color: #00FF00; /* Couleur de la barre de progression */
-                    }                                                             
-                """)
-            # Mettre à jour le texte de l'étiquette des points de vie de notre pokemon
-            label.setText(str(hp))
-            label.raise_()
+                QProgressBar::chunk {
+                    background-color: #00FF00; /* Couleur de la barre de progression */
+                }                                                             
+            """)
+        # Mettre à jour le texte de l'étiquette des points de vie de notre pokemon
+        label.setText(str(hp))
+        label.raise_()
 
-    def capture_pokemon(self, adversaire, inventaire_joueur):
-        inventaire_joueur.inventory(adversaire)
 
 
 
