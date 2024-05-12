@@ -21,20 +21,13 @@ class Pokemon:
         self.defense = defense
         self.sp_attack = sp_attack
         self.sp_defense = sp_defense
-        self.type = type_ #pour eviter le type de python on met type_
+        self.type = type_ #pour eviter le type déjà existant en python on met type_ mais il devient l'attribut type dans la suite
         self.sauvage = sauvage 
 
     @classmethod
     def creer_pokemon(cls, name, x, y, hp, attack, defense, sp_attack, sp_defense, type_, sauvage):
         return cls(name, x, y, hp, attack, defense, sp_attack, sp_defense, type_, sauvage)
 
-    # def attaquer(self, other_pokemon):
-    #     print(f"{other_pokemon.name} a {other_pokemon.hp} hp et {other_pokemon.defense} point de defense et {self.name} a {self.attack} point d'attaque.")
-    #     new_att = self.new_attack(other_pokemon.type)
-    #     degats = new_att - other_pokemon.defense 
-    #     other_pokemon.hp -= degats
-    #     print(f"{self.name} attaque {other_pokemon.name} et lui inflige {degats} dégâts.")
-    #     print(f"Il reste {other_pokemon.hp} point de vie à {other_pokemon.name}")
 
     def modifier(self, type_adversaire):
         if type_adversaire.name in self.type.fort:
@@ -47,27 +40,25 @@ class Pokemon:
             return 1
         
     def attaquer(self, adversaire):
-        degats = self.attack * self.modifier(adversaire.type) - adversaire.defense
+        degats = int(self.attack * self.modifier(adversaire.type) - adversaire.defense)
+        if degats <= 0:
+            degats = 0
         adversaire.hp -= degats
         if adversaire.hp < 0:
                 adversaire.hp = 0
         print(f"{self.name} attaque {adversaire.name} et lui inflige {degats} dégâts.")
         print(f"Il reste {adversaire.hp} points de vie à {adversaire.name}.")
 
-    def attaque_speciale_joueur(self, adversaire, tour_avant_attaque_speciale):
-        # Vérifie si l'attaque spéciale est disponible
-        if tour_avant_attaque_speciale == 0:
-            # Utilise l'attaque spéciale
-            degats = self.sp_attack * self.modifier(adversaire.type) - adversaire.sp_defense
-            adversaire.hp -= degats  
-            if adversaire.hp < 0:
-                adversaire.hp = 0
-            print(f"{self.name} utilise son attaque spéciale sur {adversaire.name} et lui inflige {degats} dégâts.")
-            print(f"Il reste {adversaire.hp} points de vie à {adversaire.name}.")
-            # Réinitialise le compteur de tours avant la prochaine attaque spéciale
-            tour_avant_attaque_speciale = 2
-        else:
-            print("L'attaque spéciale n'est pas encore disponible.")
+    def attaque_speciale_joueur(self, adversaire):
+        # Utilise l'attaque spéciale
+        degats = int(self.sp_attack * self.modifier(adversaire.type) - adversaire.sp_defense)
+        if degats <= 0:
+            degats = 0
+        adversaire.hp -= degats  
+        if adversaire.hp < 0:
+            adversaire.hp = 0
+        print(f"{self.name} utilise son attaque spéciale sur {adversaire.name} et lui inflige {degats} dégâts.")
+        print(f"Il reste {adversaire.hp} points de vie à {adversaire.name}.")
         
 
         
@@ -190,10 +181,16 @@ class Pokedex:
         chemin_fichier = os.path.join(chemin_parent, 'data', fichier)
         # On charge le fichier CSV en tant que DataFrame avec Pandas
         data = pd.read_csv(chemin_fichier)
+        noms_pokemon = {}
         for index, row in data.iterrows():
             name = row['Name']  
-            x = None
-            y = None
+            if name not in noms_pokemon:
+                noms_pokemon[name] = 1
+            else:
+                noms_pokemon[name] += 1
+                name += ' ' + str(noms_pokemon[name])
+            x = row['X']
+            y = row['Y']
             hp = row['HP']
             attack = row['Attack']
             defense = row['Defense']
@@ -227,10 +224,12 @@ class InventaireJoueur(Pokedex):
         self.inventaire_joueur = {}
 
     def inventory(self, pokemon): 
-        if pokemon.name not in self.pokedex:
+        if pokemon.name.split()[0] not in self.pokedex:
             # Si le nom du Pokémon n'existe pas dans l'inventaire du joueur, on l'ajoute directement
+            pokemon.name = pokemon.name.split()[0]
             self.pokedex[pokemon.name] = pokemon
         else:
+            pokemon.name = pokemon.name.split()[0]
             # Si le nom du Pokémon existe déjà, on trouve le prochain numéro de séquence disponible 
             # pour que deux pokémons n'aient pas le même nom
             sequence = 2
@@ -246,18 +245,13 @@ class InventaireJoueur(Pokedex):
         pokemon.x = None # Le pokemon est maintenant dans notre inventaire
         pokemon.y = None # il n'a plus de coordonnées
 
-    # def afficher_equipe(self, equipe):
-    #     print("Équipe du joueur :\n")
-    #     for nom_pokemon, pokemon in equipe.items():
-    #         print(f"Nom: {pokemon.name}")
-    #         print(f"HP: {pokemon.hp}")
-    #         print(f"Attaque: {pokemon.attack}")
-    #         print(f"Défense: {pokemon.defense}")
-    #         print(f"Sp. Attaque: {pokemon.sp_attack}")
-    #         print(f"Sp. Défense: {pokemon.sp_defense}")
-    #         print(f"Type: {pokemon.type.name}")
-    #         print(f"Sauvage: {pokemon.sauvage}")
-    #         print()  # Ajouter une ligne vide entre chaque Pokémon
+    def capturer_pokemon(self, adversaire, pokedex_sauvage, pokedex):
+        pokedex_sauvage.pokedex.pop(adversaire.name)
+        adversaire.hp = pokedex.pokedex[adversaire.name.split()[0]].hp
+        adversaire.x = None
+        adversaire.y = None
+        self.inventory(adversaire)
+
 
 
     def creer_equipe(self):
@@ -311,5 +305,3 @@ if __name__ == '__main__':
     # #     print(f"Le Pokémon '{nom_pokemon_test}' est présent dans le Pokédex.")
     # # else:
     # #     print(f"Le Pokémon '{nom_pokemon_test}' n'est pas présent dans le Pokédex.")
-
-

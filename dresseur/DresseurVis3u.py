@@ -16,6 +16,7 @@ class CharacterView(QGraphicsView):
         
         self.scene = QGraphicsScene(self)
         self.setScene(self.scene)
+
         
         self.character_images = {
             "up": ["dresseur/haut_move2.png", "dresseur/haut_move.png"],
