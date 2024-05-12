@@ -24,12 +24,19 @@ class Ui_MainWindow(object):
         self.Back.setPixmap(QtGui.QPixmap("Combat/Outils/Victoire.png"))
         self.Back.setScaledContents(True)
         self.Back.setObjectName("Back")
+
         self.Pokeball = QtWidgets.QLabel(self.centralwidget)
         self.Pokeball.setGeometry(QtCore.QRect(390, 270, 231, 301))
         self.Pokeball.setText("")
         self.Pokeball.setPixmap(QtGui.QPixmap("Combat/Outils/PokeballOpen.png"))
         self.Pokeball.setScaledContents(False)
         self.Pokeball.setObjectName("Pokeball")
+        self.Salameche = QtWidgets.QLabel(self.centralwidget)
+        self.Salameche.setGeometry(QtCore.QRect(390, 300, 231, 241))
+        self.Salameche.setText("")
+        self.Salameche.setPixmap(QtGui.QPixmap("Combat/Outils/Salamèche_face.png"))
+        self.Salameche.setScaledContents(True)
+        self.Salameche.setObjectName("Salameche")
         self.PokeballButton = QtWidgets.QPushButton(self.centralwidget)
         self.PokeballButton.setGeometry(QtCore.QRect(390, 270, 221, 291))
         self.PokeballButton.setText("")
@@ -41,6 +48,7 @@ class Ui_MainWindow(object):
         self.Back.raise_()
         self.PokeballButton.raise_()
         self.Pokeball.raise_()
+        self.Salameche.raise_()
         self.PartirButton.raise_()
         MainWindow.setCentralWidget(self.centralwidget)
 
@@ -49,15 +57,19 @@ class Ui_MainWindow(object):
 
         self.Pokeball.enterEvent = self.enter_image
         self.Pokeball.leaveEvent = self.leave_image
+        self.Salameche.enterEvent = self.enter_image
+        self.Salameche.leaveEvent = self.leave_image
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
     
     def enter_image(self, event):
         self.Pokeball.setPixmap(QPixmap("Combat/Outils/PokeballClosed.png"))
+        self.Salameche.setPixmap(QPixmap(""))
 
     def leave_image(self, event):
         self.Pokeball.setPixmap(QPixmap("Combat/Outils/PokeballOpen.png"))
+        self.Salameche.setPixmap(QPixmap("Combat/Outils/Salamèche_face.png"))
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
