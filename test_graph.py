@@ -139,7 +139,7 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
 
     def mousePressEvent(self, event):
         # Si le clic de souris a eu lieu dans une certaine zone de la fenêtre on arrive sur la map
-        if event.x() >= 0 and event.x() <= 200 and event.y() >= 0 and event.y() <= 200: 
+        if event.x() >= 0 and event.x() <= 205 and event.y() >= 0 and event.y() <= 50: 
             video_path = os.path.join(script_dir, "Image", "video.mp4")
             self.retour_acceuil = AccueilWindow(video_path)
             self.retour_acceuil.show()
@@ -155,7 +155,7 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
 
 
 
-        if event.key() == Qt.Key_Left and -self.background_position_y == 1870 and -self.background_position_x <= bord_gauche :
+        if event.key() == Qt.Key_Left and 1760 <= -self.background_position_y <= 1870 and -self.background_position_x <= bord_gauche :
             self.dresseur.x -= self.dresseur.speed
             self.dresseur.X -= self.dresseur.speed
             self.current_direction = "left"
