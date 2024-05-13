@@ -80,6 +80,20 @@ class Combat_ui(object):
         self.Fond.setScaledContents(True)
         self.Fond.setObjectName("Fond")
 
+        # Ajout du type du pokemon adverse
+        self.TypeEnemy = QtWidgets.QLabel(self.centralwidget)
+        self.TypeEnemy.setGeometry(QtCore.QRect(409, 98, 60, 60))
+        self.TypeEnemy.setPixmap(QtGui.QPixmap("data/" + self.adversaire.type.__class__.__name__ + ".png")) #
+        self.TypeEnemy.setScaledContents(True)
+        self.TypeEnemy.setObjectName("TypeEnemy")
+
+        # Ajout du type de mon pokemon
+        self.TypeAllie = QtWidgets.QLabel(self.centralwidget)
+        self.TypeAllie.setGeometry(QtCore.QRect(605, 448, 60, 60))
+        self.TypeAllie.setPixmap(QtGui.QPixmap("data/" + self.pokemon_utilise.type.__class__.__name__ + ".png")) #
+        self.TypeAllie.setScaledContents(True)
+        self.TypeAllie.setObjectName("TypeAllie")
+
 
         #Création de l'objet barre de vie de notre pokemon
         self.progressBarAllie = QtWidgets.QProgressBar(self.centralwidget)
@@ -201,6 +215,8 @@ class Combat_ui(object):
         self.Fuite.raise_()
         self.label_hp_adversaire.raise_()
         self.label_hp_allie.raise_()
+        self.TypeEnemy.raise_()
+        self.TypeAllie.raise_()
 
 
         self.AttaqueNormale.setStyleSheet("background-color: rgba(255, 255, 255, 0); border: none;")
