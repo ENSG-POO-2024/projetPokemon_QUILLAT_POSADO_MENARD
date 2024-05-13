@@ -84,7 +84,7 @@ class Sauvage_ui(object):
         self.fight_buton.clicked.connect(self.open_choix_pokemon)
 
     def open_choix_pokemon(self):
-        self.choix = ch.ChoixPokemonWindow(self.pokemon_sauvage, self.inventaire_joueur, self.pokedex_sauvages)
+        self.choix = ch.ChoixPokemonWindow(self.pokemon_sauvage, self.inventaire_joueur, self.pokedex_sauvages, True, 2)
         self.choix.show()
 
 

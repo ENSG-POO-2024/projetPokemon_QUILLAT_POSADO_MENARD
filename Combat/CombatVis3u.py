@@ -194,8 +194,8 @@ class Combat_ui(object):
 
         self.Fuite.clicked.connect(self.fuite_buton)
 
-        self.tour_joueur = True
-        self.tours_depuis_attaque_joueur = 2  # Tours écoulés depuis la dernière attaque spéciale du joueur
+        #self.tour_joueur = True
+        #self.tours_depuis_attaque_joueur = 2  # Tours écoulés depuis la dernière attaque spéciale du joueur
         self.tours_depuis_attaque_ordi = 2  # Tours écoulés depuis la dernière attaque spéciale de l'ordinateur
 
         # Affichage nom du pokémon utilisé
@@ -214,6 +214,11 @@ class Combat_ui(object):
         self.nom_poke.setFont(font)
         self.nom_poke.setStyleSheet("color: black;")  
 
+        if self.tours_depuis_attaque_joueur < 2:
+            self.AttaqueSpeciale.setStyleSheet("background-color: rgba(128, 128, 128, 128)")
+        else:
+            self.AttaqueSpeciale.setStyleSheet("background-color: rgba(128, 128, 128, 0)")
+
 
 
         # Connectez le signal clicked du bouton à la méthode correspondante
@@ -224,8 +229,10 @@ class Combat_ui(object):
 
 
     def open_pokedex(self): # A revoir
+        QTimer.singleShot(1000, self.tour_ordi)
         self.close()
-        self.pokedex_window = ch.ChoixPokemonWindow(self.adversaire, self.inventaire_joueur, self.pokedex_sauvages)  
+        self.tours_depuis_attaque_joueur += 1
+        self.pokedex_window = ch.ChoixPokemonWindow(self.adversaire, self.inventaire_joueur, self.pokedex_sauvages, self.tour_joueur, self.tours_depuis_attaque_joueur)  
         self.pokedex_window.show()
 
 
@@ -366,7 +373,7 @@ class Combat_ui(object):
         self.victory_window.show()
 
     def open_loose(self):
-        self.victory_window = d.DefaiteWindow()
+        self.victory_window = d.DefaiteWindow(self.adversaire, self.pokedex_sauvages, self.inventaire_joueur, self.pokemon_utilise, self.pokedex)
         self.victory_window.show()
 
 
@@ -379,11 +386,13 @@ class Combat_ui(object):
 
 
 class FightWindow(QMainWindow, Combat_ui):
-    def __init__(self, pokemon_sauvage, pokemon_utilise, pokedex_sauvages, inventaire_joueur, parent=None):
+    def __init__(self, pokemon_sauvage, pokemon_utilise, pokedex_sauvages, inventaire_joueur, tour_joueur,  tour_depuis_ataque_joueur, parent=None):
         self.pokemon_sauvage = pokemon_sauvage # Le pokémon rencontré
         self.inventaire_joueur = inventaire_joueur # L'inventaire du joueur avec ses pokémons
         self.pokemon_utilise = pokemon_utilise # Le pokémon qu'il utilise
         self.pokedex_sauvages = pokedex_sauvages # Le pokedex avec tous les pokémons sauvages
+        self.tour_joueur = tour_joueur
+        self.tours_depuis_attaque_joueur = tour_depuis_ataque_joueur
         super(FightWindow, self).__init__(parent)
         self.setupUi(self)
         

@@ -80,7 +80,7 @@ class ChoixPokemon_ui(object):
 
 
     def open_combat(self, pokemon_choisi):
-        self.fight_window = c.FightWindow(self.pokemon_sauvage, pokemon_choisi, self.pokedex_sauvages, self.inventaire_joueur)
+        self.fight_window = c.FightWindow(self.pokemon_sauvage, pokemon_choisi, self.pokedex_sauvages, self.inventaire_joueur, self.tour_joueur, self.tour_depuis_attaque_joueur)
         self.fight_window.show()
 
 
@@ -130,10 +130,12 @@ class ChoixPokemon_ui(object):
 
 
 class ChoixPokemonWindow(QMainWindow, ChoixPokemon_ui):
-    def __init__(self, pokemon_sauvage, inventaire_joueur, pokedex_sauvages, parent=None):
+    def __init__(self, pokemon_sauvage, inventaire_joueur, pokedex_sauvages, tour_joueur, tour_depuis_attaque_joueur, parent=None):
         self.pokemon_sauvage = pokemon_sauvage # Le pokémon rencontré
         self.inventaire_joueur = inventaire_joueur # L'inventaire du joueur avec ses pokémons
         self.pokedex_sauvages = pokedex_sauvages # Le pokedex avec tous les pokémons sauvages
+        self.tour_joueur = tour_joueur
+        self.tour_depuis_attaque_joueur = tour_depuis_attaque_joueur
         super(ChoixPokemonWindow, self).__init__(parent)
         self.setupUi(self)
         

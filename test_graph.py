@@ -169,7 +169,7 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
 
 
         if self.dresseur.proche(self.pokedex_sauvages)[0]:
-            self.inventaire_joueur.afficher_pokedex()
+            #self.inventaire_joueur.afficher_pokedex()
             self.pokemon_sauvage = self.dresseur.proche(self.pokedex_sauvages)[1]
             self.pokemon_window = sau.SauvageWindow(self.pokemon_sauvage, self.inventaire_joueur, self.pokedex_sauvages)
             self.pokemon_window.show()

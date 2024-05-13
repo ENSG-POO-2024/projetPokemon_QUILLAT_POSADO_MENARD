@@ -38,6 +38,10 @@ class Defaite_ui(object):
 
         MainWindow.setCentralWidget(self.centralwidget)
 
+        for nom_poke, pokemon in self.inventaire_joueur.pokedex.items():
+                pokemon.hp = self.pokedex.pokedex[pokemon.name.split()[0]].hp
+        self.adversaire.hp = self.pokedex.pokedex[self.adversaire.name.split()[0]].hp
+
         # On rend le (ou les) boutons invisibles
         self.Sortir.setStyleSheet("background-color: rgba(255, 255, 255, 0); border: none;")
 
@@ -47,7 +51,12 @@ class Defaite_ui(object):
 
 
 class DefaiteWindow(QMainWindow, Defaite_ui):
-    def __init__(self, parent=None):
+    def __init__(self, adversaire, pokedex_sauvages, inventaire_joueur, pokemon_utilise, pokedex, parent=None):
+        self.adversaire = adversaire
+        self.pokedex_sauvages = pokedex_sauvages
+        self.inventaire_joueur = inventaire_joueur
+        self.pokemon_utilise = pokemon_utilise
+        self.pokedex = pokedex
         super(DefaiteWindow, self).__init__(parent)
         self.setupUi(self)
 
