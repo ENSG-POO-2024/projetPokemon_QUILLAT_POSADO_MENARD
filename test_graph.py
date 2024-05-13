@@ -105,6 +105,9 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
             "static": [QPixmap("Dresseur/Sacha_bas1.png")]
         }
 
+        self.img_fin = [QPixmap("data/Fin de jeu/1.png"),QPixmap("data/Fin de jeu/1.png"),QPixmap("data/Fin de jeu/1.png"),QPixmap("data/Fin de jeu/1.png"),
+                        QPixmap("data/Fin de jeu/1.png"), QPixmap("data/Fin de jeu/1.png"), QPixmap("data/Fin de jeu/1.png"), QPixmap("data/Fin de jeu/1.png")]
+
 
         # Création de l'inventaire du joueur
         self.inventaire_joueur = poke.InventaireJoueur()
@@ -122,6 +125,9 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
         self.current_image_index = 0
         self.delay_timer = QTimer(self)
         self.delay_timer.timeout.connect(self.reset_direction)
+
+
+        self.fin = False
 
 
 
@@ -142,14 +148,16 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
         bord_bas = self.map_hauteur - self.ecran_hauteur - self.dresseur.speed
 
 
-        if event.key() == Qt.Key_Up and  2255 <= -self.background_position_x <= 2695 and -self.background_position_y <= bord_haut:
+
+        if event.key() == Qt.Key_Left and  2090 <= -self.background_position_y <= 2420 and -self.background_position_x <= bord_gauche :
             self.dresseur.y -= self.dresseur.speed
             self.dresseur.Y -= self.dresseur.speed
             self.current_direction = "up"
             QTimer.singleShot(1000, self.close)
+            self.fin = True
 
 
-        if event.key() == Qt.Key_Right and -self.background_position_x <= bord_droit and np.abs(self.dresseur.X) >= (self.nb_bloc * self.dresseur.speed):
+        if event.key() == Qt.Key_Right and -self.background_position_ <= bord_droit and np.abs(self.dresseur.X) >= (self.nb_bloc * self.dresseur.speed):
             self.background_position_x -= self.dresseur.speed
             for nom_pokemon, pokemon in self.pokedex_sauvages.pokedex.items():
                 pokemon.x -= self.dresseur.speed
@@ -205,6 +213,13 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
             pixmap = self.image_dresseur["static"][0]  # Utilisez l'image vers le bas par défaut lorsque le joueur ne se déplace pas
 
         painter.drawPixmap(self.dresseur.x+10, self.dresseur.y, pixmap.scaled(90,90))
+
+        if self.fin:
+            for img in self.img_fin:
+                QTimer.singleShot(2000, painter.drawPixmap(0,0, img))
+
+
+
         
 
     def update(self):
@@ -217,6 +232,7 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
     def reset_direction(self):
         self.current_direction = None
         self.update()
+
              
 
 
