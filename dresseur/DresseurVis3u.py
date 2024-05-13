@@ -19,11 +19,11 @@ class CharacterView(QGraphicsView):
 
         
         self.character_images = {
-            "up": ["dresseur/haut_move2.png", "dresseur/haut_move.png"],
-            "down": ["dresseur/bas_move2.png", "dresseur/bas_move.png"],
-            "left": ["dresseur/gauche_move.png", "dresseur/gauche_statique.png"],
-            "right": ["dresseur/droite_statique.png", "dresseur/droite_move.png"],
-            "static": ["dresseur/bas_statique.png"]
+            "up": ["Dresseur/Sacha_haut2.png","Dresseur/Sacha_haut3.png"],
+            "down": ["Dresseur/Sacha_bas2.png", "Dresseur/Sacha_bas3.png"],
+            "left": ["Dresseur/Sacha_gauche2.png","Dresseur/Sacha_gauche1.png"],
+            "right": ["Dresseur/Sacha_droite2.png","Dresseur/Sacha_droite1.png"],
+            "static": ["Dresseur/Sacha_bas1.png"]
         }
         
         self.direction = None
