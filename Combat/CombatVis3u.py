@@ -37,8 +37,6 @@ class Combat_ui(object):
 
         #self.pokemon_utilise = list(self.inventaire_joueur.pokedex.values())[0]
         self.adversaire = self.pokemon_sauvage
-        # HP = self.pokemon_utilise.hp
-        # HP_adv = self.adversaire.hp
 
         self.pokedex = poke.Pokedex()
         self.pokedex.charger_pokedex("pokemon_first_gen.csv")
@@ -74,17 +72,12 @@ class Combat_ui(object):
         self.progressBarAllie.setValue(self.pokemon_utilise.hp)
         self.progressBarAllie.setFormat("")
         self.progressBarAllie.setObjectName("progressBarAllie")
-        #self.label = QLabel(MainWindow)
-        #self.label.setGeometry(625, 392, 30, 30)  # Définir la géométrie du QLabel
-        #self.label.setText(str(self.pokemon_utilise.hp))  # Définir le texte à afficher
-        # Changer la couleur du texte avec la méthode setPalette
-        #palette = self.label.palette()
 
         # Créer une étiquette pour afficher les points de vie de notre pokemon
         self.label_hp_allie = QtWidgets.QLabel(self.centralwidget)
-        self.label_hp_allie.setGeometry(QtCore.QRect(623, 397, 371, 23))
+        self.label_hp_allie.setGeometry(QtCore.QRect(624, 399, 371, 23))
         self.label_hp_allie.setObjectName("label_hp_allie")
-        self.label_hp_allie.setStyleSheet("color: black; font-size: 16px;")
+        self.label_hp_allie.setStyleSheet('color: black; font-size: 16px; font-family: "Minecraft";')
     
         # Affichage de la bar d'hp de notre pokemon
         self.affiche_progress_bar(self.progressBarAllie, self.label_hp_allie, self.pokemon_utilise.hp)
@@ -100,9 +93,9 @@ class Combat_ui(object):
 
         # Créer une étiquette pour afficher les points de vie de l'adversaire
         self.label_hp_adversaire = QtWidgets.QLabel(self.centralwidget)
-        self.label_hp_adversaire.setGeometry(QtCore.QRect(113, 189, 371, 23))
+        self.label_hp_adversaire.setGeometry(QtCore.QRect(114, 191, 371, 23))
         self.label_hp_adversaire.setObjectName("label_hp_adversaire")
-        self.label_hp_adversaire.setStyleSheet("color: black; font-size: 16px;")
+        self.label_hp_adversaire.setStyleSheet('color: black; font-size: 16px; font-family: "Minecraft";')
         
         # Affichage de la bar d'hp de l'adversaire
         self.affiche_progress_bar(self.progressBarEnemy, self.label_hp_adversaire, self.adversaire.hp)
@@ -127,35 +120,35 @@ class Combat_ui(object):
 
         # Point d'attaque et de défense de notre pokémon
         self.label = QLabel(str(self.pokemon_utilise.attack), self)
-        self.label.setGeometry(145, 583, 200, 50)
-        self.label.setStyleSheet("color: black; font-size: 25px;")  
+        self.label.setGeometry(128, 583, 200, 50)
+        self.label.setStyleSheet('color: black; font-size: 30px; font-family: "Hello World";')  
         self.label = QLabel(str(self.pokemon_utilise.defense), self)
-        self.label.setGeometry(145, 657, 200, 50)
-        self.label.setStyleSheet("color: black; font-size: 25px;")
+        self.label.setGeometry(128, 657, 200, 50)
+        self.label.setStyleSheet('color: black; font-size: 30px; font-family: "Hello World";')
 
         # Point d'attaque et de défense de l'adversaire
         self.label = QLabel(str(self.adversaire.attack), self)
         self.label.setGeometry(323, -2, 200, 50)
-        self.label.setStyleSheet("color: red; font-size: 20px;")  
+        self.label.setStyleSheet('color: red; font-size: 25px; font-family: "Hello World";')  
         self.label = QLabel(str(self.adversaire.defense), self)
         self.label.setGeometry(339, 34, 200, 50)
-        self.label.setStyleSheet("color: red; font-size: 20px;")
+        self.label.setStyleSheet('color: red; font-size: 25px; font-family: "Hello World";')
 
         # Bouton de l'attaque normale
         self.AttaqueNormale = QtWidgets.QPushButton(self.centralwidget)
-        self.AttaqueNormale.setGeometry(QtCore.QRect(370, 560, 171, 161))
+        self.AttaqueNormale.setGeometry(QtCore.QRect(353, 558, 169, 161))
         self.AttaqueNormale.setText("")
         self.AttaqueNormale.setObjectName("AttaqueNormale")
 
         # Bouton de l'attaque speciale
         self.AttaqueSpeciale = QtWidgets.QPushButton(self.centralwidget)
-        self.AttaqueSpeciale.setGeometry(QtCore.QRect(570, 560, 171, 161))
+        self.AttaqueSpeciale.setGeometry(QtCore.QRect(561, 558, 169, 161))
         self.AttaqueSpeciale.setText("")
         self.AttaqueSpeciale.setObjectName("AttaqueSpeciale")
 
         # Bouton pour changer de pokemon
         self.Pokedex = QtWidgets.QPushButton(self.centralwidget)
-        self.Pokedex.setGeometry(QtCore.QRect(780, 560, 171, 161))
+        self.Pokedex.setGeometry(QtCore.QRect(770, 558, 169, 161))
         self.Pokedex.setText("")
         self.Pokedex.setObjectName("Pokedex")
 
@@ -165,10 +158,22 @@ class Combat_ui(object):
         self.Fuite.setText("")
         self.Fuite.setObjectName("Fuite")
 
+        
+
         # On met tout en avant (dans le bon ordre) pour que les objets soient au premier plan 
         self.Fond.raise_()
         self.image_poke.raise_()
         self.image_adv.raise_()
+
+        # Affichage de notre pokémon
+        self.points_attaque = QtWidgets.QLabel(self.centralwidget)
+        self.points_attaque.setGeometry(QtCore.QRect(0, 0, 1000, 750))
+        self.points_attaque.setText("")
+        self.points_attaque.setPixmap(QtGui.QPixmap("Combat/combat.png"))
+        self.points_attaque.setScaledContents(True)
+        self.points_attaque.setObjectName("Points d'attaque")
+
+        
         self.progressBarAllie.raise_()
         self.progressBarEnemy.raise_()
         self.AttaqueNormale.raise_()
@@ -192,6 +197,24 @@ class Combat_ui(object):
         self.tour_joueur = True
         self.tours_depuis_attaque_joueur = 2  # Tours écoulés depuis la dernière attaque spéciale du joueur
         self.tours_depuis_attaque_ordi = 2  # Tours écoulés depuis la dernière attaque spéciale de l'ordinateur
+
+        # Affichage nom du pokémon utilisé
+        self.nom_poke = QLabel(self.pokemon_utilise.name.split()[0], self)
+        self.nom_poke.setGeometry(660, 432, 300, 100)  # Définir la position et la taille du QLabel
+        self.nom_poke.setAlignment(Qt.AlignCenter)  # Aligner le texte au centre 
+        font = QFont("Minecraft", 40)  # Police et taille
+        self.nom_poke.setFont(font)
+        self.nom_poke.setStyleSheet('color: black;')  
+
+        # Affichage nom du pokémon adverse
+        self.nom_poke = QLabel(self.adversaire.name.split()[0], self)
+        self.nom_poke.setGeometry(93, 80, 300, 100)  # Définir la position et la taille du QLabel
+        self.nom_poke.setAlignment(Qt.AlignCenter)  # Aligner le texte au centre 
+        font = QFont("Minecraft", 40)  # Police et taille
+        self.nom_poke.setFont(font)
+        self.nom_poke.setStyleSheet("color: black;")  
+
+
 
         # Connectez le signal clicked du bouton à la méthode correspondante
         self.AttaqueNormale.clicked.connect(self.on_attaque_normale_clicked)

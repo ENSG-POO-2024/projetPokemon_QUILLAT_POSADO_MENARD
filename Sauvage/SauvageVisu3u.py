@@ -50,9 +50,9 @@ class Sauvage_ui(object):
         self.label_text = QLabel(self.pokemon_sauvage.name.split()[0], self)
         self.label_text.setAlignment(Qt.AlignCenter)
         self.label_text.setGeometry(0, 500, 1000, 55)
-        self.font = QFont("Arial", 50)  
+        self.font = QFont("Minecraft", 50)  
         self.label_text.setFont(self.font)
-        self.label_text.setStyleSheet("color: brown;")  
+        self.label_text.setStyleSheet("color: white;")  
 
 
         # Bouton pour combattre

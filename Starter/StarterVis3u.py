@@ -132,7 +132,7 @@ class StarterWindow(QMainWindow, Starter):
             self.close()     
 
         if self.clic(mouse_x, mouse_y, 390, 621, 290, 531): 
-            self.poke = poke.Pokemon('Salamèche',None, None,39,52,43,60,50,poke.Feu(), False) 
+            self.poke = poke.Pokemon('Salameche',None, None,39,52,43,60,50,poke.Feu(), False) 
             self.map_window = t.Map(self.poke, "pokemons_a_capturer.csv")
             self.map_window.show()
             self.close()  

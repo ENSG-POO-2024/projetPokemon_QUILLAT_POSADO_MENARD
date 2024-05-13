@@ -23,7 +23,7 @@ class ChoixPokemon_ui(object):
 
         # Création de l'objet MainWindow
         MainWindow.setObjectName("MainWindow")
-        MainWindow.setWindowTitle("test")
+        MainWindow.setWindowTitle("Pokedex Joueur")
         MainWindow.resize(1000, 750)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -89,7 +89,7 @@ class ChoixPokemon_ui(object):
         self.boutons[pokemon.name].setFixedSize(self.largeur, self.hauteur)
 
 
-        chemin = "Pokemons/Abo/Abo_face.png"
+        chemin = "Pokemons/" + pokemon.name.split()[0] + "/" + pokemon.name.split()[0] + "_face.png"
         style = "border-image : url(" + chemin + ");"
         self.boutons[pokemon.name].setStyleSheet(style)
 
@@ -100,6 +100,7 @@ class ChoixPokemon_ui(object):
         self.button_layout.addWidget(self.boutons[pokemon.name], self.i // self.nb_bouton, self.i % self.nb_bouton)
 
         self.boutons[pokemon.name].raise_()
+        #self.boutons[pokemon.name].setToolTip(pokemon.name)
 
         
 
@@ -146,18 +147,18 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     inventaire = poke.InventaireJoueur()
     inventaire.inventory(poke.Pokemon("Pikachu",15,12,15,12,10,10,10,poke.Eau(),False))
-    inventaire.inventory(poke.Pokemon("Salamèche",10,10,10,10,10,10,10,poke.Eau(),False))
-    inventaire.inventory(poke.Pokemon("Salamèche",10,10,10,10,10,10,10,poke.Eau(),False))
-    inventaire.inventory(poke.Pokemon("Salamèche",10,10,10,10,10,10,10,poke.Eau(),False))
-    inventaire.inventory(poke.Pokemon("Salamèche",10,10,10,10,10,10,10,poke.Eau(),False))
-    inventaire.inventory(poke.Pokemon("Salamèche",10,10,10,10,10,10,10,poke.Eau(),False))
-    inventaire.inventory(poke.Pokemon("Salamèche",10,10,10,10,10,10,10,poke.Eau(),False))
-    inventaire.inventory(poke.Pokemon("Salamèche",10,10,10,10,10,10,10,poke.Eau(),False))
-    inventaire.inventory(poke.Pokemon("Salamèche",10,10,10,10,10,10,10,poke.Eau(),False))
-    inventaire.inventory(poke.Pokemon("Salamèche",10,10,10,10,10,10,10,poke.Eau(),False))
-    inventaire.inventory(poke.Pokemon("Salamèche",10,10,10,10,10,10,10,poke.Eau(),False))
-    inventaire.inventory(poke.Pokemon("Salamèche",10,10,10,10,10,10,10,poke.Eau(),False))
-    inventaire.inventory(poke.Pokemon("Salamèche",10,10,10,10,10,10,10,poke.Eau(),False))
+    inventaire.inventory(poke.Pokemon("Salameche",10,10,10,10,10,10,10,poke.Eau(),False))
+    inventaire.inventory(poke.Pokemon("Salameche",10,10,10,10,10,10,10,poke.Eau(),False))
+    inventaire.inventory(poke.Pokemon("Salameche",10,10,10,10,10,10,10,poke.Eau(),False))
+    inventaire.inventory(poke.Pokemon("Salameche",10,10,10,10,10,10,10,poke.Eau(),False))
+    inventaire.inventory(poke.Pokemon("Salameche",10,10,10,10,10,10,10,poke.Eau(),False))
+    inventaire.inventory(poke.Pokemon("Salameche",10,10,10,10,10,10,10,poke.Eau(),False))
+    inventaire.inventory(poke.Pokemon("Salameche",10,10,10,10,10,10,10,poke.Eau(),False))
+    inventaire.inventory(poke.Pokemon("Salameche",10,10,10,10,10,10,10,poke.Eau(),False))
+    inventaire.inventory(poke.Pokemon("Salameche",10,10,10,10,10,10,10,poke.Eau(),False))
+    inventaire.inventory(poke.Pokemon("Salameche",10,10,10,10,10,10,10,poke.Eau(),False))
+    inventaire.inventory(poke.Pokemon("Salameche",10,10,10,10,10,10,10,poke.Eau(),False))
+    inventaire.inventory(poke.Pokemon("Salameche",10,10,10,10,10,10,10,poke.Eau(),False))
     poke_sauvge = poke.Pokemon("Rattata",15,12,15,12,10,10,10,poke.Eau(),False)
     pokedex_sauvages = poke.Pokedex()
     pokedex_sauvages.charger_pokedex('pokemons_a_capturer.csv') # On le remplit avec notre fichier 
