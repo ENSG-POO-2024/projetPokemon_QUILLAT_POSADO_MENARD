@@ -12,44 +12,50 @@ import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QPushButton, QMainWindow, QApplication
 
-class Ui_MainWindow(object):
+class Defaite_ui(object):
     def setupUi(self, MainWindow):
-        MainWindow.setObjectName("MainWindow")
+
+        # Création de la fenêtre
+        MainWindow.setWindowTitle("Défaite")
         MainWindow.resize(1000, 750)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+
+        # Création de l'arrière plan
         self.Back = QtWidgets.QLabel(self.centralwidget)
         self.Back.setGeometry(QtCore.QRect(0, 0, 1001, 751))
         self.Back.setText("")
         self.Back.setPixmap(QtGui.QPixmap("Combat/Outils/Defaite.png"))
         self.Back.setScaledContents(False)
         self.Back.setObjectName("Back")
+
+        # Création du bouton pour sortir de la fenêtre
         self.Sortir = QtWidgets.QPushButton(self.centralwidget)
         self.Sortir.setGeometry(QtCore.QRect(390, 520, 221, 41))
         self.Sortir.setText("")
         self.Sortir.setObjectName("Sortir")
+
+
         MainWindow.setCentralWidget(self.centralwidget)
 
+        # On rend le (ou les) boutons invisibles
         self.Sortir.setStyleSheet("background-color: rgba(255, 255, 255, 0); border: none;")
 
-        self.retranslateUi(MainWindow)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
-    def retranslateUi(self, MainWindow):
-        _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.Sortir.clicked.connect(MainWindow.close)
 
 
 
-class XXXXWindow (QMainWindow, Ui_MainWindow):
+
+class DefaiteWindow(QMainWindow, Defaite_ui):
     def __init__(self, parent=None):
-        super(XXXXWindow, self).__init__(parent)
+        super(DefaiteWindow, self).__init__(parent)
         self.setupUi(self)
-# ...
+
+
 if __name__ == "__main__":
     def run_app():
         app = QApplication(sys.argv)
-        mainWin = XXXXWindow()
+        mainWin = DefaiteWindow()
         mainWin.show()
         app.exec_()
     run_app()

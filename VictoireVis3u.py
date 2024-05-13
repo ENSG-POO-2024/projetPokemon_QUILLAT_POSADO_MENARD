@@ -11,80 +11,132 @@ import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QPushButton, QMainWindow, QApplication
 from PyQt5.QtGui import QPixmap
+from PyQt5.QtCore import Qt
 
-class Ui_MainWindow(object):
+import test_graph as t
+import Starter.StarterVis3u as s
+
+class Victoire_ui(object):
     def setupUi(self, MainWindow):
-        MainWindow.setObjectName("MainWindow")
+
+        self.base_name = self.adversaire.name.split()[0]
+
+        # On crée la fenêtre Victoire
+        MainWindow.setWindowTitle("Victoire contre " + self.base_name)
         MainWindow.resize(1000, 750)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+
+
+        # Création du fond
         self.Back = QtWidgets.QLabel(self.centralwidget)
-        self.Back.setGeometry(QtCore.QRect(0, 0, 1001, 751))
+        self.Back.setGeometry(QtCore.QRect(0, 0, 1000, 750))
         self.Back.setText("")
         self.Back.setPixmap(QtGui.QPixmap("Combat/Outils/Victoire.png"))
         self.Back.setScaledContents(True)
         self.Back.setObjectName("Back")
+        
 
+        # Ajout de la Pokéball ouverte
         self.Pokeball = QtWidgets.QLabel(self.centralwidget)
-        self.Pokeball.setGeometry(QtCore.QRect(390, 270, 231, 301))
+        self.Pokeball.setGeometry(QtCore.QRect(388, 271, 224, 293))
         self.Pokeball.setText("")
         self.Pokeball.setPixmap(QtGui.QPixmap("Combat/Outils/PokeballOpen.png"))
         self.Pokeball.setScaledContents(False)
         self.Pokeball.setObjectName("Pokeball")
-        self.Salameche = QtWidgets.QLabel(self.centralwidget)
-        self.Salameche.setGeometry(QtCore.QRect(390, 300, 231, 241))
-        self.Salameche.setText("")
-        self.Salameche.setPixmap(QtGui.QPixmap("Combat/Outils/Salamèche_face.png"))
-        self.Salameche.setScaledContents(True)
-        self.Salameche.setObjectName("Salameche")
-        self.PokeballButton = QtWidgets.QPushButton(self.centralwidget)
-        self.PokeballButton.setGeometry(QtCore.QRect(390, 270, 221, 291))
-        self.PokeballButton.setText("")
-        self.PokeballButton.setObjectName("PokeballButton")
+
+        # Ajout du pokémon capturé
+        self.capture = QtWidgets.QLabel(self.centralwidget)
+        self.capture.setGeometry(QtCore.QRect(390, 300, 231, 241))
+        self.capture.setPixmap(QtGui.QPixmap("Pokemons/"+self.base_name+"/"+self.base_name+"_face.png"))
+        self.capture.setScaledContents(True)
+        self.capture.setObjectName("Pokémon capturé")
+
+        # Création du bouton pour partir 
         self.PartirButton = QtWidgets.QPushButton(self.centralwidget)
-        self.PartirButton.setGeometry(QtCore.QRect(260, 680, 481, 31))
-        self.PartirButton.setText("")
+        self.PartirButton.setGeometry(QtCore.QRect(250, 675, 495, 40))
         self.PartirButton.setObjectName("PartirButton")
-        self.Back.raise_()
-        self.PokeballButton.raise_()
-        self.Pokeball.raise_()
-        self.Salameche.raise_()
-        self.PartirButton.raise_()
+
+        
         MainWindow.setCentralWidget(self.centralwidget)
 
-        self.PokeballButton.setStyleSheet("background-color: rgba(255, 255, 255, 0); border: none;")
+        # On rend les boutons invisibles
         self.PartirButton.setStyleSheet("background-color: rgba(255, 255, 255, 0); border: none;")
+
+
 
         self.Pokeball.enterEvent = self.enter_image
         self.Pokeball.leaveEvent = self.leave_image
-        self.Salameche.enterEvent = self.enter_image
-        self.Salameche.leaveEvent = self.leave_image
+        self.capture.enterEvent = self.enter_image
+        self.capture.leaveEvent = self.leave_image
+        self.Pokeball.mousePressEvent = self.click_image 
 
-        self.retranslateUi(MainWindow)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        self.PartirButton.clicked.connect(self.quitte_sans_pokemon)
+
+    
     
     def enter_image(self, event):
         self.Pokeball.setPixmap(QPixmap("Combat/Outils/PokeballClosed.png"))
-        self.Salameche.setPixmap(QPixmap(""))
+        self.capture.setPixmap(QPixmap(""))
 
     def leave_image(self, event):
         self.Pokeball.setPixmap(QPixmap("Combat/Outils/PokeballOpen.png"))
-        self.Salameche.setPixmap(QPixmap("Combat/Outils/Salamèche_face.png"))
+        self.capture.setPixmap(QPixmap("Pokemons/"+self.base_name+"/"+self.base_name+"_face.png"))
 
-    def retranslateUi(self, MainWindow):
-        _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+    def click_image(self, event):
+        print("ici")
+        self.pokemon_utilise.hp = self.pokedex.pokedex[self.pokemon_utilise.name.split()[0]].hp
+        self.inventaire_joueur.capturer_pokemon(self.adversaire, self.pokedex_sauvages, self.pokedex)
+        self.close()
+
+    def quitte_sans_pokemon(self):
+        self.pokemon_utilise.hp = self.pokedex.pokedex[self.pokemon_utilise.name.split()[0]].hp
+        self.adversaire.hp = self.pokedex.pokedex[self.adversaire.name.split()[0]].hp
+        self.close()
+
+    def mousePressEvent(self, event):
+        """
+        Fonction qui permet de gérer l'évenement: clic gauche
+        """
+        # On récupère les coordonnées du clic de la souris
+        mouse_x = event.x()
+        mouse_y = event.y()
+
+        if self.clic(mouse_x, mouse_y, 388, 612, 271, 564): 
+            self.pokemon_utilise.hp = self.pokedex.pokedex[self.pokemon_utilise.name.split()[0]].hp
+            self.inventaire_joueur.capturer_pokemon(self.adversaire, self.pokedex_sauvages, self.pokedex)
+            self.close() 
+
+    def clic(self, x, y, x_inf, x_sup, y_inf, y_sup):
+        """
+        Fonction qui teste si le clic est dans la zone entre x_inf et x_sup et entre y_inf et y_sup
+        """
+        if x_inf <= x <= x_sup and y_inf <= y <= y_sup:
+            return True
 
 
-class XXXXWindow (QMainWindow, Ui_MainWindow):
-    def __init__(self, parent=None):
-        super(XXXXWindow, self).__init__(parent)
+   
+
+
+class VictoireWindow (QMainWindow, Victoire_ui):
+    def __init__(self, adversaire, pokedex_sauvages, inventaire_joueur, pokemon_utilise, pokedex, parent=None):
+        self.adversaire = adversaire
+        self.pokedex_sauvages = pokedex_sauvages
+        self.inventaire_joueur = inventaire_joueur
+        self.pokemon_utilise = pokemon_utilise
+        self.pokedex = pokedex
+        super(VictoireWindow, self).__init__(parent)
         self.setupUi(self)
-# ...
+
+
+
+    
+
+
 if __name__ == "__main__":
     def run_app():
         app = QApplication(sys.argv)
-        mainWin = XXXXWindow()
+        mainWin = VictoireWindow()
         mainWin.show()
         app.exec_()
     run_app()

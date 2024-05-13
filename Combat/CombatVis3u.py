@@ -26,6 +26,8 @@ import Poke as poke
 import test_graph as t #MODIFIER QUAND FICHIER DEFINITIF
 import fight as f
 import ChoixPokemon.ChoixPokemonVisu3u as ch
+import VictoireVis3u as v
+import DefaiteVis3u as d
 
 
 class Combat_ui(object):
@@ -35,8 +37,8 @@ class Combat_ui(object):
 
         #self.pokemon_utilise = list(self.inventaire_joueur.pokedex.values())[0]
         self.adversaire = self.pokemon_sauvage
-        HP = self.pokemon_utilise.hp
-        HP_adv = self.adversaire.hp
+        # HP = self.pokemon_utilise.hp
+        # HP_adv = self.adversaire.hp
 
         self.pokedex = poke.Pokedex()
         self.pokedex.charger_pokedex("pokemon_first_gen.csv")
@@ -68,7 +70,7 @@ class Combat_ui(object):
         #Création de l'objet barre de vie de notre pokemon
         self.progressBarAllie = QtWidgets.QProgressBar(self.centralwidget)
         self.progressBarAllie.setGeometry(QtCore.QRect(620, 397, 371, 23))
-        self.progressBarAllie.setMaximum(self.pokemon_utilise.hp)
+        self.progressBarAllie.setMaximum(self.pokedex.pokedex[self.pokemon_utilise.name.split()[0]].hp)
         self.progressBarAllie.setValue(self.pokemon_utilise.hp)
         self.progressBarAllie.setFormat("")
         self.progressBarAllie.setObjectName("progressBarAllie")
@@ -91,7 +93,7 @@ class Combat_ui(object):
         # Création de la barre de vie de m'adversaire
         self.progressBarEnemy = QtWidgets.QProgressBar(self.centralwidget)
         self.progressBarEnemy.setGeometry(QtCore.QRect(110, 189, 371, 23))
-        self.progressBarEnemy.setMaximum(HP_adv)
+        self.progressBarEnemy.setMaximum(self.pokedex.pokedex[self.adversaire.name.split()[0]].hp)
         self.progressBarEnemy.setValue(self.adversaire.hp)
         self.progressBarEnemy.setFormat("")
         self.progressBarEnemy.setObjectName("progressBarEnemy")
@@ -109,7 +111,7 @@ class Combat_ui(object):
         self.image_poke = QtWidgets.QLabel(self.centralwidget)
         self.image_poke.setGeometry(QtCore.QRect(60, 230, 400, 400))
         self.image_poke.setText("")
-        self.image_poke.setPixmap(QtGui.QPixmap("Pokémons/"+self.pokemon_utilise.name.split()[0]+"/"+self.pokemon_utilise.name.split()[0]+"_dos.png"))
+        self.image_poke.setPixmap(QtGui.QPixmap("Pokemons/"+self.pokemon_utilise.name.split()[0]+"/"+self.pokemon_utilise.name.split()[0]+"_dos.png"))
         self.image_poke.setScaledContents(True)
         self.image_poke.setObjectName("Pokemon inventaire_joueur")
 
@@ -117,7 +119,7 @@ class Combat_ui(object):
         self.image_adv = QtWidgets.QLabel(self.centralwidget)
         self.image_adv.setGeometry(QtCore.QRect(550, 40, 400, 400))
         self.image_adv.setText("")
-        self.image_adv.setPixmap(QtGui.QPixmap("Pokémons/"+self.adversaire.name.split()[0]+"/"+self.adversaire.name.split()[0]+"_face.png"))
+        self.image_adv.setPixmap(QtGui.QPixmap("Pokemons/"+self.adversaire.name.split()[0]+"/"+self.adversaire.name.split()[0]+"_face.png"))
         self.image_adv.setScaledContents(True)
         self.image_adv.setObjectName("Pokemon adverse")
 
@@ -226,13 +228,12 @@ class Combat_ui(object):
             self.tour_joueur = False
 
             if self.adversaire.hp <= 0: # On vérifie si l'adversaire est battu
-                QTimer.singleShot(2000, self.close)
-                self.pokemon_utilise.hp = self.pokedex.pokedex[self.pokemon_utilise.name.split()[0]].hp
-                self.inventaire_joueur.capturer_pokemon(self.adversaire, self.pokedex_sauvages, self.pokedex)
+                QTimer.singleShot(1000, self.close)
+                QTimer.singleShot(1000, self.open_victory)
 
             else:
                 # L'ordi peut attaquer
-                QTimer.singleShot(2000, self.tour_ordi)
+                QTimer.singleShot(1000, self.tour_ordi)
         
 
     def on_attaque_speciale_clicked(self):
@@ -250,12 +251,12 @@ class Combat_ui(object):
             self.tours_depuis_attaque_joueur = 0  # On réinitialise le compteur de tours après l'attaque spéciale du joueur
 
             if self.adversaire.hp <= 0: # On vérifie si l'adversaire est battu
-                QTimer.singleShot(2000, self.close)
-                self.pokemon_utilise.hp = self.pokedex.pokedex[self.pokemon_utilise.name.split()[0]].hp
-                self.inventaire_joueur.capturer_pokemon(self.adversaire, self.pokedex_sauvages, self.pokedex)
+                QTimer.singleShot(1000, self.close)
+                QTimer.singleShot(1000, self.open_victory)
+
             else:
                 # On attend 2 secondes puis l'adversaire attaque
-                QTimer.singleShot(2000, self.tour_ordi)
+                QTimer.singleShot(1000, self.tour_ordi)
 
         
 
@@ -299,9 +300,10 @@ class Combat_ui(object):
             self.AttaqueSpeciale.setStyleSheet("background-color: rgba(255, 255, 255, 0); border: none;")
 
         if self.pokemon_utilise.hp <= 0: # On vérifie si le joueur a perdu
-                QTimer.singleShot(2000, self.close)
+                QTimer.singleShot(1000, self.close)
                 self.pokemon_utilise.hp = self.pokedex.pokedex[self.pokemon_utilise.name.split()[0]].hp
                 self.adversaire.hp = self.pokedex.pokedex[self.adversaire.name.split()[0]].hp
+                QTimer.singleShot(1000, self.open_loose)
 
 
 
@@ -335,6 +337,17 @@ class Combat_ui(object):
         # Mettre à jour le texte de l'étiquette des points de vie de notre pokemon
         label.setText(str(hp))
         label.raise_()
+
+    def open_victory(self):
+        self.victory_window = v.VictoireWindow(self.adversaire, self.pokedex_sauvages, self.inventaire_joueur, self.pokemon_utilise, self.pokedex)
+        self.victory_window.show()
+
+    def open_loose(self):
+        self.victory_window = d.DefaiteWindow()
+        self.victory_window.show()
+
+
+    
 
 
 
