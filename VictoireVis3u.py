@@ -85,14 +85,12 @@ class Victoire_ui(object):
 
     def click_image(self, event):
         for nom_poke, pokemon in self.inventaire_joueur.pokedex.items():
-            print("ici")
             pokemon.hp = self.pokedex.pokedex[pokemon.name.split()[0]].hp
         self.inventaire_joueur.capturer_pokemon(self.adversaire, self.pokedex_sauvages, self.pokedex)
         self.close()
 
     def quitte_sans_pokemon(self):
         for nom_poke, pokemon in self.inventaire_joueur.pokedex.items():
-            print("la")
             pokemon.hp = self.pokedex.pokedex[pokemon.name.split()[0]].hp
         self.adversaire.hp = self.pokedex.pokedex[self.adversaire.name.split()[0]].hp
         self.close()
@@ -107,7 +105,6 @@ class Victoire_ui(object):
 
         if self.clic(mouse_x, mouse_y, 388, 612, 271, 564): 
             for nom_poke, pokemon in self.inventaire_joueur.pokedex.items():
-                print("LA")
                 pokemon.hp = self.pokedex.pokedex[pokemon.name.split()[0]].hp
             self.inventaire_joueur.capturer_pokemon(self.adversaire, self.pokedex_sauvages, self.pokedex)
             self.close() 

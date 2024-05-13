@@ -384,6 +384,10 @@ class Combat_ui(object):
             self.AttaqueSpeciale.setStyleSheet("background-color: rgba(255, 255, 255, 0); border: none;")
 
         if self.pokemon_utilise.hp <= 0: # On vérifie si le joueur a perdu
+                self.AttaqueNormale.setEnabled(False)
+                self.AttaqueSpeciale.setEnabled(False)
+                self.Pokedex.setEnabled(False)
+                self.Fuite.setEnabled(False)
                 QTimer.singleShot(1000, self.close)
                 self.pokemon_utilise.hp = self.pokedex.pokedex[self.pokemon_utilise.name.split()[0]].hp
                 self.adversaire.hp = self.pokedex.pokedex[self.adversaire.name.split()[0]].hp

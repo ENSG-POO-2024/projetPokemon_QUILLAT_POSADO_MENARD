@@ -7,12 +7,13 @@ import sys
 import numpy as np
 import os
 import cv2
+import time
 
 ### Import des objets PyQt ###
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QGraphicsView, QGraphicsScene
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QGraphicsView, QGraphicsScene, QGraphicsOpacityEffect
 from PyQt5.QtGui import QPainter, QPixmap, QImage
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent, QSoundEffect
-from PyQt5.QtCore import Qt, QTimer, QUrl, QRect
+from PyQt5.QtCore import Qt, QTimer, QUrl, QRect, QEventLoop
 
 ### Import des fichiers ###
 import Poke as poke
@@ -96,6 +97,9 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
         self.setWindowTitle("Votre pokémon starter est " + starter.name)
         self.setGeometry(800, 0, self.ecran_largeur, self.ecran_hauteur)  # On place notre fenêtre principale
 
+        # Pour retourner sur l'acceuil
+        self.retour_img = QPixmap("Image/retour.png")
+
         # Mise en place de l'affichage du dresseur
         self.image_dresseur = {
             "up": [QPixmap("Dresseur/Sacha_haut2.png"), QPixmap("Dresseur/Sacha_haut3.png")],
@@ -105,9 +109,11 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
             "static": [QPixmap("Dresseur/Sacha_bas1.png")]
         }
 
-        self.img_fin = [QPixmap("data/Fin de jeu/1.png"),QPixmap("data/Fin de jeu/1.png"),QPixmap("data/Fin de jeu/1.png"),QPixmap("data/Fin de jeu/1.png"),
-                        QPixmap("data/Fin de jeu/1.png"), QPixmap("data/Fin de jeu/1.png"), QPixmap("data/Fin de jeu/1.png"), QPixmap("data/Fin de jeu/1.png")]
+        self.img_fin = ["data/Fin de jeu/1.png", "data/Fin de jeu/2.png", "data/Fin de jeu/3.png", "data/Fin de jeu/4.png",
+                        "data/Fin de jeu/5.png", "data/Fin de jeu/6.png", "data/Fin de jeu/7.png", "data/Fin de jeu/8.png"]
 
+
+        self.index_img = 0
 
         # Création de l'inventaire du joueur
         self.inventaire_joueur = poke.InventaireJoueur()
@@ -149,15 +155,13 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
 
 
 
-        if event.key() == Qt.Key_Left and  2090 <= -self.background_position_y <= 2420 and -self.background_position_x <= bord_gauche :
-            self.dresseur.y -= self.dresseur.speed
-            self.dresseur.Y -= self.dresseur.speed
-            self.current_direction = "up"
-            QTimer.singleShot(1000, self.close)
+        if event.key() == Qt.Key_Left and -self.background_position_y == 1870 and -self.background_position_x <= bord_gauche :
+            self.dresseur.x -= self.dresseur.speed
+            self.dresseur.X -= self.dresseur.speed
+            self.current_direction = "left"
             self.fin = True
 
-
-        if event.key() == Qt.Key_Right and -self.background_position_ <= bord_droit and np.abs(self.dresseur.X) >= (self.nb_bloc * self.dresseur.speed):
+        if event.key() == Qt.Key_Right and -self.background_position_x <= bord_droit and np.abs(self.dresseur.X) >= (self.nb_bloc * self.dresseur.speed):
             self.background_position_x -= self.dresseur.speed
             for nom_pokemon, pokemon in self.pokedex_sauvages.pokedex.items():
                 pokemon.x -= self.dresseur.speed
@@ -207,6 +211,8 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
         
         painter.setRenderHint(QPainter.SmoothPixmapTransform)
 
+        painter.drawPixmap(5, -75, self.retour_img)
+
         if self.current_direction:
             pixmap = self.image_dresseur[self.current_direction][self.current_image_index]
         else:
@@ -215,12 +221,9 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
         painter.drawPixmap(self.dresseur.x+10, self.dresseur.y, pixmap.scaled(90,90))
 
         if self.fin:
-            for img in self.img_fin:
-                QTimer.singleShot(2000, painter.drawPixmap(0,0, img))
+            QTimer.singleShot(2000, self.close)
 
 
-
-        
 
     def update(self):
         if self.current_direction:
