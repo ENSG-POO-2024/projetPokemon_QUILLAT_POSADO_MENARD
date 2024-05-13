@@ -185,7 +185,7 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
         for cle_pokemons, poke_sauvage in self.pokedex_sauvages.pokedex.items(): # On affiche tous les pokémons sauvages
             if self.dresseur.proche_affichage(poke_sauvage):
                 base_name = poke_sauvage.name.split()[0] # Pour gérer le cas avec plusieurs fois le même pokémon
-                image_path = os.path.join(script_dir, "Pokémons/" + base_name, base_name + "_face.png")
+                image_path = os.path.join(script_dir, "Pokemons/" + base_name, base_name + "_face.png")
                 pixmap = QPixmap(image_path)
                 painter.drawPixmap(poke_sauvage.x, poke_sauvage.y, pixmap) 
         

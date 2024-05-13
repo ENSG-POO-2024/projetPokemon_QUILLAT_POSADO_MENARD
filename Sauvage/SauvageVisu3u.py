@@ -42,7 +42,7 @@ class Sauvage_ui(object):
         self.label_poke.setAlignment(Qt.AlignCenter)
         self.label_poke.setGeometry(QtCore.QRect(0, 200, 1000, 270))
         self.label_poke.setText("")
-        self.gif_poke = QtGui.QMovie("Pokémons/"+self.pokemon_sauvage.name.split()[0]+"/"+self.pokemon_sauvage.name.split()[0]+"_face.gif")
+        self.gif_poke = QtGui.QMovie("Pokemons/"+self.pokemon_sauvage.name.split()[0]+"/"+self.pokemon_sauvage.name.split()[0]+"_face.gif")
         self.gif_poke.setScaledSize(QtCore.QSize(250, 250))
         self.label_poke.setMovie(self.gif_poke)
         self.gif_poke.start()

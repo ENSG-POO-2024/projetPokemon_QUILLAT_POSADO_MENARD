@@ -111,7 +111,7 @@ class Combat_ui(object):
         self.image_poke = QtWidgets.QLabel(self.centralwidget)
         self.image_poke.setGeometry(QtCore.QRect(60, 230, 400, 400))
         self.image_poke.setText("")
-        self.image_poke.setPixmap(QtGui.QPixmap("Pokémons/"+self.pokemon_utilise.name.split()[0]+"/"+self.pokemon_utilise.name.split()[0]+"_dos.png"))
+        self.image_poke.setPixmap(QtGui.QPixmap("Pokemons/"+self.pokemon_utilise.name.split()[0]+"/"+self.pokemon_utilise.name.split()[0]+"_dos.png"))
         self.image_poke.setScaledContents(True)
         self.image_poke.setObjectName("Pokemon inventaire_joueur")
 
@@ -119,7 +119,7 @@ class Combat_ui(object):
         self.image_adv = QtWidgets.QLabel(self.centralwidget)
         self.image_adv.setGeometry(QtCore.QRect(550, 40, 400, 400))
         self.image_adv.setText("")
-        self.image_adv.setPixmap(QtGui.QPixmap("Pokémons/"+self.adversaire.name.split()[0]+"/"+self.adversaire.name.split()[0]+"_face.png"))
+        self.image_adv.setPixmap(QtGui.QPixmap("Pokemons/"+self.adversaire.name.split()[0]+"/"+self.adversaire.name.split()[0]+"_face.png"))
         self.image_adv.setScaledContents(True)
         self.image_adv.setObjectName("Pokemon adverse")
 
