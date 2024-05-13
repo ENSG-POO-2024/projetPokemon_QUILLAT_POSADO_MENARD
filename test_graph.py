@@ -12,7 +12,7 @@ import cv2
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QGraphicsView, QGraphicsScene
 from PyQt5.QtGui import QPainter, QPixmap, QImage
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent, QSoundEffect
-from PyQt5.QtCore import Qt, QTimer, QUrl
+from PyQt5.QtCore import Qt, QTimer, QUrl, QRect
 
 ### Import des fichiers ###
 import Poke as poke
@@ -33,11 +33,11 @@ class AccueilWindow(QWidget): # On arrive sur la page d'acceuil et on peut cliqu
 
         ## Création de la fenêtre d'acceuil
         self.setWindowTitle("Accueil")
-        self.setGeometry(250, 100, 1000, 720)
+        self.setGeometry(250, 100, 1000, 750)
 
         ## Affichage de la vidéo d'acceuil
         self.label = QLabel(self)
-        self.label.setGeometry(-120, 0, 1280, 720)
+        self.label.setGeometry(0, 0, 1000, 750)
 
         self.video_path = video_path
         self.cap = cv2.VideoCapture(video_path)
@@ -47,6 +47,7 @@ class AccueilWindow(QWidget): # On arrive sur la page d'acceuil et on peut cliqu
 
         self.mouse_clicked = False  # Pour suivre si le clic de souris a eu lieu
         self.label.mousePressEvent = self.mousePressEvent  # Redéfinition de la méthode mousePressEvent
+
 
 
     def update_frame(self):
@@ -61,12 +62,15 @@ class AccueilWindow(QWidget): # On arrive sur la page d'acceuil et on peut cliqu
 
     def mousePressEvent(self, event):
         # Si le clic de souris a eu lieu dans une certaine zone de la fenêtre on arrive sur la map
-        if event.x() >= 0 and event.x() <= 200 and event.y() >= 0 and event.y() <= 200:
+        if event.x() >= 60 and event.x() <= 380 and event.y() >= 295 and event.y() <= 390:
             self.timer.stop()  # On arrête la mise à jour de la vidéo avant d'ouvrir la fenêtre de jeu
             self.cap.release()  
             self.starter_window = s.StarterWindow()
             self.starter_window.show()
             self.close()
+
+
+    
 
 
 class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map

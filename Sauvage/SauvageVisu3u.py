@@ -31,34 +31,45 @@ class Sauvage_ui(object):
         self.Fond = QtWidgets.QLabel(self.centralwidget)
         self.Fond.setGeometry(QtCore.QRect(0, 0, 1000, 750))
         self.Fond.setText("")
-        self.Fond.setPixmap(QtGui.QPixmap("Image/test.png"))
+        self.Fond.setPixmap(QtGui.QPixmap("Image/rencontre.png"))
         self.Fond.setScaledContents(True)
         self.Fond.setObjectName("Fond")
 
+       
+
         # Affichage du pokemon rencontré
-        self.image_poke = QtWidgets.QLabel(self.centralwidget)
-        self.image_poke.setGeometry(QtCore.QRect(320, 10, 400, 400))
-        self.image_poke.setText("")
-        self.image_poke.setPixmap(QtGui.QPixmap("Pokémons/"+self.pokemon_sauvage.name.split()[0]+"/"+self.pokemon_sauvage.name.split()[0]+"_face.png"))
-        self.image_poke.setScaledContents(True)
-        self.image_poke.setObjectName("Pokemon rencontré")
+        self.label_poke = QtWidgets.QLabel(self.centralwidget)
+        self.label_poke.setAlignment(Qt.AlignCenter)
+        self.label_poke.setGeometry(QtCore.QRect(0, 200, 1000, 270))
+        self.label_poke.setText("")
+        self.gif_poke = QtGui.QMovie("Pokémons/"+self.pokemon_sauvage.name.split()[0]+"/"+self.pokemon_sauvage.name.split()[0]+"_face.gif")
+        self.gif_poke.setScaledSize(QtCore.QSize(250, 250))
+        self.label_poke.setMovie(self.gif_poke)
+        self.gif_poke.start()
+        self.label_poke.setObjectName("Pokemon rencontré")
+        self.label_text = QLabel(self.pokemon_sauvage.name.split()[0], self)
+        self.label_text.setAlignment(Qt.AlignCenter)
+        self.label_text.setGeometry(0, 500, 1000, 55)
+        self.font = QFont("Arial", 50)  
+        self.label_text.setFont(self.font)
+        self.label_text.setStyleSheet("color: brown;")  
 
 
         # Bouton pour combattre
         self.fight_buton = QtWidgets.QPushButton(self.centralwidget)
-        self.fight_buton.setGeometry(QtCore.QRect(630, 365, 260, 460))
+        self.fight_buton.setGeometry(QtCore.QRect(105, 587, 365, 77))
         self.fight_buton.setText("")
         self.fight_buton.setObjectName("Fuite")
 
         # Bouton pour fuir
         self.fuite = QtWidgets.QPushButton(self.centralwidget)
-        self.fuite.setGeometry(QtCore.QRect(90, 365, 260, 460))
+        self.fuite.setGeometry(QtCore.QRect(530, 587, 365, 77))
         self.fuite.setText("")
         self.fuite.setObjectName("Fuite")
 
         # On met tout en avant (dans le bon ordre) pour que les objets soient au premier plan 
         self.Fond.raise_()
-        self.image_poke.raise_()
+        self.label_poke.raise_()
         self.fuite.raise_()
         self.fight_buton.raise_()
 
