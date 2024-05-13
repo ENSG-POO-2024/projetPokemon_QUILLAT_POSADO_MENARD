@@ -68,7 +68,7 @@ class Combat_ui(object):
 
         # Ajout du son
         self.musique = QMediaPlayer(self.centralwidget)
-        self.musique.setMedia(QMediaContent(QUrl.fromLocalFile("battle.mp3")))
+        self.musique.setMedia(QMediaContent(QUrl.fromLocalFile("Combat/battle.mp3")))
         self.musique.setVolume(100)
         self.musique.play()
 
@@ -232,6 +232,7 @@ class Combat_ui(object):
         #self.tour_joueur = True
         #self.tours_depuis_attaque_joueur = 2  # Tours écoulés depuis la dernière attaque spéciale du joueur
         self.tours_depuis_attaque_ordi = 2  # Tours écoulés depuis la dernière attaque spéciale de l'ordinateur
+        self.apres_pokedex = False
 
         # Affichage nom du pokémon utilisé
         self.nom_poke = QLabel(self.pokemon_utilise.name.split()[0], self)
@@ -254,8 +255,11 @@ class Combat_ui(object):
         else:
             self.AttaqueSpeciale.setStyleSheet("background-color: rgba(128, 128, 128, 0)")
 
+        if self.apres_pokedex:
+            self.tour_ordi()
 
 
+        
         # Connectez le signal clicked du bouton à la méthode correspondante
         self.AttaqueNormale.clicked.connect(self.on_attaque_normale_clicked)
         self.AttaqueSpeciale.clicked.connect(self.on_attaque_speciale_clicked)
@@ -264,7 +268,7 @@ class Combat_ui(object):
 
 
     def open_pokedex(self): # A revoir
-        QTimer.singleShot(1000, self.tour_ordi)
+        self.apres_pokedex = True
         self.close()
         self.tours_depuis_attaque_joueur += 1
         self.pokedex_window = ch.ChoixPokemonWindow(self.adversaire, self.inventaire_joueur, self.pokedex_sauvages, self.tour_joueur, self.tours_depuis_attaque_joueur)  
@@ -272,11 +276,13 @@ class Combat_ui(object):
 
 
     def fuite_buton(self):
+        self.apres_pokedex = False
         self.pokemon_utilise.hp = self.pokedex.pokedex[self.pokemon_utilise.name.split()[0]].hp
         self.adversaire.hp = self.pokedex.pokedex[self.adversaire.name.split()[0]].hp
         self.close() 
 
     def on_attaque_normale_clicked(self):
+        self.apres_pokedex = False
         self.Pokedex.setEnabled(False)
         self.Fuite.setEnabled(False)
         if self.tour_joueur:
@@ -300,10 +306,12 @@ class Combat_ui(object):
 
             else:
                 # L'ordi peut attaquer
+                self.tour_attaque_ordi = True
                 QTimer.singleShot(1000, self.tour_ordi)
         
 
     def on_attaque_speciale_clicked(self):
+        self.apres_pokedex = False
         self.Pokedex.setEnabled(False)
         self.Fuite.setEnabled(False)
         if self.tours_depuis_attaque_joueur >= 2:
@@ -325,13 +333,13 @@ class Combat_ui(object):
 
             else:
                 # On attend 2 secondes puis l'adversaire attaque
+                self.tour_attaque_ordi = True
                 QTimer.singleShot(1000, self.tour_ordi)
 
         
 
     def tour_ordi(self):
-        self.Pokedex.setEnabled(True)
-        self.Fuite.setEnabled(True)
+        self.apres_pokedex = False
         # On vérifie si l'ordi a son attaque spéciale de prête 
         if self.tours_depuis_attaque_ordi >= 2:
             # Si oui alors il l'utilise
@@ -341,6 +349,8 @@ class Combat_ui(object):
         
             # On récative le bouton d'attaque du joueur
             self.AttaqueNormale.setEnabled(True)
+            self.Pokedex.setEnabled(True)
+            self.Fuite.setEnabled(True)
 
             # On passe au tour du joueur
             self.tour_joueur = True
@@ -358,12 +368,15 @@ class Combat_ui(object):
         
             # On récative le bouton d'attaque du joueur
             self.AttaqueNormale.setEnabled(True)
+            self.Pokedex.setEnabled(True)
+            self.Fuite.setEnabled(True)
 
             # On incrémente le compteur de tours depuis la dernière attaque spéciale de l'adversaire
             self.tours_depuis_attaque_ordi += 1
 
             # On passe au tour du joueur
             self.tour_joueur = True
+            self.tour_attaque_ordi = False
 
 
         if self.tours_depuis_attaque_joueur >= 2: # On met à jour si besoin le bouton d'attaque spéciale
@@ -388,7 +401,8 @@ class Combat_ui(object):
                 }
                     
                 QProgressBar::chunk {
-                    background-color: #FF0000; /* Couleur de la barre de progression */
+                    background-color: #FF0000; /* Couleur de la barre de progression */   
+                    border-radius: 100px;
                 }                                
             """) 
         
@@ -403,6 +417,7 @@ class Combat_ui(object):
 
                 QProgressBar::chunk {
                     background-color: #00FF00; /* Couleur de la barre de progression */
+                    border-radius: 100px;
                 }                                                             
             """)
         # Mettre à jour le texte de l'étiquette des points de vie de notre pokemon
@@ -414,6 +429,8 @@ class Combat_ui(object):
         self.victory_window.show()
 
     def open_loose(self):
+        self.Pokedex.setEnabled(False)
+        self.Fuite.setEnabled(False)
         self.victory_window = d.DefaiteWindow(self.adversaire, self.pokedex_sauvages, self.inventaire_joueur, self.pokemon_utilise, self.pokedex)
         self.victory_window.show()
 

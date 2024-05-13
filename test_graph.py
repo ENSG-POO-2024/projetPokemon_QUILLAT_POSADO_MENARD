@@ -142,6 +142,13 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
         bord_bas = self.map_hauteur - self.ecran_hauteur - self.dresseur.speed
 
 
+        if event.key() == Qt.Key_Up and  2255 <= -self.background_position_x <= 2695 and -self.background_position_y <= bord_haut:
+            self.dresseur.y -= self.dresseur.speed
+            self.dresseur.Y -= self.dresseur.speed
+            self.current_direction = "up"
+            QTimer.singleShot(1000, self.close)
+
+
         if event.key() == Qt.Key_Right and -self.background_position_x <= bord_droit and np.abs(self.dresseur.X) >= (self.nb_bloc * self.dresseur.speed):
             self.background_position_x -= self.dresseur.speed
             for nom_pokemon, pokemon in self.pokedex_sauvages.pokedex.items():
