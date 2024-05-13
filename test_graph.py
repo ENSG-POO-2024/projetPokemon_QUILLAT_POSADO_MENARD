@@ -98,10 +98,11 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
 
         # Mise en place de l'affichage du dresseur
         self.image_dresseur = {
-            "up": [QPixmap("dresseur/haut_move.png"), QPixmap("dresseur/haut_move2.png")],
-            "down": [QPixmap("dresseur/bas_statique.png"), QPixmap("dresseur/bas_move.png"), QPixmap("dresseur/bas_move2.png")],
-            "left": [QPixmap("dresseur/gauche_move.png"), QPixmap("dresseur/gauche_statique.png")],
-            "right": [QPixmap("dresseur/droite_move.png"), QPixmap("dresseur/droite_statique.png")],
+            "up": [QPixmap("Dresseur/Sacha_haut2.png"), QPixmap("Dresseur/Sacha_haut3.png")],
+            "down": [QPixmap("Dresseur/Sacha_bas2.png"), QPixmap("Dresseur/Sacha_bas3.png")],
+            "left": [QPixmap("Dresseur/Sacha_gauche2.png"), QPixmap("Dresseur/Sacha_gauche1.png")],
+            "right": [QPixmap("Dresseur/Sacha_droite2.png"), QPixmap("Dresseur/Sacha_droite1.png")],
+            "static": [QPixmap("Dresseur/Sacha_bas1.png")]
         }
 
 
@@ -194,7 +195,7 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
         if self.current_direction:
             pixmap = self.image_dresseur[self.current_direction][self.current_image_index]
         else:
-            pixmap = self.image_dresseur["down"][0]  # Utilisez l'image vers le bas par défaut lorsque le joueur ne se déplace pas
+            pixmap = self.image_dresseur["static"][0]  # Utilisez l'image vers le bas par défaut lorsque le joueur ne se déplace pas
 
         painter.drawPixmap(self.dresseur.x+10, self.dresseur.y, pixmap.scaled(90,90))
         

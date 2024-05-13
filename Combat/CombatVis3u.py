@@ -30,6 +30,22 @@ import VictoireVis3u as v
 import DefaiteVis3u as d
 
 
+def bas_image(image):
+    img = image.toImage()
+    hauteur = img.height()
+    largeur = img.width()
+
+    for h in range(hauteur-1, -1, -1):
+        for l in range(largeur):
+            color = img.pixelColor(l, h)
+
+            if color.alpha() != 0:
+                return h
+            
+    return 0
+
+
+
 class Combat_ui(object):
 
         
@@ -113,6 +129,9 @@ class Combat_ui(object):
         self.image_adv.setGeometry(QtCore.QRect(550, 40, 400, 400))
         self.image_adv.setText("")
         self.image_adv.setPixmap(QtGui.QPixmap("Pokemons/"+self.adversaire.name.split()[0]+"/"+self.adversaire.name.split()[0]+"_face.png"))
+        self.img_adv_largeur = QtGui.QPixmap("Pokemons/"+self.adversaire.name.split()[0]+"/"+self.adversaire.name.split()[0]+"_dos.png").width()
+        self.bas_img_adv = bas_image(QtGui.QPixmap("Pokemons/"+self.adversaire.name.split()[0]+"/"+self.adversaire.name.split()[0]+"_face.png"))
+        self.image_adv.move(550, 80-self.bas_img_adv)
         self.image_adv.setScaledContents(True)
         self.image_adv.setObjectName("Pokemon adverse")
 
@@ -242,6 +261,8 @@ class Combat_ui(object):
         self.close() 
 
     def on_attaque_normale_clicked(self):
+        self.Pokedex.setEnabled(False)
+        self.Fuite.setEnabled(False)
         if self.tour_joueur:
             # Attaque normale du joueur
             self.pokemon_utilise.attaquer(self.adversaire)
@@ -267,6 +288,8 @@ class Combat_ui(object):
         
 
     def on_attaque_speciale_clicked(self):
+        self.Pokedex.setEnabled(False)
+        self.Fuite.setEnabled(False)
         if self.tours_depuis_attaque_joueur >= 2:
             # Attaque spéciale du joueur
             self.pokemon_utilise.attaque_speciale_joueur(self.adversaire)
@@ -291,6 +314,8 @@ class Combat_ui(object):
         
 
     def tour_ordi(self):
+        self.Pokedex.setEnabled(True)
+        self.Fuite.setEnabled(True)
         # On vérifie si l'ordi a son attaque spéciale de prête 
         if self.tours_depuis_attaque_ordi >= 2:
             # Si oui alors il l'utilise
