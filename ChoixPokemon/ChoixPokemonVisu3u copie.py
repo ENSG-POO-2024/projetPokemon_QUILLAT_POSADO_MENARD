@@ -46,7 +46,7 @@ class ChoixPokemon_ui(object):
             base_name = pokemon.name.split()[0] # Pour gérer le cas avec plusieurs fois le même pokémon
             self.label = QLabel(self)
             self.label.setGeometry(self.x, self.y-10, self.largeur, self.hauteur)  # Position et taille de l'image
-            self.pixmap = QPixmap("Pokémons/"+base_name+"/"+base_name+"_face.png")
+            self.pixmap = QPixmap("Pokemons/"+base_name+"/"+base_name+"_face.png")
             self.label.setPixmap(self.pixmap)
             self.label.setScaledContents(True)
             self.creer_bouton(pokemon)

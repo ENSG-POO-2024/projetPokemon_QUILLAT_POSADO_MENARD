@@ -48,7 +48,7 @@ class Victoire_ui(object):
         # Ajout du pokémon capturé
         self.capture = QtWidgets.QLabel(self.centralwidget)
         self.capture.setGeometry(QtCore.QRect(390, 300, 231, 241))
-        self.capture.setPixmap(QtGui.QPixmap("Pokémons/"+self.base_name+"/"+self.base_name+"_face.png"))
+        self.capture.setPixmap(QtGui.QPixmap("Pokemons/"+self.base_name+"/"+self.base_name+"_face.png"))
         self.capture.setScaledContents(True)
         self.capture.setObjectName("Pokémon capturé")
 
@@ -81,7 +81,7 @@ class Victoire_ui(object):
 
     def leave_image(self, event):
         self.Pokeball.setPixmap(QPixmap("Combat/Outils/PokeballOpen.png"))
-        self.capture.setPixmap(QPixmap("Pokémons/"+self.base_name+"/"+self.base_name+"_face.png"))
+        self.capture.setPixmap(QPixmap("Pokemons/"+self.base_name+"/"+self.base_name+"_face.png"))
 
     def click_image(self, event):
         print("ici")
