@@ -15,6 +15,7 @@ from PyQt5.QtCore import Qt
 
 import test_graph as t
 import Starter.StarterVis3u as s
+import Poke as poke
 
 class Victoire_ui(object):
     def setupUi(self, MainWindow):
@@ -138,7 +139,15 @@ class VictoireWindow (QMainWindow, Victoire_ui):
 if __name__ == "__main__":
     def run_app():
         app = QApplication(sys.argv)
-        mainWin = VictoireWindow()
-        mainWin.show()
+        adversaire = poke.Pokemon("Electhor",15,12,90,90,85,125,90,poke.Electrik(),False)
+        pokemon_utilise = poke.Pokemon("Dracaufeu",15,12,78,84,78,109,85,poke.Feu(),False)
+        inventaire = poke.InventaireJoueur()
+        inventaire.inventory(pokemon_utilise)
+        pokedex_sauvages = poke.Pokedex()
+        pokedex_sauvages.charger_pokedex('pokemon_first_gen.csv') # On le remplit avec notre fichier 
+        pokedex = poke.Pokedex()
+        pokedex.charger_pokedex('pokemon_first_gen.csv')
+        victoire = VictoireWindow(adversaire, pokedex_sauvages, inventaire, pokemon_utilise, pokedex)
+        victoire.show()
         app.exec_()
     run_app()

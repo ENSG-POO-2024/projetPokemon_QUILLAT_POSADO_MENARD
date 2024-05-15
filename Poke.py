@@ -43,22 +43,30 @@ class Pokemon:
         degats = int(self.attack * self.modifier(adversaire.type) - adversaire.defense)
         if degats <= 0:
             degats = 0
+        elif degats >= adversaire.hp:
+            degats = adversaire.hp
         adversaire.hp -= degats
         if adversaire.hp < 0:
                 adversaire.hp = 0
-        print(f"{self.name} attaque {adversaire.name} et lui inflige {degats} dégâts.")
-        print(f"Il reste {adversaire.hp} points de vie à {adversaire.name}.")
+        print(f"{self.name} attaque {adversaire.name.split()[0]} et lui inflige {degats} dégâts.")
+        print(f"Il reste {adversaire.hp} points de vie à {adversaire.name.split()[0]}.")
+
+        return degats
 
     def attaque_speciale_joueur(self, adversaire):
         # Utilise l'attaque spéciale
         degats = int(self.sp_attack * self.modifier(adversaire.type) - adversaire.sp_defense)
         if degats <= 0:
             degats = 0
+        elif degats >= adversaire.hp:
+            degats = adversaire.hp
         adversaire.hp -= degats  
         if adversaire.hp < 0:
             adversaire.hp = 0
-        print(f"{self.name} utilise son attaque spéciale sur {adversaire.name} et lui inflige {degats} dégâts.")
-        print(f"Il reste {adversaire.hp} points de vie à {adversaire.name}.")
+        print(f"{self.name} utilise son attaque spéciale sur {adversaire.name.split()[0]} et lui inflige {degats} dégâts.")
+        print(f"Il reste {adversaire.hp} points de vie à {adversaire.name.split()[0]}.")
+
+        return degats
         
 
         

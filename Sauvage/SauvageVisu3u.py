@@ -84,7 +84,7 @@ class Sauvage_ui(object):
         self.fight_buton.clicked.connect(self.open_choix_pokemon)
 
     def open_choix_pokemon(self):
-        self.choix = ch.ChoixPokemonWindow(self.pokemon_sauvage, self.inventaire_joueur, self.pokedex_sauvages, True, 2)
+        self.choix = ch.ChoixPokemonWindow(self.pokemon_sauvage, self.inventaire_joueur, self.pokedex_sauvages, False)
         self.choix.show()
 
 
@@ -96,3 +96,18 @@ class SauvageWindow(QMainWindow, Sauvage_ui):
         self.pokedex_sauvages = pokedex_sauvages # Le pokedex avec tous les pokemons sauvages
         super(SauvageWindow, self).__init__(parent)
         self.setupUi(self)
+
+
+if __name__ == "__main__":
+    def run_app():
+        app = QApplication(sys.argv)
+        adversaire = poke.Pokemon("Electhor",15,12,90,90,85,125,90,poke.Electrik(),False)
+        pokemon_utilise = poke.Pokemon("Dracaufeu",15,12,78,84,78,109,85,poke.Feu(),False)
+        inventaire = poke.InventaireJoueur()
+        inventaire.inventory(pokemon_utilise)
+        pokedex_sauvages = poke.Pokedex()
+        pokedex_sauvages.charger_pokedex('pokemon_first_gen.csv') 
+        sauvage = SauvageWindow(adversaire, inventaire, pokedex_sauvages)
+        sauvage.show()
+        app.exec_()
+    run_app()

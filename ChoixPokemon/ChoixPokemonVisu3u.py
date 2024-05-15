@@ -4,7 +4,7 @@ import os
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QApplication, QPushButton, QHBoxLayout, QWidget, QLabel, QMainWindow, QVBoxLayout, QScrollArea, QGridLayout, QStackedWidget
 from PyQt5.QtGui import QPixmap, QIcon
-from PyQt5.QtCore import Qt, QSize, QPoint
+from PyQt5.QtCore import Qt, QSize, QPoint, pyqtSignal
 
 current_dir = os.path.dirname(__file__)
 parent_dir = os.path.abspath(os.path.join(current_dir, ".."))
@@ -75,12 +75,22 @@ class ChoixPokemon_ui(object):
 
         for nom_bouton, bouton in self.boutons.items():
             bouton.clicked.connect(lambda checked, nom=nom_bouton: MainWindow.close())
-            bouton.clicked.connect(lambda checked, nom=nom_bouton: self.open_combat(self.inventaire_joueur.pokedex[nom]))
-
+            if self.clic_pokedex:
+                bouton.clicked.connect(lambda checked, nom=nom_bouton: self.open_combat(self.inventaire_joueur.pokedex[nom]))
+            else:
+                bouton.clicked.connect(lambda checked, nom=nom_bouton: self.open_first_combat(self.inventaire_joueur.pokedex[nom]))
 
 
     def open_combat(self, pokemon_choisi):
-        self.fight_window = c.FightWindow(self.pokemon_sauvage, pokemon_choisi, self.pokedex_sauvages, self.inventaire_joueur, self.tour_joueur, self.tour_depuis_attaque_joueur)
+        self.fight_window = c.FightWindow(self.pokemon_sauvage, pokemon_choisi, self.pokedex_sauvages, self.inventaire_joueur, False)
+        self.fight_window.AttaqueNormale.setEnabled(False)
+        self.fight_window.AttaqueSpeciale.setEnabled(False)
+        self.fight_window.Fuite.setEnabled(False)
+        self.fight_window.Pokedex.setEnabled(False)
+        self.fight_window.show()
+
+    def open_first_combat(self, pokemon_choisi):
+        self.fight_window = c.FightWindow(self.pokemon_sauvage, pokemon_choisi, self.pokedex_sauvages, self.inventaire_joueur, True)
         self.fight_window.show()
 
 
@@ -96,7 +106,7 @@ class ChoixPokemon_ui(object):
         #self.boutons[pokemon.name].setStyleSheet("background-color: rgba(0, 0, 0, 0); border: 2px solid black;")
         
 
-        self.nb_bouton = 3
+        self.nb_bouton = 3 # Bouton par ligne
         self.button_layout.addWidget(self.boutons[pokemon.name], self.i // self.nb_bouton, self.i % self.nb_bouton)
 
         self.boutons[pokemon.name].raise_()
@@ -130,53 +140,26 @@ class ChoixPokemon_ui(object):
 
 
 class ChoixPokemonWindow(QMainWindow, ChoixPokemon_ui):
-    def __init__(self, pokemon_sauvage, inventaire_joueur, pokedex_sauvages, tour_joueur, tour_depuis_attaque_joueur, parent=None):
+
+    def __init__(self, pokemon_sauvage, inventaire_joueur, pokedex_sauvages, clic_pokedex, parent=None):
         self.pokemon_sauvage = pokemon_sauvage # Le pokémon rencontré
         self.inventaire_joueur = inventaire_joueur # L'inventaire du joueur avec ses pokémons
         self.pokedex_sauvages = pokedex_sauvages # Le pokedex avec tous les pokémons sauvages
-        self.tour_joueur = tour_joueur
-        self.tour_depuis_attaque_joueur = tour_depuis_attaque_joueur
+        self.clic_pokedex = clic_pokedex
         super(ChoixPokemonWindow, self).__init__(parent)
         self.setupUi(self)
-        
-    # def showEvent(self, event):
-    #     super().showEvent(event)
-    #     self.obtenir_coordonnees_boutons()  # Appel de la fonction pour obtenir les coordonnées des boutons après affichage
+
 
 
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    inventaire = poke.InventaireJoueur()
-    inventaire.inventory(poke.Pokemon("Pikachu",15,12,15,12,10,10,10,poke.Eau(),False))
-    inventaire.inventory(poke.Pokemon("Salameche",10,10,10,10,10,10,10,poke.Eau(),False))
-    inventaire.inventory(poke.Pokemon("Salameche",10,10,10,10,10,10,10,poke.Eau(),False))
-    inventaire.inventory(poke.Pokemon("Salameche",10,10,10,10,10,10,10,poke.Eau(),False))
-    inventaire.inventory(poke.Pokemon("Salameche",10,10,10,10,10,10,10,poke.Eau(),False))
-    inventaire.inventory(poke.Pokemon("Salameche",10,10,10,10,10,10,10,poke.Eau(),False))
-    inventaire.inventory(poke.Pokemon("Salameche",10,10,10,10,10,10,10,poke.Eau(),False))
-    inventaire.inventory(poke.Pokemon("Salameche",10,10,10,10,10,10,10,poke.Eau(),False))
-    inventaire.inventory(poke.Pokemon("Salameche",10,10,10,10,10,10,10,poke.Eau(),False))
-    inventaire.inventory(poke.Pokemon("Salameche",10,10,10,10,10,10,10,poke.Eau(),False))
-    inventaire.inventory(poke.Pokemon("Salameche",10,10,10,10,10,10,10,poke.Eau(),False))
-    inventaire.inventory(poke.Pokemon("Salameche",10,10,10,10,10,10,10,poke.Eau(),False))
-    inventaire.inventory(poke.Pokemon("Salameche",10,10,10,10,10,10,10,poke.Eau(),False))
-    inventaire.inventory(poke.Pokemon("Salameche",10,10,10,10,10,10,10,poke.Eau(),False))
-    inventaire.inventory(poke.Pokemon("Salameche",10,10,10,10,10,10,10,poke.Eau(),False))
-    inventaire.inventory(poke.Pokemon("Salameche",10,10,10,10,10,10,10,poke.Eau(),False))
-    inventaire.inventory(poke.Pokemon("Salameche",10,10,10,10,10,10,10,poke.Eau(),False))
-    inventaire.inventory(poke.Pokemon("Salameche",10,10,10,10,10,10,10,poke.Eau(),False))
-    inventaire.inventory(poke.Pokemon("Salameche",10,10,10,10,10,10,10,poke.Eau(),False))
-    inventaire.inventory(poke.Pokemon("Salameche",10,10,10,10,10,10,10,poke.Eau(),False))
-    inventaire.inventory(poke.Pokemon("Salameche",10,10,10,10,10,10,10,poke.Eau(),False))
-    inventaire.inventory(poke.Pokemon("Salameche",10,10,10,10,10,10,10,poke.Eau(),False))
-    inventaire.inventory(poke.Pokemon("Salameche",10,10,10,10,10,10,10,poke.Eau(),False))
-    inventaire.inventory(poke.Pokemon("Salameche",10,10,10,10,10,10,10,poke.Eau(),False))
-    inventaire.inventory(poke.Pokemon("Salameche",10,10,10,10,10,10,10,poke.Eau(),False))
-    poke_sauvge = poke.Pokemon("Rattata",15,12,15,12,10,10,10,poke.Eau(),False)
+    inventaire = poke.Pokedex()
+    inventaire.charger_pokedex('pokemon_first_gen.csv')
+    poke_sauvage = poke.Pokemon("Rattata",15,12,30,56,35,25,35,poke.Normal(),False)
     pokedex_sauvages = poke.Pokedex()
     pokedex_sauvages.charger_pokedex('pokemons_a_capturer.csv') # On le remplit avec notre fichier 
-    fenetre = ChoixPokemonWindow(poke_sauvge, inventaire, pokedex_sauvages)
-    fenetre.setWindowTitle("Exemple de fenêtre avec boutons par-dessus une image de fond")
+    fenetre = ChoixPokemonWindow(poke_sauvage, inventaire, pokedex_sauvages)
+    fenetre.setWindowTitle("Exemple de fenêtre d'inventaire")
     fenetre.show()
     sys.exit(app.exec_())

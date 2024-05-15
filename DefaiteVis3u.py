@@ -13,6 +13,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QPushButton, QMainWindow, QApplication
 from PyQt5.QtCore import pyqtSignal, QObject
 
+import Poke as poke
+
 
 class Defaite_ui(object):
     
@@ -67,7 +69,15 @@ class DefaiteWindow(QMainWindow, Defaite_ui):
 if __name__ == "__main__":
     def run_app():
         app = QApplication(sys.argv)
-        mainWin = DefaiteWindow()
-        mainWin.show()
+        adversaire = poke.Pokemon("Electhor",15,12,90,90,85,125,90,poke.Electrik(),False)
+        pokemon_utilise = poke.Pokemon("Dracaufeu",15,12,78,84,78,109,85,poke.Feu(),False)
+        inventaire = poke.InventaireJoueur()
+        inventaire.inventory(pokemon_utilise)
+        pokedex_sauvages = poke.Pokedex()
+        pokedex_sauvages.charger_pokedex('pokemon_first_gen.csv') # On le remplit avec notre fichier 
+        pokedex = poke.Pokedex()
+        pokedex.charger_pokedex('pokemon_first_gen.csv')
+        defaite = DefaiteWindow(adversaire, pokedex_sauvages, inventaire, pokemon_utilise, pokedex)
+        defaite.show()
         app.exec_()
     run_app()

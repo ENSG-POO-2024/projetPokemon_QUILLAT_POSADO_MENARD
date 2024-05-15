@@ -43,3 +43,7 @@ def poke_coord(fichier_entree, fichier_sortie, nombre_lignes):
     lignes_aleatoires.to_csv(chemin_fichier, index=False)
 
 
+if __name__ == '__main__':
+    pokemons_sauvages = poke_coord('pokemon_first_gen.csv', 'pokemons_a_capturer.csv', 10)
+
+
