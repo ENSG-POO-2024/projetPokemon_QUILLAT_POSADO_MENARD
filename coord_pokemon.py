@@ -9,20 +9,20 @@ def generer_coordonnees_uniques(nombre_lignes):
     while len(coordonnees_uniques) < nombre_lignes:
         x = random.randint(4, 41) * 110
         y = random.randint(4, 41) * 110
-        coordonnees_uniques.add((int(x), int(y)))
+        if 2310 <= x <= 2530 or 2200 <= y <= 2420:
+           pass
+        else:
+            coordonnees_uniques.add((int(x), int(y)))
     return list(coordonnees_uniques)
 
 
 def poke_coord(fichier_entree, fichier_sortie, nombre_lignes):
-    # Charger le fichier CSV dans un DataFrame
     # On prend le chemin du répertoire parent du script Python
     chemin_parent = os.path.dirname(os.path.abspath(__file__))
     # On construit le chemin complet du fichier CSV en joignant le chemin du répertoire parent avec le répertoire "data" et le nom du fichier
     chemin_fichier = os.path.join(chemin_parent, 'data', fichier_entree)
     # On charge le fichier CSV en tant que DataFrame avec Pandas
     df = pd.read_csv(chemin_fichier)
-
-    
 
     # Calculer les poids de rareté en fonction des valeurs de rareté
     poids_rarete = df['Rare'].apply(lambda x: x)  

@@ -16,13 +16,28 @@ import Combat.CombatVis3u as c
 import ChoixPokemon.ChoixPokemonVisu3u as ch
 
 
-class Sauvage_ui(object):
+class RencontreRocket_ui(object):
 
     def setupUi(self, MainWindow):
 
+        #self.pokemon_utilise = list(self.inventaire_joueur.pokedex.values())[0]
+        self.adversaire = poke.Pokemon("Mewtwo",0,0,106,110,90,154,90,poke.Psy(),False)
+
+        self.pokedex = poke.Pokedex()
+        self.pokedex.charger_pokedex("pokemon_first_gen.csv")
+
+        self.inventaire_joueur = poke.InventaireJoueur()
+        self.inventaire_joueur.inventory(poke.Pokemon("Mew",0,0,100,100,100,100,100,poke.Psy(),False))
+        self.inventaire_joueur.inventory(poke.Pokemon("Dracaufeu",15,12,78,84,78,109,85,poke.Feu(),False))
+        self.inventaire_joueur.inventory(poke.Pokemon("Ectoplasma",0,0,60,65,60,130,75, poke.Tenebres(), False))
+
+
+        self.pokedex_sauvages = poke.Pokedex()
+        self.pokedex_sauvages.charger_pokedex("pokemon_first_gen.csv")
+
         # Création de l'objet MainWindow
         MainWindow.setObjectName("MainWindow")
-        MainWindow.setWindowTitle("Rencontre avec " + self.pokemon_sauvage.name.split()[0])
+        MainWindow.setWindowTitle("Rencontre avec " + self.adversaire.name.split()[0])
         MainWindow.resize(1000, 750)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -42,12 +57,12 @@ class Sauvage_ui(object):
         self.label_poke.setAlignment(Qt.AlignCenter)
         self.label_poke.setGeometry(QtCore.QRect(0, 200, 1000, 270))
         self.label_poke.setText("")
-        self.gif_poke = QtGui.QMovie("Pokemons/"+self.pokemon_sauvage.name.split()[0]+"/"+self.pokemon_sauvage.name.split()[0]+"_face.gif")
+        self.gif_poke = QtGui.QMovie("Pokemons/"+self.adversaire.name.split()[0]+"/"+self.adversaire.name.split()[0]+"_face.gif")
         self.gif_poke.setScaledSize(QtCore.QSize(250, 250))
         self.label_poke.setMovie(self.gif_poke)
         self.gif_poke.start()
         self.label_poke.setObjectName("Pokemon rencontré")
-        self.label_text = QLabel(self.pokemon_sauvage.name.split()[0], self)
+        self.label_text = QLabel(self.adversaire.name.split()[0], self)
         self.label_text.setAlignment(Qt.AlignCenter)
         self.label_text.setGeometry(0, 500, 1000, 55)
         self.font = QFont("Minecraft", 50)  
@@ -84,30 +99,31 @@ class Sauvage_ui(object):
         self.fight_buton.clicked.connect(self.open_choix_pokemon)
 
     def open_choix_pokemon(self):
-        self.choix = ch.ChoixPokemonWindow(self.pokemon_sauvage, self.inventaire_joueur, self.pokedex_sauvages, False, False)
+        self.choix = ch.ChoixPokemonWindow(self.adversaire, self.inventaire_joueur, self.pokedex_sauvages, False, True)
         self.choix.show()
 
 
 
-class SauvageWindow(QMainWindow, Sauvage_ui):
-    def __init__(self, pokemon_sauvage, inventaire_joueur, pokedex_sauvages, parent=None):
-        self.pokemon_sauvage = pokemon_sauvage # Le pokémon qu'on a rencontré
-        self.inventaire_joueur = inventaire_joueur # L'inventaire du joueur avec ses pokémons
-        self.pokedex_sauvages = pokedex_sauvages # Le pokedex avec tous les pokemons sauvages
-        super(SauvageWindow, self).__init__(parent)
+class RencontreRocketWindow(QMainWindow, RencontreRocket_ui):
+    def __init__(self, parent=None):
+        self.adversaire = poke.Pokemon("Mewtwo",0,0,106,110,90,154,90,poke.Psy(),False)
+
+        self.inventaire_joueur = poke.InventaireJoueur()
+        self.inventaire_joueur.inventory(poke.Pokemon("Mew",0,0,100,100,100,100,100,poke.Psy(),False))
+        self.inventaire_joueur.inventory(poke.Pokemon("Dracaufeu",15,12,78,84,78,109,85,poke.Feu(),False))
+        self.inventaire_joueur.inventory(poke.Pokemon("Ectoplasma",0,0,60,65,60,130,75, poke.Tenebres(), False))
+
+
+        self.pokedex_sauvages = poke.Pokedex()
+        self.pokedex_sauvages.charger_pokedex("pokemon_first_gen.csv")
+        super(RencontreRocketWindow, self).__init__(parent)
         self.setupUi(self)
 
 
 if __name__ == "__main__":
     def run_app():
         app = QApplication(sys.argv)
-        adversaire = poke.Pokemon("Electhor",15,12,90,90,85,125,90,poke.Electrik(),False)
-        pokemon_utilise = poke.Pokemon("Dracaufeu",15,12,78,84,78,109,85,poke.Feu(),False)
-        inventaire = poke.InventaireJoueur()
-        inventaire.inventory(pokemon_utilise)
-        pokedex_sauvages = poke.Pokedex()
-        pokedex_sauvages.charger_pokedex('pokemon_first_gen.csv') 
-        sauvage = SauvageWindow(adversaire, inventaire, pokedex_sauvages)
-        sauvage.show()
+        rocket = RencontreRocketWindow()
+        rocket.show()
         app.exec_()
     run_app()

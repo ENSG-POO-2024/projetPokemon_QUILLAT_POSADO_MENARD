@@ -7,7 +7,6 @@ import sys
 import numpy as np
 import os
 import cv2
-import time
 
 ### Import des objets PyQt ###
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QGraphicsView, QGraphicsScene, QGraphicsOpacityEffect
@@ -22,6 +21,8 @@ import coord_pokemon as coo
 import Starter.StarterVis3u as s
 import Combat.CombatVis3u as c
 import Sauvage.SauvageVisu3u as sau
+import ReglesVis3u as r
+import RencontreRocket as r
 
 ### Import du chemin d'accès au fichier python actuel ###
 script_dir = os.path.dirname(__file__)
@@ -69,6 +70,14 @@ class AccueilWindow(QWidget): # On arrive sur la page d'acceuil et on peut cliqu
             self.starter_window = s.StarterWindow()
             self.starter_window.show()
             self.close()
+
+        if event.x() >= 600 and event.x() <= 980 and event.y() >= 306 and event.y() <= 375:
+            self.timer.stop()  # On arrête la mise à jour de la vidéo avant d'ouvrir la fenêtre des règles
+            self.cap.release()  
+            self.regles_window = r.ReglesWindow()
+            self.regles_window.show()
+            self.close()
+
 
 
     
@@ -154,38 +163,37 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
         bord_bas = self.map_hauteur - self.ecran_hauteur - self.dresseur.speed
 
 
+        if np.abs(self.dresseur.x) ==  self.ecran_largeur//2 and np.abs(self.dresseur.y) == self.ecran_hauteur//2:
+
+            if event.key() == Qt.Key_Right and -self.background_position_x <= bord_droit and np.abs(self.dresseur.x):
+                self.background_position_x -= self.dresseur.speed
+                for nom_pokemon, pokemon in self.pokedex_sauvages.pokedex.items():
+                    pokemon.x -= self.dresseur.speed
+                    self.current_direction = "right"
+
+            elif event.key() == Qt.Key_Left and -self.background_position_x > bord_gauche :
+                self.background_position_x += self.dresseur.speed
+                for nom_pokemon, pokemon in self.pokedex_sauvages.pokedex.items():
+                    pokemon.x += self.dresseur.speed
+                    self.current_direction = "left"
+
+            elif event.key() == Qt.Key_Down and -self.background_position_y <= bord_bas and np.abs(self.dresseur.y):
+                self.background_position_y -= self.dresseur.speed
+                for nom_pokemon, pokemon in self.pokedex_sauvages.pokedex.items():
+                    pokemon.y -= self.dresseur.speed
+                    self.current_direction = "down"
+
+            elif event.key() == Qt.Key_Up and -self.background_position_y > bord_haut and np.abs(self.dresseur.y):
+                self.background_position_y += self.dresseur.speed
+                for nom_pokemon, pokemon in self.pokedex_sauvages.pokedex.items():
+                    pokemon.y += self.dresseur.speed
+                    self.current_direction = "up"
 
         if event.key() == Qt.Key_Left and 1760 <= -self.background_position_y <= 1870 and -self.background_position_x <= bord_gauche :
-            self.dresseur.x -= self.dresseur.speed
-            self.dresseur.X -= self.dresseur.speed
-            self.current_direction = "left"
-            self.fin = True
-
-        if event.key() == Qt.Key_Right and -self.background_position_x <= bord_droit and np.abs(self.dresseur.X) >= (self.nb_bloc * self.dresseur.speed):
-            self.background_position_x -= self.dresseur.speed
-            for nom_pokemon, pokemon in self.pokedex_sauvages.pokedex.items():
-                pokemon.x -= self.dresseur.speed
-                self.current_direction = "right"
-
-        elif event.key() == Qt.Key_Left and -self.background_position_x > bord_gauche and np.abs(self.dresseur.X) <= (self.map_largeur - self.nb_bloc * self.dresseur.speed):
-            self.background_position_x += self.dresseur.speed
-            for nom_pokemon, pokemon in self.pokedex_sauvages.pokedex.items():
-                pokemon.x += self.dresseur.speed
+                self.dresseur.x -= self.dresseur.speed
+                self.dresseur.X -= self.dresseur.speed
                 self.current_direction = "left"
-
-        elif event.key() == Qt.Key_Down and -self.background_position_y <= bord_bas and np.abs(self.dresseur.Y) >= (self.nb_bloc * self.dresseur.speed):
-            self.background_position_y -= self.dresseur.speed
-            for nom_pokemon, pokemon in self.pokedex_sauvages.pokedex.items():
-                pokemon.y -= self.dresseur.speed
-                self.current_direction = "down"
-
-        elif event.key() == Qt.Key_Up and -self.background_position_y > bord_haut and np.abs(self.dresseur.Y) <= (self.map_hauteur - self.nb_bloc * self.dresseur.speed):
-            self.background_position_y += self.dresseur.speed
-            for nom_pokemon, pokemon in self.pokedex_sauvages.pokedex.items():
-                pokemon.y += self.dresseur.speed
-                self.current_direction = "up"
-
-
+                self.fin = True
 
 
         if self.dresseur.proche(self.pokedex_sauvages)[0]:
@@ -194,9 +202,13 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
             self.pokemon_window = sau.SauvageWindow(self.pokemon_sauvage, self.inventaire_joueur, self.pokedex_sauvages)
             self.pokemon_window.show()
 
+        if  1760 <= -self.background_position_y <= 1980 and -self.background_position_x == 4070:
+            self.rocket_window = r.RencontreRocketWindow()
+            self.rocket_window.show()
+
+
         self.update()
         self.delay_timer.start(750)
-
 
 
     def paintEvent(self, event): # Fonction pour afficher les images 
@@ -213,12 +225,18 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
 
         painter.drawPixmap(5, -75, self.retour_img)
 
+        if 1870 <= -self.background_position_x <= 2090 and 1760 <= -self.background_position_y <= 1980:
+            maison_img = QPixmap("Image/maison.png")
+            painter.drawPixmap(self.background_position_x + 2310, self.background_position_y + 2200, maison_img)
+
         if self.current_direction:
             pixmap = self.image_dresseur[self.current_direction][self.current_image_index]
         else:
             pixmap = self.image_dresseur["static"][0]  # Utilisez l'image vers le bas par défaut lorsque le joueur ne se déplace pas
 
         painter.drawPixmap(self.dresseur.x+10, self.dresseur.y, pixmap.scaled(90,90))
+
+        
 
         if self.fin:
             QTimer.singleShot(2000, self.close)

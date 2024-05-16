@@ -85,9 +85,9 @@ class Victoire_ui(object):
         self.capture.setPixmap(QPixmap("Pokemons/"+self.base_name+"/"+self.base_name+"_face.png"))
 
     def click_image(self, event):
+        self.inventaire_joueur.capturer_pokemon(self.adversaire, self.pokedex_sauvages, self.pokedex)
         for nom_poke, pokemon in self.inventaire_joueur.pokedex.items():
             pokemon.hp = self.pokedex.pokedex[pokemon.name.split()[0]].hp
-        self.inventaire_joueur.capturer_pokemon(self.adversaire, self.pokedex_sauvages, self.pokedex)
         self.close()
 
     def quitte_sans_pokemon(self):

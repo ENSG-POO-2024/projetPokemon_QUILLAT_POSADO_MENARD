@@ -40,14 +40,16 @@ class Pokemon:
             return 1
         
     def attaquer(self, adversaire):
-        degats = int(self.attack * self.modifier(adversaire.type) - adversaire.defense)
+        degats = int(500*self.attack*self.modifier(adversaire.type)/adversaire.defense)//50 + 2
         if degats <= 0:
             degats = 0
         elif degats >= adversaire.hp:
             degats = adversaire.hp
         adversaire.hp -= degats
+
         if adversaire.hp < 0:
                 adversaire.hp = 0
+
         print(f"{self.name} attaque {adversaire.name.split()[0]} et lui inflige {degats} dégâts.")
         print(f"Il reste {adversaire.hp} points de vie à {adversaire.name.split()[0]}.")
 
@@ -55,14 +57,16 @@ class Pokemon:
 
     def attaque_speciale_joueur(self, adversaire):
         # Utilise l'attaque spéciale
-        degats = int(self.sp_attack * self.modifier(adversaire.type) - adversaire.sp_defense)
+        degats = int(500*self.sp_attack*self.modifier(adversaire.type)/adversaire.sp_defense)//50 + 2
         if degats <= 0:
             degats = 0
         elif degats >= adversaire.hp:
             degats = adversaire.hp
         adversaire.hp -= degats  
+        
         if adversaire.hp < 0:
             adversaire.hp = 0
+
         print(f"{self.name} utilise son attaque spéciale sur {adversaire.name.split()[0]} et lui inflige {degats} dégâts.")
         print(f"Il reste {adversaire.hp} points de vie à {adversaire.name.split()[0]}.")
 
@@ -278,6 +282,12 @@ class InventaireJoueur(Pokedex):
         self.afficher_pokedex()
 
         return equipe
+    
+    def toujours_vivant(self):
+        for nom_poke, pokemon in self.pokedex.items():
+            if pokemon.hp > 0:
+                return True
+        return False
     
 
 

@@ -51,5 +51,6 @@ class Dresseur:
     def proche_affichage(self, pokemon):
         if self.distance(pokemon) <= self.DISTANCE_AFFICHAGE:
             return True
+        
     
 

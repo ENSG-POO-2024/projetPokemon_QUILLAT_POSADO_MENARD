@@ -3,7 +3,6 @@ import cv2
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtCore import QTimer
-from FirstOnePage import Ui_MainWindow 
 
 ### IMPORTANT: IL FAUT INSTALLER OPENCV AVEC LA COMMANDE SUIVANTE: pip install opencv-python
 
