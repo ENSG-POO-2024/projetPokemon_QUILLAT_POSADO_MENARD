@@ -230,7 +230,7 @@ class InventaireJoueur(Pokedex):
         super().__init__()
         self.inventaire_joueur = {}
 
-    def inventory(self, pokemon): 
+    def ajout_inventaire(self, pokemon): 
         if pokemon.name.split()[0] not in self.pokedex:
             # Si le nom du Pokémon n'existe pas dans l'inventaire du joueur, on l'ajoute directement
             pokemon.name = pokemon.name.split()[0]
@@ -257,7 +257,7 @@ class InventaireJoueur(Pokedex):
         adversaire.hp = pokedex.pokedex[adversaire.name.split()[0]].hp
         adversaire.x = None
         adversaire.y = None
-        self.inventory(adversaire)
+        self.ajout_inventaire(adversaire)
 
 
 
@@ -271,7 +271,7 @@ class InventaireJoueur(Pokedex):
             while pokemon_choisi not in pokemons_disponibles:
                 print("Ce Pokémon n'est pas dans votre inventaire. Veuillez choisir un autre Pokémon.")
                 pokemon_choisi = input("Choisissez un Pokémon pour rejoindre votre équipe : ")
-            equipe.inventory(self.pokedex[pokemon_choisi]) 
+            equipe.ajout_inventaire(self.pokedex[pokemon_choisi]) 
             pokemons_disponibles.remove(pokemon_choisi)  # Retirer le pokémon choisi de la liste des pokémons disponibles
 
         self.afficher_pokedex()
@@ -294,4 +294,4 @@ if __name__ == '__main__':
     magicarpe = Pokemon.creer_pokemon("Magicarpe", 0, 0, 50, 20, 10, 35, 15, Eau())
     pokedex.charger_pokedex('pokemon_first_gen.csv')
     print(pokedex)
-    inventaire_joueur.inventory(magicarpe)
+    inventaire_joueur.ajout_inventaire(magicarpe)

@@ -102,7 +102,7 @@ if __name__ == "__main__":
         adversaire = poke.Pokemon("Electhor",15,12,90,90,85,125,90,poke.Electrik())
         pokemon_utilise = poke.Pokemon("Dracaufeu",15,12,78,84,78,109,85,poke.Feu())
         inventaire = poke.InventaireJoueur()
-        inventaire.inventory(pokemon_utilise)
+        inventaire.ajout_inventaire(pokemon_utilise)
         pokedex_sauvages = poke.Pokedex()
         pokedex_sauvages.charger_pokedex('pokemon_first_gen.csv') 
         sauvage = SauvageWindow(adversaire, inventaire, pokedex_sauvages)

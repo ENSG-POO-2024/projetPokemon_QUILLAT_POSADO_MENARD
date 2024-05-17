@@ -25,9 +25,9 @@ class RencontreRocket_ui(object):
         self.pokedex.charger_pokedex("pokemon_first_gen.csv")
 
         self.inventaire_joueur = poke.InventaireJoueur()
-        self.inventaire_joueur.inventory(poke.Pokemon("Mew",0,0,100,100,100,100,100,poke.Psy()))
-        self.inventaire_joueur.inventory(poke.Pokemon("Dracaufeu",15,12,78,84,78,109,85,poke.Feu()))
-        self.inventaire_joueur.inventory(poke.Pokemon("Ectoplasma",0,0,60,65,60,130,75, poke.Tenebres()))
+        self.inventaire_joueur.ajout_inventaire(poke.Pokemon("Mew",0,0,100,100,100,100,100,poke.Psy()))
+        self.inventaire_joueur.ajout_inventaire(poke.Pokemon("Dracaufeu",15,12,78,84,78,109,85,poke.Feu()))
+        self.inventaire_joueur.ajout_inventaire(poke.Pokemon("Ectoplasma",0,0,60,65,60,130,75, poke.Tenebres()))
 
 
         self.pokedex_sauvages = poke.Pokedex()
@@ -107,9 +107,9 @@ class RencontreRocketWindow(QMainWindow, RencontreRocket_ui):
         self.adversaire = poke.Pokemon("Mewtwo",0,0,106,110,90,154,90,poke.Psy())
 
         self.inventaire_joueur = poke.InventaireJoueur()
-        self.inventaire_joueur.inventory(poke.Pokemon("Mew",0,0,100,100,100,100,100,poke.Psy()))
-        self.inventaire_joueur.inventory(poke.Pokemon("Dracaufeu",15,12,78,84,78,109,85,poke.Feu()))
-        self.inventaire_joueur.inventory(poke.Pokemon("Ectoplasma",0,0,60,65,60,130,75, poke.Tenebres()))
+        self.inventaire_joueur.ajout_inventaire(poke.Pokemon("Mew",0,0,100,100,100,100,100,poke.Psy()))
+        self.inventaire_joueur.ajout_inventaire(poke.Pokemon("Dracaufeu",15,12,78,84,78,109,85,poke.Feu()))
+        self.inventaire_joueur.ajout_inventaire(poke.Pokemon("Ectoplasma",0,0,60,65,60,130,75, poke.Tenebres()))
 
 
         self.pokedex_sauvages = poke.Pokedex()

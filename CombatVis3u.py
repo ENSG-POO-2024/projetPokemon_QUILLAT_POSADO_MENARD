@@ -542,8 +542,8 @@ if __name__ == "__main__":
     pokedex_sauvages = poke.Pokedex()
     pokedex_sauvages.charger_pokedex('pokemon_first_gen.csv') # On le remplit avec notre fichier 
     pokemon_utilise = poke.Pokemon("Tortank",15,12,79,83,100,85,105,poke.Eau())
-    inventaire.inventory(pokemon_utilise)
-    inventaire.inventory(poke.Pokemon("Dracaufeu",15,12,78,84,78,109,85,poke.Feu()))
+    inventaire.ajout_inventaire(pokemon_utilise)
+    inventaire.ajout_inventaire(poke.Pokemon("Dracaufeu",15,12,78,84,78,109,85,poke.Feu()))
     fenetre = FightWindow(poke_sauvage, pokemon_utilise, pokedex_sauvages, inventaire, True)
     fenetre.setWindowTitle("Exemple de fenêtre de combat")
     fenetre.show()

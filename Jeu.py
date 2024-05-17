@@ -139,7 +139,7 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
 
         # Création de l'inventaire du joueur
         self.inventaire_joueur = poke.InventaireJoueur()
-        self.inventaire_joueur.inventory(starter) # Ajout du starter à son inventaire
+        self.inventaire_joueur.ajout_inventaire(starter) # Ajout du starter à son inventaire
         
         # Création du pokedex contenant les pokémons sauvages de la map
         self.pokedex_sauvages = poke.Pokedex()
