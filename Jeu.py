@@ -13,7 +13,7 @@ from PyQt5.QtCore import Qt, QTimer
 ### Import des fichiers ###
 import Poke as poke
 from dresseur import Dresseur
-import Coord_pokemon as coo
+import Pokemon_coord as coo
 import Starter.Starter as s
 import Sauvage as sau
 import Regles as re
