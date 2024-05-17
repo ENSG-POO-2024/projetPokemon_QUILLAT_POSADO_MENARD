@@ -201,26 +201,36 @@ class Pokedex:
             # On ajoute les Pokémons au dictionnaire avec leur nom comme clé
             self.pokedex[name] = pokemon
 
-    def afficher_pokedex(self):
+    def __str__(self):
+        texte = ""
         for nom_pokemon, pokemon in self.pokedex.items():
-            print(f"Nom: {pokemon.name}")
-            print(f"X: {pokemon.x}")
-            print(f"Y: {pokemon.y}")
-            print(f"HP: {pokemon.hp}")
-            print(f"Attaque: {pokemon.attack}")
-            print(f"Défense: {pokemon.defense}")
-            print(f"Sp. Attaque: {pokemon.sp_attack}")
-            print(f"Sp. Défense: {pokemon.sp_defense}")
-            print(f"Type: {pokemon.type.name}")
-            print()  # Ajouter une ligne vide entre chaque Pokémon
-        return 
+            texte += "Nom: " + pokemon.name + "\n"
+            texte += "X: " + str(pokemon.x) + "\n"
+            texte += "Y: " + str(pokemon.y) + "\n"
+            texte += "HP: " + str(pokemon.hp) + "\n"
+            texte += "Attaque: " + str(pokemon.attack) + "\n"
+            texte += "Défense: " + str(pokemon.defense) + "\n"
+            texte += "Sp. Attaque: " + str(pokemon.sp_attack) + "\n"
+            texte += "Sp. Défense: " + str(pokemon.sp_defense) + "\n"
+            texte += "Type: " + pokemon.type.name + "\n" + "\n"
+            # print(f"Nom: {pokemon.name}")
+            # print(f"X: {pokemon.x}")
+            # print(f"Y: {pokemon.y}")
+            # print(f"HP: {pokemon.hp}")
+            # print(f"Attaque: {pokemon.attack}")
+            # print(f"Défense: {pokemon.defense}")
+            # print(f"Sp. Attaque: {pokemon.sp_attack}")
+            # print(f"Sp. Défense: {pokemon.sp_defense}")
+            # print(f"Type: {pokemon.type.name}")
+            # print()  # Ajouter une ligne vide entre chaque Pokémon
+        return texte
 
 class InventaireJoueur(Pokedex):
     def __init__(self):
         super().__init__()
         self.inventaire_joueur = {}
 
-    def inventory(self, pokemon): 
+    def ajout_inventaire(self, pokemon): 
         if pokemon.name.split()[0] not in self.pokedex:
             # Si le nom du Pokémon n'existe pas dans l'inventaire du joueur, on l'ajoute directement
             pokemon.name = pokemon.name.split()[0]
@@ -247,7 +257,7 @@ class InventaireJoueur(Pokedex):
         adversaire.hp = pokedex.pokedex[adversaire.name.split()[0]].hp
         adversaire.x = None
         adversaire.y = None
-        self.inventory(adversaire)
+        self.ajout_inventaire(adversaire)
 
 
 
@@ -261,7 +271,7 @@ class InventaireJoueur(Pokedex):
             while pokemon_choisi not in pokemons_disponibles:
                 print("Ce Pokémon n'est pas dans votre inventaire. Veuillez choisir un autre Pokémon.")
                 pokemon_choisi = input("Choisissez un Pokémon pour rejoindre votre équipe : ")
-            equipe.inventory(self.pokedex[pokemon_choisi]) 
+            equipe.ajout_inventaire(self.pokedex[pokemon_choisi]) 
             pokemons_disponibles.remove(pokemon_choisi)  # Retirer le pokémon choisi de la liste des pokémons disponibles
 
         self.afficher_pokedex()
@@ -283,5 +293,5 @@ if __name__ == '__main__':
     inventaire_joueur = InventaireJoueur()
     magicarpe = Pokemon.creer_pokemon("Magicarpe", 0, 0, 50, 20, 10, 35, 15, Eau())
     pokedex.charger_pokedex('pokemon_first_gen.csv')
-    pokedex.afficher_pokedex()
-    inventaire_joueur.inventory(magicarpe)
+    print(pokedex)
+    inventaire_joueur.ajout_inventaire(magicarpe)
