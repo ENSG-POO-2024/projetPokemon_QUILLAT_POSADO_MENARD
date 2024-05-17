@@ -15,7 +15,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QApplication, QLabel
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QFont, QPixmap
-from PyQt5 import *
+from PyQt5 import QtTest
 
 current_dir = os.path.dirname(__file__)
 parent_dir = os.path.abspath(os.path.join(current_dir, ".."))
@@ -149,20 +149,20 @@ class Combat_ui(object):
 
 
         # Point d'attaque et de défense de notre pokémon
-        self.label = QLabel(str(self.pokemon_utilise.attack), self)
-        self.label.setGeometry(128, 583, 200, 50)
-        self.label.setStyleSheet('color: black; font-size: 30px; font-family: "Hello World";')  
-        self.label = QLabel(str(self.pokemon_utilise.defense), self)
-        self.label.setGeometry(128, 657, 200, 50)
-        self.label.setStyleSheet('color: black; font-size: 30px; font-family: "Hello World";')
+        self.poke_att = QLabel(str(self.pokemon_utilise.attack), self)
+        self.poke_att.setGeometry(128, 583, 200, 50)
+        self.poke_att.setStyleSheet('color: black; font-size: 30px; font-family: "Hello World";')  
+        self.poke_def = QLabel(str(self.pokemon_utilise.defense), self)
+        self.poke_def.setGeometry(128, 657, 200, 50)
+        self.poke_def.setStyleSheet('color: black; font-size: 30px; font-family: "Hello World";')
 
         # Point d'attaque et de défense de l'adversaire
-        self.label = QLabel(str(self.adversaire.attack), self)
-        self.label.setGeometry(323, -2, 200, 50)
-        self.label.setStyleSheet('color: red; font-size: 25px; font-family: "Hello World";')  
-        self.label = QLabel(str(self.adversaire.defense), self)
-        self.label.setGeometry(339, 34, 200, 50)
-        self.label.setStyleSheet('color: red; font-size: 25px; font-family: "Hello World";')
+        self.adv_att = QLabel(str(self.adversaire.attack), self)
+        self.adv_att.setGeometry(323, -2, 200, 50)
+        self.adv_att.setStyleSheet('color: red; font-size: 25px; font-family: "Hello World";')  
+        self.adv_def = QLabel(str(self.adversaire.defense), self)
+        self.adv_def.setGeometry(339, 34, 200, 50)
+        self.adv_def.setStyleSheet('color: red; font-size: 25px; font-family: "Hello World";')
 
         # Bouton de l'attaque normale
         self.AttaqueNormale = QtWidgets.QPushButton(self.centralwidget)
@@ -288,13 +288,14 @@ class Combat_ui(object):
 
     def on_attaque_normale_clicked(self):
         self.Pokedex.setEnabled(False)
+        self.AttaqueSpeciale.setEnabled(False)
         self.Fuite.setEnabled(False)
         if self.tour_joueur:
             # Attaque normale du joueur
             degats = self.pokemon_utilise.attaquer(self.adversaire)
             self.progressBarEnemy.setValue(self.adversaire.hp)
             self.affiche_progress_bar(self.progressBarEnemy, self.label_hp_adversaire, self.adversaire.hp)
-            self.affichage_attaque("Media/Image/map.png", self.pokemon_utilise, self.adversaire, degats, False)
+            self.affichage_attaque("Media/Image/Attaque.png", self.pokemon_utilise, self.adversaire, degats, False, True)
             
 
             # On désactive le bouton d'attaque pour empêcher les attaques multiples dans le même tour
@@ -324,7 +325,7 @@ class Combat_ui(object):
             degats = self.pokemon_utilise.attaque_speciale_joueur(self.adversaire)
             self.progressBarEnemy.setValue(self.adversaire.hp)
             self.affiche_progress_bar(self.progressBarEnemy, self.label_hp_adversaire, self.adversaire.hp)
-            self.affichage_attaque("Media/Image/map.png", self.pokemon_utilise, self.adversaire, degats, True)
+            self.affichage_attaque("Media/Image/Attaque.png", self.pokemon_utilise, self.adversaire, degats, True, True)
             
 
             # On désactive le bouton d'attaque spéciale pour empêcher les attaques multiples dans le même tour
@@ -351,7 +352,7 @@ class Combat_ui(object):
             degats = self.adversaire.attaque_speciale_joueur(self.pokemon_utilise)
             self.progressBarAllie.setValue(self.pokemon_utilise.hp)
             self.affiche_progress_bar(self.progressBarAllie, self.label_hp_allie, self.pokemon_utilise.hp)
-            self.affichage_attaque("Media/Image/map.png", self.adversaire, self.pokemon_utilise, degats, True)
+            self.affichage_attaque("Media/Image/Attaque.png", self.adversaire, self.pokemon_utilise, degats, True, False)
 
             # Mettez à jour l'état de disponibilité de l'attaque spéciale de l'ordinateur
             self.tours_depuis_attaque_ordi = 0  # Réinitialisez le compteur de tours depuis l'attaque spéciale
@@ -362,7 +363,7 @@ class Combat_ui(object):
             degats = self.adversaire.attaquer(self.pokemon_utilise)
             self.progressBarAllie.setValue(self.pokemon_utilise.hp)
             self.affiche_progress_bar(self.progressBarAllie, self.label_hp_allie, self.pokemon_utilise.hp)
-            self.affichage_attaque("Media/Image/map.png", self.adversaire, self.pokemon_utilise, degats, False)
+            self.affichage_attaque("Media/Image/Attaque.png", self.adversaire, self.pokemon_utilise, degats, False, False)
 
 
             # On incrémente le compteur de tours depuis la dernière attaque spéciale de l'adversaire
@@ -405,17 +406,17 @@ class Combat_ui(object):
         self.tour_joueur = True
 
 
-    def affiche_progress_bar(self, bar, label, hp):
+    def affiche_progress_bar(self, bar, new_label, hp):
         if hp <= 0.25 * bar.maximum():
             bar.setStyleSheet("""                                                                
                 QProgressBar {
-                    border: 2px solid grey;
+                    border: 2px solid black;
                     border-radius: 5px;
                     background-color: #FFFFFF; /* Couleur de fond de la barre de progression */
                 }
                     
                 QProgressBar::chunk {
-                    background-color: #FF0000; /* Couleur de la barre de progression */   
+                    background-color: #CA443B; /* Couleur de la barre de progression */   
                     border-radius: 100px;
                 }                                
             """) 
@@ -424,19 +425,19 @@ class Combat_ui(object):
             bar.setStyleSheet("""   
                 QProgressBar { color: red;}                                                            
                 QProgressBar {                            
-                    border: 2px solid grey;
+                    border: 2px solid black;
                     border-radius: 5px;
                     background-color: #FFFFFF; /* Couleur de fond de la barre de progression */
                 }
 
                 QProgressBar::chunk {
-                    background-color: #00FF00; /* Couleur de la barre de progression */
+                    background-color: #60D07F; /* Couleur de la barre de progression */
                     border-radius: 100px;
                 }                                                             
             """)
         # On met à jour le texte de l'étiquette des points de vie de notre pokemon
-        label.setText(str(hp))
-        label.raise_()
+        new_label.setText(str(hp))
+        new_label.raise_()
 
 
     def open_victory(self):
@@ -451,20 +452,17 @@ class Combat_ui(object):
         self.victory_window = d.DefaiteWindow(self.adversaire, self.pokedex_sauvages, self.inventaire_joueur, self.pokemon_utilise, self.pokedex)
         self.victory_window.show()
 
-    def affichage_attaque(self, chemin_image, attaquant, defenseur, degats, speciale):
+    def affichage_attaque(self, chemin_image, attaquant, defenseur, degats, speciale, joueur):
         # Afficher l'image d'attaque
-        x = 300
-        y = 175
-        largeur = 400
-        hauteur = 400
         self.image_label = QLabel(self.centralwidget)
-        self.image_label.setGeometry(x, y, largeur, hauteur)
+        self.image_label.setGeometry(0, 0, 1000, 750)
         pixmap = QPixmap(chemin_image)
-        pixmap = pixmap.scaled(largeur, hauteur)  
+        pixmap = pixmap.scaled(1000, 750)  
         self.image_label.setPixmap(pixmap)
         self.image_label.setScaledContents(True) 
         self.image_label.show()
         QTimer.singleShot(3000, self.image_label.close)
+
         # Afficher le texte d'attaque
         if defenseur.hp <=0:
             if speciale:
@@ -483,18 +481,30 @@ class Combat_ui(object):
                 text = attaquant.name.split()[0] + " attaque " + defenseur.name.split()[0] + " mais ce n'est pas tres efficace " + str(degats) + " degats sont infliges !"
 
         self.text_label = QLabel(text, self.centralwidget)
-        self.text_label.setGeometry(x+10, y, largeur-10, hauteur)  # Remplacez x, y, largeur et hauteur par les coordonnées et dimensions souhaitées
+        self.text_label.setGeometry(160, 565, 680, 145)  # Remplacez x, y, largeur et hauteur par les coordonnées et dimensions souhaitées
         self.text_label.setAlignment(Qt.AlignCenter)  # Alignement du texte au centre
-        self.text_label.setStyleSheet('color: red; font-size: 20px; font-family: "Minecraft";')  # Style du texte
+        if joueur:
+            self.text_label.setStyleSheet('color: black; font-size: 35px; font-family: "Minecraft";') 
+        else:
+            self.text_label.setStyleSheet('color: #CA453B; font-size: 35px; font-family: "Minecraft";') 
         self.text_label.setWordWrap(True)
         self.text_label.show()
+        self.image_label.raise_()
+        self.text_label.raise_()
+        self.poke_att.lower()
+        self.poke_def.lower()
         QTimer.singleShot(3000, self.text_label.close)
+        QTimer.singleShot(3000, self.new_raise)
 
     def stop_audio(self):
         pygame.mixer.stop()  # Arrêt du son
 
     def play_audio(self):
         self.sound.play()  # Lancement du son
+
+    def new_raise(self):
+        self.poke_att.raise_()
+        self.poke_def.raise_()
 
   
 
@@ -515,12 +525,12 @@ class FightWindow(QMainWindow, Combat_ui):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     inventaire = poke.InventaireJoueur()
-    poke_sauvage = poke.Pokemon("Florizarre",15,12,80,82,83,100,100,poke.Plante(),False)
+    poke_sauvage = poke.Pokemon("Florizarre",15,12,80,82,83,100,100,poke.Plante())
     pokedex_sauvages = poke.Pokedex()
     pokedex_sauvages.charger_pokedex('pokemon_first_gen.csv') # On le remplit avec notre fichier 
-    pokemon_utilise = poke.Pokemon("Tortank",15,12,79,83,100,85,105,poke.Eau(),False)
+    pokemon_utilise = poke.Pokemon("Tortank",15,12,79,83,100,85,105,poke.Eau())
     inventaire.inventory(pokemon_utilise)
-    inventaire.inventory(poke.Pokemon("Dracaufeu",15,12,78,84,78,109,85,poke.Feu(),False))
+    inventaire.inventory(poke.Pokemon("Dracaufeu",15,12,78,84,78,109,85,poke.Feu()))
     fenetre = FightWindow(poke_sauvage, pokemon_utilise, pokedex_sauvages, inventaire, True)
     fenetre.setWindowTitle("Exemple de fenêtre de combat")
     fenetre.show()

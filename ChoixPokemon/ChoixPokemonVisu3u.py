@@ -5,7 +5,6 @@ from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QApplication, QPushButton, QWidget, QLabel, QMainWindow, QVBoxLayout, QScrollArea, QGridLayout
 from PyQt5.QtGui import QPixmap
 
-import TeamRocket as t
 
 current_dir = os.path.dirname(__file__)
 parent_dir = os.path.abspath(os.path.join(current_dir, ".."))
@@ -13,6 +12,7 @@ sys.path.append(parent_dir)
 
 import Poke as poke
 import Combat.CombatVis3u as c
+import TeamRocket as t
 
 
 
@@ -30,7 +30,10 @@ class ChoixPokemon_ui(object):
         # Affichage du fond
         self.label = QLabel(self)
         self.label.setGeometry(0, 0, 1000, 750)  # Position et taille de l'image
-        self.pixmap = QPixmap("Media/Image/pokedex.png")
+        if self.rocket:
+            self.pixmap = QPixmap("Media/Image/pokedex_rocket.png")
+        else:
+            self.pixmap = QPixmap("Media/Image/pokedex.png") 
         self.label.setPixmap(self.pixmap)
         self.label.setScaledContents(True)
 
@@ -163,10 +166,10 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     inventaire = poke.Pokedex()
     inventaire.charger_pokedex('pokemon_first_gen.csv')
-    poke_sauvage = poke.Pokemon("Rattata",15,12,30,56,35,25,35,poke.Normal(),False)
+    poke_sauvage = poke.Pokemon("Rattata",15,12,30,56,35,25,35,poke.Normal())
     pokedex_sauvages = poke.Pokedex()
     pokedex_sauvages.charger_pokedex('pokemons_a_capturer.csv') # On le remplit avec notre fichier 
-    fenetre = ChoixPokemonWindow(poke_sauvage, inventaire, pokedex_sauvages, False)
+    fenetre = ChoixPokemonWindow(poke_sauvage, inventaire, pokedex_sauvages, False, False)
     fenetre.setWindowTitle("Exemple de fenêtre d'inventaire")
     fenetre.show()
     sys.exit(app.exec_())

@@ -19,15 +19,15 @@ class RencontreRocket_ui(object):
     def setupUi(self, MainWindow):
 
         #self.pokemon_utilise = list(self.inventaire_joueur.pokedex.values())[0]
-        self.adversaire = poke.Pokemon("Mewtwo",0,0,106,110,90,154,90,poke.Psy(),False)
+        self.adversaire = poke.Pokemon("Mewtwo",0,0,106,110,90,154,90,poke.Psy())
 
         self.pokedex = poke.Pokedex()
         self.pokedex.charger_pokedex("pokemon_first_gen.csv")
 
         self.inventaire_joueur = poke.InventaireJoueur()
-        self.inventaire_joueur.inventory(poke.Pokemon("Mew",0,0,100,100,100,100,100,poke.Psy(),False))
-        self.inventaire_joueur.inventory(poke.Pokemon("Dracaufeu",15,12,78,84,78,109,85,poke.Feu(),False))
-        self.inventaire_joueur.inventory(poke.Pokemon("Ectoplasma",0,0,60,65,60,130,75, poke.Tenebres(), False))
+        self.inventaire_joueur.inventory(poke.Pokemon("Mew",0,0,100,100,100,100,100,poke.Psy()))
+        self.inventaire_joueur.inventory(poke.Pokemon("Dracaufeu",15,12,78,84,78,109,85,poke.Feu()))
+        self.inventaire_joueur.inventory(poke.Pokemon("Ectoplasma",0,0,60,65,60,130,75, poke.Tenebres()))
 
 
         self.pokedex_sauvages = poke.Pokedex()
@@ -44,7 +44,7 @@ class RencontreRocket_ui(object):
         self.Fond = QtWidgets.QLabel(self.centralwidget)
         self.Fond.setGeometry(QtCore.QRect(0, 0, 1000, 750))
         self.Fond.setText("")
-        self.Fond.setPixmap(QtGui.QPixmap("Media/Image/rencontre.png"))
+        self.Fond.setPixmap(QtGui.QPixmap("Media/Image/rocket.png"))
         self.Fond.setScaledContents(True)
         self.Fond.setObjectName("Fond")
 
@@ -104,12 +104,12 @@ class RencontreRocket_ui(object):
 
 class RencontreRocketWindow(QMainWindow, RencontreRocket_ui):
     def __init__(self, parent=None):
-        self.adversaire = poke.Pokemon("Mewtwo",0,0,106,110,90,154,90,poke.Psy(),False)
+        self.adversaire = poke.Pokemon("Mewtwo",0,0,106,110,90,154,90,poke.Psy())
 
         self.inventaire_joueur = poke.InventaireJoueur()
-        self.inventaire_joueur.inventory(poke.Pokemon("Mew",0,0,100,100,100,100,100,poke.Psy(),False))
-        self.inventaire_joueur.inventory(poke.Pokemon("Dracaufeu",15,12,78,84,78,109,85,poke.Feu(),False))
-        self.inventaire_joueur.inventory(poke.Pokemon("Ectoplasma",0,0,60,65,60,130,75, poke.Tenebres(), False))
+        self.inventaire_joueur.inventory(poke.Pokemon("Mew",0,0,100,100,100,100,100,poke.Psy()))
+        self.inventaire_joueur.inventory(poke.Pokemon("Dracaufeu",15,12,78,84,78,109,85,poke.Feu()))
+        self.inventaire_joueur.inventory(poke.Pokemon("Ectoplasma",0,0,60,65,60,130,75, poke.Tenebres()))
 
 
         self.pokedex_sauvages = poke.Pokedex()

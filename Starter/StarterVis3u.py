@@ -10,7 +10,7 @@ parent_dir = os.path.abspath(os.path.join(current_dir, ".."))
 sys.path.append(parent_dir)
 
 import Poke as poke
-import test_graph as t #MODIFIER QUAND FICHIER DEFINITIF
+import Jeu as j
 
 
 class Starter(object):
@@ -117,20 +117,20 @@ class StarterWindow(QMainWindow, Starter):
         mouse_y = event.y()
 
         if self.clic(mouse_x, mouse_y, 80, 311, 310, 551): 
-            self.poke = poke.Pokemon('Bulbizarre',None, None,45,49,49,65,65,poke.Plante(), False) 
-            self.map_window = t.Map(self.poke, "pokemons_a_capturer.csv")
+            self.poke = poke.Pokemon('Bulbizarre',None, None,45,49,49,65,65,poke.Plante()) 
+            self.map_window = j.Map(self.poke, "pokemons_a_capturer.csv")
             self.map_window.show()
             self.close()     
 
         if self.clic(mouse_x, mouse_y, 390, 621, 290, 531): 
-            self.poke = poke.Pokemon('Salameche',None, None,39,52,43,60,50,poke.Feu(), False) 
-            self.map_window = t.Map(self.poke, "pokemons_a_capturer.csv")
+            self.poke = poke.Pokemon('Salameche',None, None,39,52,43,60,50,poke.Feu()) 
+            self.map_window = j.Map(self.poke, "pokemons_a_capturer.csv")
             self.map_window.show()
             self.close()  
 
         if self.clic(mouse_x, mouse_y, 680, 911, 300, 541): 
-            self.poke = poke.Pokemon('Carapuce',None, None,44,48,65,50,64,poke.Eau(), False) 
-            self.map_window = t.Map(self.poke, "pokemons_a_capturer.csv")
+            self.poke = poke.Pokemon('Carapuce',None, None,44,48,65,50,64,poke.Eau()) 
+            self.map_window = j.Map(self.poke, "pokemons_a_capturer.csv")
             self.map_window.show()
             self.close()  
 

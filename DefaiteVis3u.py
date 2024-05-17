@@ -59,8 +59,8 @@ class DefaiteWindow(QMainWindow, Defaite_ui):
 if __name__ == "__main__":
     def run_app():
         app = QApplication(sys.argv)
-        adversaire = poke.Pokemon("Electhor",15,12,90,90,85,125,90,poke.Electrik(),False)
-        pokemon_utilise = poke.Pokemon("Dracaufeu",15,12,78,84,78,109,85,poke.Feu(),False)
+        adversaire = poke.Pokemon("Electhor",15,12,90,90,85,125,90,poke.Electrik())
+        pokemon_utilise = poke.Pokemon("Dracaufeu",15,12,78,84,78,109,85,poke.Feu())
         inventaire = poke.InventaireJoueur()
         inventaire.inventory(pokemon_utilise)
         pokedex_sauvages = poke.Pokedex()

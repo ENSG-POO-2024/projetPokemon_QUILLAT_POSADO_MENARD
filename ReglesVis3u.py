@@ -4,7 +4,7 @@ import os
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QApplication
 
-import test_graph as t
+import Jeu as j
 
 script_dir = os.path.dirname(__file__)
 
@@ -43,7 +43,7 @@ class Regles_ui(object):
     def open_acceuil(self):
         video_path = os.path.join(script_dir, "Media/Image", "video.mp4")
         self.close()
-        self.acceuil_window = t.AccueilWindow(video_path)
+        self.acceuil_window = j.AccueilWindow(video_path)
         self.acceuil_window.show()
 
 

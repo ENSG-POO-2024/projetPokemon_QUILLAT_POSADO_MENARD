@@ -9,17 +9,16 @@ import os
 import cv2
 
 ### Import des objets PyQt ###
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QGraphicsView, QGraphicsScene, QGraphicsOpacityEffect
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel
 from PyQt5.QtGui import QPainter, QPixmap, QImage
-from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent, QSoundEffect
-from PyQt5.QtCore import Qt, QTimer, QUrl, QRect, QEventLoop
+from PyQt5.QtCore import Qt, QTimer
+from PyQt5 import QtTest
 
 ### Import des fichiers ###
 import Poke as poke
 from dresseur import Dresseur
 import coord_pokemon as coo
 import Starter.StarterVis3u as s
-import Combat.CombatVis3u as c
 import Sauvage.SauvageVisu3u as sau
 import ReglesVis3u as re
 import RencontreRocket as r
@@ -241,11 +240,6 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
             pixmap = self.image_dresseur["static"][0]  # Utilisez l'image vers le bas par défaut lorsque le joueur ne se déplace pas
 
         painter.drawPixmap(self.dresseur.x+10, self.dresseur.y, pixmap.scaled(90,90))
-
-        
-
-        if self.fin:
-            QTimer.singleShot(2000, self.close)
 
 
 

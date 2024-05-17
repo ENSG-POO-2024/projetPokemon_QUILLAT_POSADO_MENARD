@@ -62,7 +62,7 @@ class Rocket_ui(object):
         self.Fond = QtWidgets.QLabel(self.centralwidget)
         self.Fond.setGeometry(QtCore.QRect(0, 0, 1000, 750))
         self.Fond.setText("")
-        self.Fond.setPixmap(QtGui.QPixmap("Media/Image/BackgroundCombat.png"))
+        self.Fond.setPixmap(QtGui.QPixmap("Media/Image/combat_rocket.png"))
         self.Fond.setScaledContents(True)
         self.Fond.setObjectName("Fond")
 
@@ -138,12 +138,12 @@ class Rocket_ui(object):
 
 
         # Point d'attaque et de défense de notre pokémon
-        self.label = QLabel(str(self.pokemon_utilise.attack), self)
-        self.label.setGeometry(128, 583, 200, 50)
-        self.label.setStyleSheet('color: black; font-size: 30px; font-family: "Hello World";')  
-        self.label = QLabel(str(self.pokemon_utilise.defense), self)
-        self.label.setGeometry(128, 657, 200, 50)
-        self.label.setStyleSheet('color: black; font-size: 30px; font-family: "Hello World";')
+        self.poke_att = QLabel(str(self.pokemon_utilise.attack), self)
+        self.poke_att.setGeometry(128, 583, 200, 50)
+        self.poke_att.setStyleSheet('color: black; font-size: 30px; font-family: "Hello World";')  
+        self.poke_def = QLabel(str(self.pokemon_utilise.defense), self)
+        self.poke_def.setGeometry(128, 657, 200, 50)
+        self.poke_def.setStyleSheet('color: black; font-size: 30px; font-family: "Hello World";')
 
         # Point d'attaque et de défense de l'adversaire
         self.label = QLabel(str(self.adversaire.attack), self)
@@ -283,7 +283,7 @@ class Rocket_ui(object):
             degats = self.pokemon_utilise.attaquer(self.adversaire)
             self.progressBarEnemy.setValue(self.adversaire.hp)
             self.affiche_progress_bar(self.progressBarEnemy, self.label_hp_adversaire, self.adversaire.hp)
-            self.affichage_attaque("Media/Image/map.png", self.pokemon_utilise, self.adversaire, degats, False)
+            self.affichage_attaque("Media/Image/Attaque.png", self.pokemon_utilise, self.adversaire, degats, False, True)
             
 
             # On désactive le bouton d'attaque pour empêcher les attaques multiples dans le même tour
@@ -313,7 +313,7 @@ class Rocket_ui(object):
             degats = self.pokemon_utilise.attaque_speciale_joueur(self.adversaire)
             self.progressBarEnemy.setValue(self.adversaire.hp)
             self.affiche_progress_bar(self.progressBarEnemy, self.label_hp_adversaire, self.adversaire.hp)
-            self.affichage_attaque("Media/Image/map.png", self.pokemon_utilise, self.adversaire, degats, True)
+            self.affichage_attaque("Media/Image/Attaque.png", self.pokemon_utilise, self.adversaire, degats, True, True)
             
 
             # On désactive le bouton d'attaque spéciale pour empêcher les attaques multiples dans le même tour
@@ -340,7 +340,7 @@ class Rocket_ui(object):
             degats = self.adversaire.attaque_speciale_joueur(self.pokemon_utilise)
             self.progressBarAllie.setValue(self.pokemon_utilise.hp)
             self.affiche_progress_bar(self.progressBarAllie, self.label_hp_allie, self.pokemon_utilise.hp)
-            self.affichage_attaque("Media/Image/map.png", self.adversaire, self.pokemon_utilise, degats, True)
+            self.affichage_attaque("Media/Image/Attaque.png", self.adversaire, self.pokemon_utilise, degats, True, False)
 
             # Mettez à jour l'état de disponibilité de l'attaque spéciale de l'ordinateur
             self.tours_depuis_attaque_ordi = 0  # Réinitialisez le compteur de tours depuis l'attaque spéciale
@@ -351,7 +351,7 @@ class Rocket_ui(object):
             degats = self.adversaire.attaquer(self.pokemon_utilise)
             self.progressBarAllie.setValue(self.pokemon_utilise.hp)
             self.affiche_progress_bar(self.progressBarAllie, self.label_hp_allie, self.pokemon_utilise.hp)
-            self.affichage_attaque("Media/Image/map.png", self.adversaire, self.pokemon_utilise, degats, False)
+            self.affichage_attaque("Media/Image/Attaque.png", self.adversaire, self.pokemon_utilise, degats, False, False)
 
 
             # On incrémente le compteur de tours depuis la dernière attaque spéciale de l'adversaire
@@ -440,20 +440,17 @@ class Rocket_ui(object):
         self.victory_window = d.DefaiteWindow(self.adversaire, self.pokedex_sauvages, self.inventaire_joueur, self.pokemon_utilise, self.pokedex)
         self.victory_window.show()
 
-    def affichage_attaque(self, chemin_image, attaquant, defenseur, degats, speciale):
+    def affichage_attaque(self, chemin_image, attaquant, defenseur, degats, speciale, joueur):
         # Afficher l'image d'attaque
-        x = 300
-        y = 175
-        largeur = 400
-        hauteur = 400
         self.image_label = QLabel(self.centralwidget)
-        self.image_label.setGeometry(x, y, largeur, hauteur)
+        self.image_label.setGeometry(0, 0, 1000, 750)
         pixmap = QPixmap(chemin_image)
-        pixmap = pixmap.scaled(largeur, hauteur)  
+        pixmap = pixmap.scaled(1000, 750)  
         self.image_label.setPixmap(pixmap)
         self.image_label.setScaledContents(True) 
         self.image_label.show()
         QTimer.singleShot(3000, self.image_label.close)
+
         # Afficher le texte d'attaque
         if defenseur.hp <=0:
             if speciale:
@@ -472,18 +469,30 @@ class Rocket_ui(object):
                 text = attaquant.name.split()[0] + " attaque " + defenseur.name.split()[0] + " mais ce n'est pas tres efficace " + str(degats) + " degats sont infliges !"
 
         self.text_label = QLabel(text, self.centralwidget)
-        self.text_label.setGeometry(x+10, y, largeur-10, hauteur)  # Remplacez x, y, largeur et hauteur par les coordonnées et dimensions souhaitées
+        self.text_label.setGeometry(160, 565, 680, 145)  # Remplacez x, y, largeur et hauteur par les coordonnées et dimensions souhaitées
         self.text_label.setAlignment(Qt.AlignCenter)  # Alignement du texte au centre
-        self.text_label.setStyleSheet('color: red; font-size: 20px; font-family: "Minecraft";')  # Style du texte
+        if joueur:
+            self.text_label.setStyleSheet('color: black; font-size: 35px; font-family: "Minecraft";') 
+        else:
+            self.text_label.setStyleSheet('color: #CA453B; font-size: 35px; font-family: "Minecraft";') 
         self.text_label.setWordWrap(True)
         self.text_label.show()
+        self.image_label.raise_()
+        self.text_label.raise_()
+        self.poke_att.lower()
+        self.poke_def.lower()
         QTimer.singleShot(3000, self.text_label.close)
+        QTimer.singleShot(3000, self.new_raise)
 
     def stop_audio(self):
         pygame.mixer.stop()  # Arrêt du son
 
     def play_audio(self):
         self.sound.play()  # Lancement du son
+
+    def new_raise(self):
+        self.poke_att.raise_()
+        self.poke_def.raise_()
 
   
 
@@ -505,12 +514,12 @@ class RocketWindow(QMainWindow, Rocket_ui):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     pokedex = poke.Pokedex()
-    adversaire = poke.Pokemon("Mewtwo",0,0,106,110,90,154,90,poke.Psy(),False)
+    adversaire = poke.Pokemon("Mewtwo",0,0,106,110,90,154,90,poke.Psy())
     inventaire_joueur = poke.InventaireJoueur()
-    inventaire_joueur.inventory(poke.Pokemon("Mew",0,0,100,100,100,100,100,poke.Psy(),False))
-    inventaire_joueur.inventory(poke.Pokemon("Dracaufeu",15,12,78,84,78,109,85,poke.Feu(),False))
-    inventaire_joueur.inventory(poke.Pokemon("Ectoplasma",0,0,60,65,60,130,75, poke.Tenebres(), False))
-    pokemon_utilise = poke.Pokemon("Mew",0,0,100,100,100,100,100,poke.Psy(),False)
+    inventaire_joueur.inventory(poke.Pokemon("Mew",0,0,100,100,100,100,100,poke.Psy()))
+    inventaire_joueur.inventory(poke.Pokemon("Dracaufeu",15,12,78,84,78,109,85,poke.Feu()))
+    inventaire_joueur.inventory(poke.Pokemon("Ectoplasma",0,0,60,65,60,130,75, poke.Tenebres()))
+    pokemon_utilise = poke.Pokemon("Mew",0,0,100,100,100,100,100,poke.Psy())
     pokedex_sauvages = poke.Pokedex()
     pokedex_sauvages.charger_pokedex("pokemon_first_gen.csv")
     pokedex.charger_pokedex("pokemon_first_gen.csv")

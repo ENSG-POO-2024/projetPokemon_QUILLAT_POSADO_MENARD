@@ -8,7 +8,7 @@ from abc import *
 ####### Code #######
 
 class Pokemon:
-    def __init__(self, name, x, y, hp, attack, defense, sp_attack, sp_defense, type_, sauvage):
+    def __init__(self, name, x, y, hp, attack, defense, sp_attack, sp_defense, type_):
         self.name = name
         self.x = x
         self.y = y
@@ -18,11 +18,10 @@ class Pokemon:
         self.sp_attack = sp_attack
         self.sp_defense = sp_defense
         self.type = type_ #pour eviter le type déjà existant en python on met type_ mais il devient l'attribut type dans la suite
-        self.sauvage = sauvage 
 
     @classmethod
-    def creer_pokemon(cls, name, x, y, hp, attack, defense, sp_attack, sp_defense, type_, sauvage):
-        return cls(name, x, y, hp, attack, defense, sp_attack, sp_defense, type_, sauvage)
+    def creer_pokemon(cls, name, x, y, hp, attack, defense, sp_attack, sp_defense, type_):
+        return cls(name, x, y, hp, attack, defense, sp_attack, sp_defense, type_)
 
 
     def modifier(self, type_adversaire):
@@ -73,7 +72,7 @@ class Pokemon:
 
 class Type(Pokemon):
     def __init__(self, name, fort=[], faible=[], neutre=[]):
-        super().__init__(name, None, None, None, None, None, None, None, None, None)
+        super().__init__(name, None, None, None, None, None, None, None, None)
         self.fort = fort
         self.faible = faible
         self.neutre = neutre
@@ -169,14 +168,6 @@ class Vol(Type):
 
 
 
-# # Création des Pokémon avec leurs types respectifs et des statistiques personnalisées
-# magicarpe = Pokemon.creer_pokemon("Magicarpe", 50, 20, 10, 35, 15, Eau())
-# charmander = Pokemon.creer_pokemon("Charmander", 70, 25, 15, 35, 25, Feu())
-# pikachu = Pokemon.creer_pokemon("Pikachu", 60, 30, 12, 40, 20, Electrik())
-
-# # Combat entre Pikachu et Magicarpe
-# pikachu.attaquer(magicarpe)
-
 
 class Pokedex:
     def __init__(self):
@@ -206,8 +197,7 @@ class Pokedex:
             sp_defense = row['Sp. Def']
             type_name = row['Type 1'] 
             type_obj = globals()[type_name]()
-            sauvage = False
-            pokemon = Pokemon(name, x, y, hp, attack, defense, sp_attack, sp_defense, type_obj, sauvage)
+            pokemon = Pokemon(name, x, y, hp, attack, defense, sp_attack, sp_defense, type_obj)
             # On ajoute les Pokémons au dictionnaire avec leur nom comme clé
             self.pokedex[name] = pokemon
 
@@ -222,7 +212,6 @@ class Pokedex:
             print(f"Sp. Attaque: {pokemon.sp_attack}")
             print(f"Sp. Défense: {pokemon.sp_defense}")
             print(f"Type: {pokemon.type.name}")
-            print(f"Sauvage: {pokemon.sauvage}")
             print()  # Ajouter une ligne vide entre chaque Pokémon
         return 
 
@@ -292,30 +281,7 @@ if __name__ == '__main__':
     # Exemple d'utilisation
     pokedex = Pokedex()
     inventaire_joueur = InventaireJoueur()
-    magicarpe = Pokemon.creer_pokemon("Magicarpe", 0, 0, 50, 20, 10, 35, 15, Eau(), False)
+    magicarpe = Pokemon.creer_pokemon("Magicarpe", 0, 0, 50, 20, 10, 35, 15, Eau())
     pokedex.charger_pokedex('pokemon_first_gen.csv')
     pokedex.afficher_pokedex()
     inventaire_joueur.inventory(magicarpe)
-    # inventaire_joueur.inventory(magicarpe)
-    # inventaire_joueur.afficher_pokedex()
-    # inventaire_joueur.creer_equipe()
-
-
-
-
-    # # On charge le Pokédex à partir du fichier CSV
-    # pokedex = charger_pokedex('pokemon_first_gen.csv')
-
-
-    # # Afficher le Pokédex
-    # #afficher_dico(pokedex)
-
-
-    # # Nom du Pokémon à tester
-    # nom_pokemon_test = "Salamèche"  # Remplacez "Bulbasaur" par le nom du Pokémon que vous voulez tester
-
-    # # # Vérifier si le Pokémon est dans le Pokédex
-    # # if nom_pokemon_test in pokedex:
-    # #     print(f"Le Pokémon '{nom_pokemon_test}' est présent dans le Pokédex.")
-    # # else:
-    # #     print(f"Le Pokémon '{nom_pokemon_test}' n'est pas présent dans le Pokédex.")
