@@ -26,22 +26,6 @@ import VictoireVis3u as v
 import DefaiteVis3u as d
 
 
-def bas_image(image):
-    img = image.toImage()
-    hauteur = img.height()
-    largeur = img.width()
-
-    for h in range(hauteur-1, -1, -1):
-        for l in range(largeur):
-            color = img.pixelColor(l, h)
-
-            if color.alpha() != 0:
-                return h
-            
-    return 0
-
-
-
 class Combat_ui(object):
 
     def __init__(self):
@@ -134,8 +118,6 @@ class Combat_ui(object):
         self.gif_poke.setScaledSize(QtCore.QSize(300, 300))
         self.image_poke.setMovie(self.gif_poke)
         self.gif_poke.start()
-        # self.image_poke.setPixmap(QtGui.QPixmap("Pokemons/"+self.pokemon_utilise.name.split()[0]+"/"+self.pokemon_utilise.name.split()[0]+"_dos.png"))
-        #self.image_poke.setScaledContents(True)
         self.image_poke.setObjectName("Pokemon inventaire_joueur")
 
         # Affichage pokémon adverse
@@ -146,11 +128,6 @@ class Combat_ui(object):
         self.gif_adv.setScaledSize(QtCore.QSize(250, 250))
         self.image_adv.setMovie(self.gif_adv)
         self.gif_adv.start()
-        # self.image_adv.setPixmap(QtGui.QPixmap("Pokemons/"+self.adversaire.name.split()[0]+"/"+self.adversaire.name.split()[0]+"_face.png"))
-        # self.img_adv_largeur = QtGui.QPixmap("Pokemons/"+self.adversaire.name.split()[0]+"/"+self.adversaire.name.split()[0]+"_dos.png").width()
-        # self.bas_img_adv = bas_image(QtGui.QMovie("Pokemons/"+self.adversaire.name.split()[0]+"/"+self.adversaire.name.split()[0]+"_dos.gif"))
-        # self.image_adv.move(550, 88-self.bas_img_adv)
-        #self.image_adv.setScaledContents(True)
         self.image_adv.setObjectName("Pokemon adverse")
 
 
@@ -316,12 +293,13 @@ class Combat_ui(object):
             self.tour_joueur = False
 
             if self.adversaire.hp <= 0: # On vérifie si l'adversaire est battu
-                QTimer.singleShot(4000, self.close)
-                QTimer.singleShot(4000, self.open_victory)
+                QTimer.singleShot(1000, self.image_adv.close)
+                QTimer.singleShot(3500, self.close)
+                QTimer.singleShot(3500, self.open_victory)
 
             else:
                 # L'ordi peut attaquer
-                QTimer.singleShot(4500, self.tour_ordi)
+                QTimer.singleShot(4000, self.tour_ordi)
         
 
     def on_attaque_speciale_clicked(self):
@@ -344,12 +322,12 @@ class Combat_ui(object):
             self.tours_depuis_attaque_joueur = 0  # On réinitialise le compteur de tours après l'attaque spéciale du joueur
 
             if self.adversaire.hp <= 0: # On vérifie si l'adversaire est battu
-                QTimer.singleShot(4000, self.close)
-                QTimer.singleShot(4000, self.open_victory)
+                QTimer.singleShot(1000, self.image_adv.close)
+                QTimer.singleShot(3500, self.close)
+                QTimer.singleShot(3500, self.open_victory)
 
             else:
-                # On attend 6 secondes puis l'adversaire attaque
-                QTimer.singleShot(4500, self.tour_ordi)
+                QTimer.singleShot(4000, self.tour_ordi)
 
         
 
@@ -388,12 +366,13 @@ class Combat_ui(object):
                 self.Fuite.setEnabled(False)
 
                 if self.inventaire_joueur.toujours_vivant() :
-                    QTimer.singleShot(4000, self.pokemon_KO)
+                    QTimer.singleShot(2000, self.pokemon_KO)
                 else:
-                    QTimer.singleShot(4000, self.close)
+                    QTimer.singleShot(1000, self.image_poke.close)
+                    QTimer.singleShot(2000, self.close)
                     self.pokemon_utilise.hp = self.pokedex.pokedex[self.pokemon_utilise.name.split()[0]].hp
                     self.adversaire.hp = self.pokedex.pokedex[self.adversaire.name.split()[0]].hp
-                    QTimer.singleShot(4000, self.open_loose)
+                    QTimer.singleShot(2000, self.open_loose)
                         
 
         else:
