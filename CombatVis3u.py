@@ -15,14 +15,13 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QApplication, QLabel
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QFont, QPixmap
-from PyQt5 import QtTest
 
 current_dir = os.path.dirname(__file__)
 parent_dir = os.path.abspath(os.path.join(current_dir, ".."))
 sys.path.append(parent_dir)
 
 import Poke as poke
-import ChoixPokemon.ChoixPokemonVisu3u as ch
+import ChoixPokemonVisu3u as ch
 import VictoireVis3u as v
 import DefaiteVis3u as d
 
@@ -308,12 +307,12 @@ class Combat_ui(object):
             self.tour_joueur = False
 
             if self.adversaire.hp <= 0: # On vérifie si l'adversaire est battu
-                QTimer.singleShot(5000, self.close)
-                QTimer.singleShot(5000, self.open_victory)
+                QTimer.singleShot(4000, self.close)
+                QTimer.singleShot(4000, self.open_victory)
 
             else:
                 # L'ordi peut attaquer
-                QTimer.singleShot(6000, self.tour_ordi)
+                QTimer.singleShot(4500, self.tour_ordi)
         
 
     def on_attaque_speciale_clicked(self):
@@ -336,12 +335,12 @@ class Combat_ui(object):
             self.tours_depuis_attaque_joueur = 0  # On réinitialise le compteur de tours après l'attaque spéciale du joueur
 
             if self.adversaire.hp <= 0: # On vérifie si l'adversaire est battu
-                QTimer.singleShot(5000, self.close)
-                QTimer.singleShot(5000, self.open_victory)
+                QTimer.singleShot(4000, self.close)
+                QTimer.singleShot(4000, self.open_victory)
 
             else:
                 # On attend 6 secondes puis l'adversaire attaque
-                QTimer.singleShot(6000, self.tour_ordi)
+                QTimer.singleShot(4500, self.tour_ordi)
 
         
 
@@ -380,12 +379,12 @@ class Combat_ui(object):
                 self.Fuite.setEnabled(False)
 
                 if self.inventaire_joueur.toujours_vivant() :
-                    QTimer.singleShot(3000, self.pokemon_KO)
+                    QTimer.singleShot(4000, self.pokemon_KO)
                 else:
-                    QTimer.singleShot(5000, self.close)
+                    QTimer.singleShot(4000, self.close)
                     self.pokemon_utilise.hp = self.pokedex.pokedex[self.pokemon_utilise.name.split()[0]].hp
                     self.adversaire.hp = self.pokedex.pokedex[self.adversaire.name.split()[0]].hp
-                    QTimer.singleShot(5000, self.open_loose)
+                    QTimer.singleShot(4000, self.open_loose)
                         
 
         else:
@@ -461,7 +460,6 @@ class Combat_ui(object):
         self.image_label.setPixmap(pixmap)
         self.image_label.setScaledContents(True) 
         self.image_label.show()
-        QTimer.singleShot(3000, self.image_label.close)
 
         # Afficher le texte d'attaque
         if defenseur.hp <=0:
@@ -493,8 +491,14 @@ class Combat_ui(object):
         self.text_label.raise_()
         self.poke_att.lower()
         self.poke_def.lower()
-        QTimer.singleShot(3000, self.text_label.close)
-        QTimer.singleShot(3000, self.new_raise)
+        if joueur:
+            QTimer.singleShot(3000, self.text_label.close)
+            QTimer.singleShot(3000, self.image_label.close)
+            QTimer.singleShot(3000, self.new_raise)
+        else:
+            QTimer.singleShot(2000, self.text_label.close)
+            QTimer.singleShot(2000, self.image_label.close)
+            QTimer.singleShot(2000, self.new_raise)
 
     def stop_audio(self):
         pygame.mixer.stop()  # Arrêt du son

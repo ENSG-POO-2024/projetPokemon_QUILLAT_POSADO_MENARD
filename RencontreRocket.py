@@ -11,7 +11,7 @@ parent_dir = os.path.abspath(os.path.join(current_dir, ".."))
 sys.path.append(parent_dir)
 
 import Poke as poke
-import ChoixPokemon.ChoixPokemonVisu3u as ch
+import ChoixPokemonVisu3u as ch
 
 
 class RencontreRocket_ui(object):
