@@ -6,7 +6,7 @@ class Dresseur:
 
     SIZE = 10
     DISTANCE_COMBAT = 3
-    DISTANCE_AFFICHAGE = 580 # Affiche les pokémons dans un carré de 3 blocs
+    DISTANCE_AFFICHAGE = 312 # Affiche les pokémons dans un carré de 3 blocs
     VITESSE_DEPART = 110
     
     def __init__(self, x, y, X, Y, sacha):

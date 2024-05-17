@@ -23,14 +23,14 @@ class Regles_ui(object):
         self.Back = QtWidgets.QLabel(self.centralwidget)
         self.Back.setGeometry(QtCore.QRect(0, 0, 1000, 750))
         self.Back.setText("")
-        self.Back.setPixmap(QtGui.QPixmap("Combat/Outils/Victoire.png"))
+        self.Back.setPixmap(QtGui.QPixmap("Media/Image/regles.png"))
         self.Back.setScaledContents(True)
         self.Back.setObjectName("Back")
         
 
         # Création du bouton pour partir 
         self.PartirButton = QtWidgets.QPushButton(self.centralwidget)
-        self.PartirButton.setGeometry(QtCore.QRect(0, 0, 200, 120))
+        self.PartirButton.setGeometry(QtCore.QRect(0, 0, 145, 35))
         self.PartirButton.setObjectName("PartirButton")
 
         MainWindow.setCentralWidget(self.centralwidget)

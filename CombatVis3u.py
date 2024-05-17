@@ -128,21 +128,29 @@ class Combat_ui(object):
 
         # Affichage de notre pokémon
         self.image_poke = QtWidgets.QLabel(self.centralwidget)
-        self.image_poke.setGeometry(QtCore.QRect(60, 230, 400, 400))
+        self.image_poke.setGeometry(QtCore.QRect(90, 230, 400, 400))
         self.image_poke.setText("")
-        self.image_poke.setPixmap(QtGui.QPixmap("Pokemons/"+self.pokemon_utilise.name.split()[0]+"/"+self.pokemon_utilise.name.split()[0]+"_dos.png"))
-        self.image_poke.setScaledContents(True)
+        self.gif_poke = QtGui.QMovie("Pokemons/"+self.pokemon_utilise.name.split()[0]+"/"+self.pokemon_utilise.name.split()[0]+"_dos.gif")
+        self.gif_poke.setScaledSize(QtCore.QSize(300, 300))
+        self.image_poke.setMovie(self.gif_poke)
+        self.gif_poke.start()
+        # self.image_poke.setPixmap(QtGui.QPixmap("Pokemons/"+self.pokemon_utilise.name.split()[0]+"/"+self.pokemon_utilise.name.split()[0]+"_dos.png"))
+        #self.image_poke.setScaledContents(True)
         self.image_poke.setObjectName("Pokemon inventaire_joueur")
 
         # Affichage pokémon adverse
         self.image_adv = QtWidgets.QLabel(self.centralwidget)
-        self.image_adv.setGeometry(QtCore.QRect(550, 40, 400, 400))
+        self.image_adv.setGeometry(QtCore.QRect(620, 35, 400, 400))
         self.image_adv.setText("")
-        self.image_adv.setPixmap(QtGui.QPixmap("Pokemons/"+self.adversaire.name.split()[0]+"/"+self.adversaire.name.split()[0]+"_face.png"))
-        self.img_adv_largeur = QtGui.QPixmap("Pokemons/"+self.adversaire.name.split()[0]+"/"+self.adversaire.name.split()[0]+"_dos.png").width()
-        self.bas_img_adv = bas_image(QtGui.QPixmap("Pokemons/"+self.adversaire.name.split()[0]+"/"+self.adversaire.name.split()[0]+"_face.png"))
-        self.image_adv.move(550, 88-self.bas_img_adv)
-        self.image_adv.setScaledContents(True)
+        self.gif_adv = QtGui.QMovie("Pokemons/"+self.adversaire.name.split()[0]+"/"+self.adversaire.name.split()[0]+"_face.gif")
+        self.gif_adv.setScaledSize(QtCore.QSize(250, 250))
+        self.image_adv.setMovie(self.gif_adv)
+        self.gif_adv.start()
+        # self.image_adv.setPixmap(QtGui.QPixmap("Pokemons/"+self.adversaire.name.split()[0]+"/"+self.adversaire.name.split()[0]+"_face.png"))
+        # self.img_adv_largeur = QtGui.QPixmap("Pokemons/"+self.adversaire.name.split()[0]+"/"+self.adversaire.name.split()[0]+"_dos.png").width()
+        # self.bas_img_adv = bas_image(QtGui.QMovie("Pokemons/"+self.adversaire.name.split()[0]+"/"+self.adversaire.name.split()[0]+"_dos.gif"))
+        # self.image_adv.move(550, 88-self.bas_img_adv)
+        #self.image_adv.setScaledContents(True)
         self.image_adv.setObjectName("Pokemon adverse")
 
 
@@ -281,7 +289,8 @@ class Combat_ui(object):
 
     def fuite_buton(self):
         self.stop_audio()
-        self.pokemon_utilise.hp = self.pokedex.pokedex[self.pokemon_utilise.name.split()[0]].hp
+        for nom_poke, pokemon in self.inventaire_joueur.pokedex.items():
+            pokemon.hp = self.pokedex.pokedex[pokemon.name.split()[0]].hp
         self.adversaire.hp = self.pokedex.pokedex[self.adversaire.name.split()[0]].hp
         self.close() 
 
@@ -388,7 +397,7 @@ class Combat_ui(object):
                         
 
         else:
-            QTimer.singleShot(3000, self.update_variable)
+            QTimer.singleShot(2000, self.update_variable)
 
 
     def pokemon_KO(self):

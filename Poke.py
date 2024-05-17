@@ -235,7 +235,7 @@ class InventaireJoueur(Pokedex):
                 sequence += 1
                 new_name = f"{pokemon.name} {sequence}"
             # On crée une copie du Pokémon avec le nom modifié pour éviter d'écraser la précédente clé
-            pokemon_copie = Pokemon(new_name, pokemon.x, pokemon.y, pokemon.hp, pokemon.attack, pokemon.defense, pokemon.sp_attack, pokemon.sp_defense, pokemon.type, pokemon.sauvage)
+            pokemon_copie = Pokemon(new_name, pokemon.x, pokemon.y, pokemon.hp, pokemon.attack, pokemon.defense, pokemon.sp_attack, pokemon.sp_defense, pokemon.type)
             # On ajoute le Pokémon avec le nom modifié à l'inventaire du joueur
             self.pokedex[new_name] = pokemon_copie
         
