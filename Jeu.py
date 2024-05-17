@@ -1,6 +1,3 @@
-### POUR TESTER LES NOUVEAUX GRAPH ET EVITER DE PERDRE L'ANCIEN ###
-
-### LUI FONCTIONNE ###
 
 ### Import des bibliothèques ###
 import sys
@@ -12,7 +9,6 @@ import cv2
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel
 from PyQt5.QtGui import QPainter, QPixmap, QImage
 from PyQt5.QtCore import Qt, QTimer
-from PyQt5 import QtTest
 
 ### Import des fichiers ###
 import Poke as poke
