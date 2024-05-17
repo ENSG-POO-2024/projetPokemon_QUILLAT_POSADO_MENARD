@@ -1,5 +1,7 @@
 # Pokémon: projet informatique de Diego, Rémi, Maël
 
+Pour lancer le jeu, vous devez lancer Jeu.py
+
 ## Données disponibles
 
 ### Dans le répertoire "Media", vous avez:
