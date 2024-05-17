@@ -13,7 +13,7 @@ import Poke as poke
 import Jeu as j
 
 
-class Starter(object):
+class Starter_ui(object):
 
     def setupUi(self, MainWindow):
         
@@ -103,7 +103,7 @@ class Starter(object):
 
 
 
-class StarterWindow(QMainWindow, Starter):
+class StarterWindow(QMainWindow, Starter_ui):
     def __init__(self, parent=None):
         super(StarterWindow, self).__init__(parent)
         self.setupUi(self)
