@@ -15,14 +15,13 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QApplication, QLabel
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QFont, QPixmap
-from PyQt5 import QtTest
 
 current_dir = os.path.dirname(__file__)
 parent_dir = os.path.abspath(os.path.join(current_dir, ".."))
 sys.path.append(parent_dir)
 
 import Poke as poke
-import ChoixPokemon.ChoixPokemonVisu3u as ch
+import ChoixPokemonVisu3u as ch
 import VictoireVis3u as v
 import DefaiteVis3u as d
 

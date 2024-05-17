@@ -19,7 +19,7 @@ import Poke as poke
 from dresseur import Dresseur
 import coord_pokemon as coo
 import Starter.StarterVis3u as s
-import Sauvage.SauvageVisu3u as sau
+import SauvageVisu3u as sau
 import ReglesVis3u as re
 import RencontreRocket as r
 
