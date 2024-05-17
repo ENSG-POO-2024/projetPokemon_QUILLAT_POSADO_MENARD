@@ -17,10 +17,10 @@ from PyQt5 import QtTest
 ### Import des fichiers ###
 import Poke as poke
 from dresseur import Dresseur
-import coord_pokemon as coo
-import Starter.StarterVis3u as s
-import SauvageVisu3u as sau
-import ReglesVis3u as re
+import Coord_pokemon as coo
+import Starter.Starter as s
+import Sauvage as sau
+import Regles as re
 import RencontreRocket as r
 
 ### Import du chemin d'accès au fichier python actuel ###
@@ -28,7 +28,7 @@ script_dir = os.path.dirname(__file__)
 
 
 
-class AccueilWindow(QWidget): # On arrive sur la page d'acceuil et on peut cliquer sur Jouer ou Règles
+class Accueil(QWidget): # On arrive sur la page d'acceuil et on peut cliquer sur Jouer ou Règles
     def __init__(self, video_path):
         super().__init__()
 
@@ -76,14 +76,14 @@ class AccueilWindow(QWidget): # On arrive sur la page d'acceuil et on peut cliqu
         if event.x() >= 60 and event.x() <= 380 and event.y() >= 295 and event.y() <= 390:
             self.timer.stop()  # On arrête la mise à jour de la vidéo avant d'ouvrir la fenêtre de jeu
             self.cap.release()  
-            self.starter_window = s.StarterWindow()
+            self.starter_window = s.Starter()
             self.starter_window.show()
             self.close()
 
         if event.x() >= 600 and event.x() <= 980 and event.y() >= 306 and event.y() <= 375:
             self.timer.stop()  # On arrête la mise à jour de la vidéo avant d'ouvrir la fenêtre des règles
             self.cap.release()  
-            self.regles_window = re.ReglesWindow()
+            self.regles_window = re.Regles()
             self.regles_window.show()
             self.close()
 
@@ -163,7 +163,7 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
         # Si le clic de souris a eu lieu dans une certaine zone de la fenêtre on arrive sur la map
         if event.x() >= 0 and event.x() <= 205 and event.y() >= 0 and event.y() <= 50: 
             video_path = os.path.join(script_dir, "Media/Image", "video.mp4")
-            self.retour_acceuil = AccueilWindow(video_path)
+            self.retour_acceuil = Accueil(video_path)
             self.retour_acceuil.show()
             self.close()
 
@@ -212,11 +212,11 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
         if self.dresseur.proche(self.pokedex_sauvages)[0]:
             #self.inventaire_joueur.afficher_pokedex()
             self.pokemon_sauvage = self.dresseur.proche(self.pokedex_sauvages)[1]
-            self.pokemon_window = sau.SauvageWindow(self.pokemon_sauvage, self.inventaire_joueur, self.pokedex_sauvages)
+            self.pokemon_window = sau.Sauvage(self.pokemon_sauvage, self.inventaire_joueur, self.pokedex_sauvages)
             self.pokemon_window.show()
 
         if  1760 <= -self.background.y <= 1980 and -self.background.x == 4070:
-            self.rocket_window = r.RencontreRocketWindow()
+            self.rocket_window = r.RencontreRocket()
             self.rocket_window.show()
 
 
@@ -269,7 +269,7 @@ if __name__ == "__main__":
     app = QApplication(sys.argv) 
 
     video_path = os.path.join(script_dir, "Media/Image", "video.mp4")
-    accueil = AccueilWindow(video_path)
+    accueil = Accueil(video_path)
     accueil.show()
 
 

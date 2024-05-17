@@ -11,7 +11,7 @@ parent_dir = os.path.abspath(os.path.join(current_dir, ".."))
 sys.path.append(parent_dir)
 
 import Poke as poke
-import CombatVis3u as c
+import Combat as c
 import TeamRocket as t
 
 
@@ -85,7 +85,7 @@ class ChoixPokemon_ui(object):
 
 
     def open_combat(self, pokemon_choisi):
-        self.fight_window = c.FightWindow(self.pokemon_sauvage, pokemon_choisi, self.pokedex_sauvages, self.inventaire_joueur, False)
+        self.fight_window = c.Fight(self.pokemon_sauvage, pokemon_choisi, self.pokedex_sauvages, self.inventaire_joueur, False)
         self.fight_window.AttaqueNormale.setEnabled(False)
         self.fight_window.AttaqueSpeciale.setEnabled(False)
         self.fight_window.Fuite.setEnabled(False)
@@ -93,15 +93,15 @@ class ChoixPokemon_ui(object):
         self.fight_window.show()
 
     def open_first_combat(self, pokemon_choisi):
-        self.fight_window = c.FightWindow(self.pokemon_sauvage, pokemon_choisi, self.pokedex_sauvages, self.inventaire_joueur, True)
+        self.fight_window = c.Fight(self.pokemon_sauvage, pokemon_choisi, self.pokedex_sauvages, self.inventaire_joueur, True)
         self.fight_window.show()
 
     def open_first_rocket(self, pokemon_choisi):
-        self.rocket_window = t.RocketWindow(self.pokemon_sauvage, pokemon_choisi, self.pokedex_sauvages, self.inventaire_joueur, True)
+        self.rocket_window = t.Rocket(self.pokemon_sauvage, pokemon_choisi, self.pokedex_sauvages, self.inventaire_joueur, True)
         self.rocket_window.show()
 
     def open_rocket(self, pokemon_choisi):
-        self.rocket_window = t.RocketWindow(self.pokemon_sauvage, pokemon_choisi, self.pokedex_sauvages, self.inventaire_joueur, False)        
+        self.rocket_window = t.Rocket(self.pokemon_sauvage, pokemon_choisi, self.pokedex_sauvages, self.inventaire_joueur, False)        
         self.rocket_window.AttaqueNormale.setEnabled(False)
         self.rocket_window.AttaqueSpeciale.setEnabled(False)
         self.rocket_window.Fuite.setEnabled(False)
@@ -148,7 +148,7 @@ class ChoixPokemon_ui(object):
 
 
 
-class ChoixPokemonWindow(QMainWindow, ChoixPokemon_ui):
+class ChoixPokemon(QMainWindow, ChoixPokemon_ui):
 
     def __init__(self, pokemon_sauvage, inventaire_joueur, pokedex_sauvages, clic_pokedex, rocket, parent=None):
         self.pokemon_sauvage = pokemon_sauvage # Le pokémon rencontré
@@ -156,7 +156,7 @@ class ChoixPokemonWindow(QMainWindow, ChoixPokemon_ui):
         self.pokedex_sauvages = pokedex_sauvages # Le pokedex avec tous les pokémons sauvages
         self.clic_pokedex = clic_pokedex
         self.rocket = rocket
-        super(ChoixPokemonWindow, self).__init__(parent)
+        super(ChoixPokemon, self).__init__(parent)
         self.setupUi(self)
 
 
@@ -169,7 +169,7 @@ if __name__ == "__main__":
     poke_sauvage = poke.Pokemon("Rattata",15,12,30,56,35,25,35,poke.Normal())
     pokedex_sauvages = poke.Pokedex()
     pokedex_sauvages.charger_pokedex('pokemons_a_capturer.csv') # On le remplit avec notre fichier 
-    fenetre = ChoixPokemonWindow(poke_sauvage, inventaire, pokedex_sauvages, False, False)
+    fenetre = ChoixPokemon(poke_sauvage, inventaire, pokedex_sauvages, False, False)
     fenetre.setWindowTitle("Exemple de fenêtre d'inventaire")
     fenetre.show()
     sys.exit(app.exec_())

@@ -21,9 +21,9 @@ parent_dir = os.path.abspath(os.path.join(current_dir, ".."))
 sys.path.append(parent_dir)
 
 import Poke as poke
-import ChoixPokemonVisu3u as ch
-import VictoireVis3u as v
-import DefaiteVis3u as d
+import ChoixPokemon as ch
+import Victoire as v
+import Defaite as d
 
 
 class Combat_ui(object):
@@ -259,7 +259,7 @@ class Combat_ui(object):
     def open_pokedex(self): 
         self.close()
         self.tours_depuis_attaque_joueur += 1
-        self.pokedex_window = ch.ChoixPokemonWindow(self.adversaire, self.inventaire_joueur, self.pokedex_sauvages, True, False)  
+        self.pokedex_window = ch.ChoixPokemon(self.adversaire, self.inventaire_joueur, self.pokedex_sauvages, True, False)  
         self.pokedex_window.boutons[self.pokemon_utilise.name.split()[0]].setEnabled(False)
         self.pokedex_window.show()
 
@@ -381,7 +381,7 @@ class Combat_ui(object):
 
     def pokemon_KO(self):
         self.close()
-        self.pokedex_window = ch.ChoixPokemonWindow(self.adversaire, self.inventaire_joueur, self.pokedex_sauvages, False, False)  
+        self.pokedex_window = ch.ChoixPokemon(self.adversaire, self.inventaire_joueur, self.pokedex_sauvages, False, False)  
         self.pokedex_window.show()
 
     def update_variable(self):
@@ -429,14 +429,14 @@ class Combat_ui(object):
 
     def open_victory(self):
         self.stop_audio()
-        self.victory_window = v.VictoireWindow(self.adversaire, self.pokedex_sauvages, self.inventaire_joueur, self.pokemon_utilise, self.pokedex)
+        self.victory_window = v.Victoire(self.adversaire, self.pokedex_sauvages, self.inventaire_joueur, self.pokemon_utilise, self.pokedex)
         self.victory_window.show()
 
     def open_loose(self):
         self.stop_audio()
         self.Pokedex.setEnabled(False)
         self.Fuite.setEnabled(False)
-        self.victory_window = d.DefaiteWindow(self.adversaire, self.pokedex_sauvages, self.inventaire_joueur, self.pokemon_utilise, self.pokedex)
+        self.victory_window = d.Defaite(self.adversaire, self.pokedex_sauvages, self.inventaire_joueur, self.pokemon_utilise, self.pokedex)
         self.victory_window.show()
 
     def affichage_attaque(self, chemin_image, attaquant, defenseur, degats, speciale, joueur):
@@ -503,14 +503,14 @@ class Combat_ui(object):
 
 
 
-class FightWindow(QMainWindow, Combat_ui):
+class Fight(QMainWindow, Combat_ui):
     def __init__(self, pokemon_sauvage, pokemon_utilise, pokedex_sauvages, inventaire_joueur, first_combat, parent=None):
         self.pokemon_sauvage = pokemon_sauvage # Le pokémon rencontré
         self.inventaire_joueur = inventaire_joueur # L'inventaire du joueur avec ses pokémons
         self.pokemon_utilise = pokemon_utilise # Le pokémon qu'il utilise
         self.pokedex_sauvages = pokedex_sauvages # Le pokedex avec tous les pokémons sauvages
         self.first_combat = first_combat
-        super(FightWindow, self).__init__(parent)
+        super(Fight, self).__init__(parent)
         self.setupUi(self)
 
 
@@ -523,7 +523,7 @@ if __name__ == "__main__":
     pokemon_utilise = poke.Pokemon("Tortank",15,12,79,83,100,85,105,poke.Eau())
     inventaire.inventory(pokemon_utilise)
     inventaire.inventory(poke.Pokemon("Dracaufeu",15,12,78,84,78,109,85,poke.Feu()))
-    fenetre = FightWindow(poke_sauvage, pokemon_utilise, pokedex_sauvages, inventaire, True)
+    fenetre = Fight(poke_sauvage, pokemon_utilise, pokedex_sauvages, inventaire, True)
     fenetre.setWindowTitle("Exemple de fenêtre de combat")
     fenetre.show()
     sys.exit(app.exec_())

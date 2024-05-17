@@ -45,14 +45,14 @@ class Defaite_ui(object):
 
 
 
-class DefaiteWindow(QMainWindow, Defaite_ui):
+class Defaite(QMainWindow, Defaite_ui):
     def __init__(self, adversaire, pokedex_sauvages, inventaire_joueur, pokemon_utilise, pokedex, parent=None):
         self.adversaire = adversaire
         self.pokedex_sauvages = pokedex_sauvages
         self.inventaire_joueur = inventaire_joueur
         self.pokemon_utilise = pokemon_utilise
         self.pokedex = pokedex
-        super(DefaiteWindow, self).__init__(parent)
+        super(Defaite, self).__init__(parent)
         self.setupUi(self)
 
 
@@ -67,7 +67,7 @@ if __name__ == "__main__":
         pokedex_sauvages.charger_pokedex('pokemon_first_gen.csv') # On le remplit avec notre fichier 
         pokedex = poke.Pokedex()
         pokedex.charger_pokedex('pokemon_first_gen.csv')
-        defaite = DefaiteWindow(adversaire, pokedex_sauvages, inventaire, pokemon_utilise, pokedex)
+        defaite = Defaite(adversaire, pokedex_sauvages, inventaire, pokemon_utilise, pokedex)
         defaite.show()
         app.exec_()
     run_app()

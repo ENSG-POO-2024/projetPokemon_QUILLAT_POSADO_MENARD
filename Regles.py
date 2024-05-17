@@ -43,13 +43,13 @@ class Regles_ui(object):
     def open_acceuil(self):
         video_path = os.path.join(script_dir, "Media/Image", "video.mp4")
         self.close()
-        self.acceuil_window = j.AccueilWindow(video_path)
+        self.acceuil_window = j.Accueil(video_path)
         self.acceuil_window.show()
 
 
-class ReglesWindow(QMainWindow, Regles_ui):
+class Regles(QMainWindow, Regles_ui):
     def __init__(self, parent=None):
-        super(ReglesWindow, self).__init__(parent)
+        super(Regles, self).__init__(parent)
         self.setupUi(self)
 
 
@@ -57,7 +57,7 @@ class ReglesWindow(QMainWindow, Regles_ui):
 if __name__ == "__main__":
     def run_app():
         app = QApplication(sys.argv)
-        regles = ReglesWindow()
+        regles = Regles()
         regles.setWindowTitle("Exemple de la page règles")
         regles.show()
         app.exec_()

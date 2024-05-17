@@ -11,7 +11,7 @@ parent_dir = os.path.abspath(os.path.join(current_dir, ".."))
 sys.path.append(parent_dir)
 
 import Poke as poke
-import ChoixPokemonVisu3u as ch
+import ChoixPokemon as ch
 
 
 class RencontreRocket_ui(object):
@@ -97,12 +97,12 @@ class RencontreRocket_ui(object):
         self.fight_buton.clicked.connect(self.open_choix_pokemon)
 
     def open_choix_pokemon(self):
-        self.choix = ch.ChoixPokemonWindow(self.adversaire, self.inventaire_joueur, self.pokedex_sauvages, False, True)
+        self.choix = ch.ChoixPokemon(self.adversaire, self.inventaire_joueur, self.pokedex_sauvages, False, True)
         self.choix.show()
 
 
 
-class RencontreRocketWindow(QMainWindow, RencontreRocket_ui):
+class RencontreRocket(QMainWindow, RencontreRocket_ui):
     def __init__(self, parent=None):
         self.adversaire = poke.Pokemon("Mewtwo",0,0,106,110,90,154,90,poke.Psy())
 
@@ -114,14 +114,14 @@ class RencontreRocketWindow(QMainWindow, RencontreRocket_ui):
 
         self.pokedex_sauvages = poke.Pokedex()
         self.pokedex_sauvages.charger_pokedex("pokemon_first_gen.csv")
-        super(RencontreRocketWindow, self).__init__(parent)
+        super(RencontreRocket, self).__init__(parent)
         self.setupUi(self)
 
 
 if __name__ == "__main__":
     def run_app():
         app = QApplication(sys.argv)
-        rocket = RencontreRocketWindow()
+        rocket = RencontreRocket()
         rocket.show()
         app.exec_()
     run_app()

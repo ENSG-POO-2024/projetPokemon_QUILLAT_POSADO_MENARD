@@ -103,9 +103,9 @@ class Starter_ui(object):
 
 
 
-class StarterWindow(QMainWindow, Starter_ui):
+class Starter(QMainWindow, Starter_ui):
     def __init__(self, parent=None):
-        super(StarterWindow, self).__init__(parent)
+        super(Starter, self).__init__(parent)
         self.setupUi(self)
 
     def mousePressEvent(self, event):
@@ -146,7 +146,7 @@ class StarterWindow(QMainWindow, Starter_ui):
 if __name__ == "__main__":
     def run_app():
         app = QApplication(sys.argv)
-        mainWin = StarterWindow()
+        mainWin = Starter()
         mainWin.show()
         app.exec_()
     run_app()

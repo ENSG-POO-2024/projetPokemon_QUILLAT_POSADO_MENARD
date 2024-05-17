@@ -14,9 +14,9 @@ parent_dir = os.path.abspath(os.path.join(current_dir, ".."))
 sys.path.append(parent_dir)
 
 import Poke as poke
-import ChoixPokemonVisu3u as ch
-import VictoireVis3u as v
-import DefaiteVis3u as d
+import ChoixPokemon as ch
+import Victoire as v
+import Defaite as d
 
 
 def bas_image(image):
@@ -265,7 +265,7 @@ class Rocket_ui(object):
     def open_pokedex(self): 
         self.close()
         self.tours_depuis_attaque_joueur += 1
-        self.pokedex_window = ch.ChoixPokemonWindow(self.adversaire, self.inventaire_joueur, self.pokedex_sauvages, True, True)  
+        self.pokedex_window = ch.ChoixPokemon(self.adversaire, self.inventaire_joueur, self.pokedex_sauvages, True, True)  
         self.pokedex_window.boutons[self.pokemon_utilise.name.split()[0]].setEnabled(False)
         self.pokedex_window.show()
 
@@ -383,7 +383,7 @@ class Rocket_ui(object):
 
     def pokemon_KO(self):
         self.close()
-        self.pokedex_window = ch.ChoixPokemonWindow(self.adversaire, self.inventaire_joueur, self.pokedex_sauvages, False, True)  
+        self.pokedex_window = ch.ChoixPokemon(self.adversaire, self.inventaire_joueur, self.pokedex_sauvages, False, True)  
         self.pokedex_window.show()
 
     def update_variable(self):
@@ -431,14 +431,14 @@ class Rocket_ui(object):
 
     def open_victory(self):
         self.stop_audio()
-        self.victory_window = v.VictoireWindow(self.adversaire, self.pokedex_sauvages, self.inventaire_joueur, self.pokemon_utilise, self.pokedex)
+        self.victory_window = v.Victoire(self.adversaire, self.pokedex_sauvages, self.inventaire_joueur, self.pokemon_utilise, self.pokedex)
         self.victory_window.show()
 
     def open_loose(self):
         self.stop_audio()
         self.Pokedex.setEnabled(False)
         self.Fuite.setEnabled(False)
-        self.victory_window = d.DefaiteWindow(self.adversaire, self.pokedex_sauvages, self.inventaire_joueur, self.pokemon_utilise, self.pokedex)
+        self.victory_window = d.Defaite(self.adversaire, self.pokedex_sauvages, self.inventaire_joueur, self.pokemon_utilise, self.pokedex)
         self.victory_window.show()
 
     def affichage_attaque(self, chemin_image, attaquant, defenseur, degats, speciale, joueur):
@@ -498,9 +498,7 @@ class Rocket_ui(object):
   
 
 
-
-
-class RocketWindow(QMainWindow, Rocket_ui):
+class Rocket(QMainWindow, Rocket_ui):
     def __init__(self, pokemon_sauvage, pokemon_utilise, pokedex_sauvages, inventaire_joueur, first_combat, parent=None):
         self.pokemon_sauvage = pokemon_sauvage # Le pokémon rencontré
         self.inventaire_joueur = inventaire_joueur # L'inventaire du joueur avec ses pokémons
@@ -508,7 +506,7 @@ class RocketWindow(QMainWindow, Rocket_ui):
         self.pokedex_sauvages = pokedex_sauvages # Le pokedex avec tous les pokémons sauvages
         self.first_combat = first_combat
         self.pokemon_utilise = pokemon_utilise
-        super(RocketWindow, self).__init__(parent)
+        super(Rocket, self).__init__(parent)
         self.setupUi(self)
 
 
@@ -524,7 +522,7 @@ if __name__ == "__main__":
     pokedex_sauvages = poke.Pokedex()
     pokedex_sauvages.charger_pokedex("pokemon_first_gen.csv")
     pokedex.charger_pokedex("pokemon_first_gen.csv")
-    fenetre = RocketWindow(adversaire, pokemon_utilise, pokedex_sauvages, inventaire_joueur,True)
+    fenetre = Rocket(adversaire, pokemon_utilise, pokedex_sauvages, inventaire_joueur,True)
     fenetre.setWindowTitle("Exemple de fenêtre de combat")
     fenetre.show()
     sys.exit(app.exec_())

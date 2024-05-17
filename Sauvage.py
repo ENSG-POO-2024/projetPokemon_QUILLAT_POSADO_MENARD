@@ -11,7 +11,7 @@ parent_dir = os.path.abspath(os.path.join(current_dir, ".."))
 sys.path.append(parent_dir)
 
 import Poke as poke
-import ChoixPokemonVisu3u as ch
+import ChoixPokemon as ch
 
 
 class Sauvage_ui(object):
@@ -82,17 +82,17 @@ class Sauvage_ui(object):
         self.fight_buton.clicked.connect(self.open_choix_pokemon)
 
     def open_choix_pokemon(self):
-        self.choix = ch.ChoixPokemonWindow(self.pokemon_sauvage, self.inventaire_joueur, self.pokedex_sauvages, False, False)
+        self.choix = ch.ChoixPokemon(self.pokemon_sauvage, self.inventaire_joueur, self.pokedex_sauvages, False, False)
         self.choix.show()
 
 
 
-class SauvageWindow(QMainWindow, Sauvage_ui):
+class Sauvage(QMainWindow, Sauvage_ui):
     def __init__(self, pokemon_sauvage, inventaire_joueur, pokedex_sauvages, parent=None):
         self.pokemon_sauvage = pokemon_sauvage # Le pokémon qu'on a rencontré
         self.inventaire_joueur = inventaire_joueur # L'inventaire du joueur avec ses pokémons
         self.pokedex_sauvages = pokedex_sauvages # Le pokedex avec tous les pokemons sauvages
-        super(SauvageWindow, self).__init__(parent)
+        super(Sauvage, self).__init__(parent)
         self.setupUi(self)
 
 
@@ -105,7 +105,7 @@ if __name__ == "__main__":
         inventaire.inventory(pokemon_utilise)
         pokedex_sauvages = poke.Pokedex()
         pokedex_sauvages.charger_pokedex('pokemon_first_gen.csv') 
-        sauvage = SauvageWindow(adversaire, inventaire, pokedex_sauvages)
+        sauvage = Sauvage(adversaire, inventaire, pokedex_sauvages)
         sauvage.show()
         app.exec_()
     run_app()
