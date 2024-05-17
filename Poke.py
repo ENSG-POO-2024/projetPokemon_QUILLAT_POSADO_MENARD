@@ -201,19 +201,29 @@ class Pokedex:
             # On ajoute les Pokémons au dictionnaire avec leur nom comme clé
             self.pokedex[name] = pokemon
 
-    def afficher_pokedex(self):
+    def __str__(self):
+        texte = ""
         for nom_pokemon, pokemon in self.pokedex.items():
-            print(f"Nom: {pokemon.name}")
-            print(f"X: {pokemon.x}")
-            print(f"Y: {pokemon.y}")
-            print(f"HP: {pokemon.hp}")
-            print(f"Attaque: {pokemon.attack}")
-            print(f"Défense: {pokemon.defense}")
-            print(f"Sp. Attaque: {pokemon.sp_attack}")
-            print(f"Sp. Défense: {pokemon.sp_defense}")
-            print(f"Type: {pokemon.type.name}")
-            print()  # Ajouter une ligne vide entre chaque Pokémon
-        return 
+            texte += "Nom: " + pokemon.name + "\n"
+            texte += "X: " + str(pokemon.x) + "\n"
+            texte += "Y: " + str(pokemon.y) + "\n"
+            texte += "HP: " + str(pokemon.hp) + "\n"
+            texte += "Attaque: " + str(pokemon.attack) + "\n"
+            texte += "Défense: " + str(pokemon.defense) + "\n"
+            texte += "Sp. Attaque: " + str(pokemon.sp_attack) + "\n"
+            texte += "Sp. Défense: " + str(pokemon.sp_defense) + "\n"
+            texte += "Type: " + pokemon.type.name + "\n" + "\n"
+            # print(f"Nom: {pokemon.name}")
+            # print(f"X: {pokemon.x}")
+            # print(f"Y: {pokemon.y}")
+            # print(f"HP: {pokemon.hp}")
+            # print(f"Attaque: {pokemon.attack}")
+            # print(f"Défense: {pokemon.defense}")
+            # print(f"Sp. Attaque: {pokemon.sp_attack}")
+            # print(f"Sp. Défense: {pokemon.sp_defense}")
+            # print(f"Type: {pokemon.type.name}")
+            # print()  # Ajouter une ligne vide entre chaque Pokémon
+        return texte
 
 class InventaireJoueur(Pokedex):
     def __init__(self):
@@ -283,5 +293,5 @@ if __name__ == '__main__':
     inventaire_joueur = InventaireJoueur()
     magicarpe = Pokemon.creer_pokemon("Magicarpe", 0, 0, 50, 20, 10, 35, 15, Eau())
     pokedex.charger_pokedex('pokemon_first_gen.csv')
-    pokedex.afficher_pokedex()
+    print(pokedex)
     inventaire_joueur.inventory(magicarpe)
