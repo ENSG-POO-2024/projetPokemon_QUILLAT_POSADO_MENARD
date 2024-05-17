@@ -53,8 +53,6 @@ class Victoire_ui(object):
         # On rend les boutons invisibles
         self.PartirButton.setStyleSheet("background-color: rgba(255, 255, 255, 0); border: none;")
 
-
-
         self.Pokeball.enterEvent = self.enter_image
         self.Pokeball.leaveEvent = self.leave_image
         self.capture.enterEvent = self.enter_image
@@ -62,7 +60,6 @@ class Victoire_ui(object):
         self.Pokeball.mousePressEvent = self.click_image 
 
         self.PartirButton.clicked.connect(self.quitte_sans_pokemon)
-
     
     
     def enter_image(self, event):
@@ -107,7 +104,6 @@ class Victoire_ui(object):
             return True
 
 
-   
 
 
 class Victoire(QMainWindow, Victoire_ui):
@@ -120,9 +116,6 @@ class Victoire(QMainWindow, Victoire_ui):
         super(Victoire, self).__init__(parent)
         self.setupUi(self)
 
-
-
-    
 
 
 if __name__ == "__main__":
