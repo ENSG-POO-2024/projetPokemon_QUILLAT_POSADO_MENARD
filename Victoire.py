@@ -22,42 +22,49 @@ class Victoire_ui(object):
         self.Back = QtWidgets.QLabel(self.centralwidget)
         self.Back.setGeometry(QtCore.QRect(0, 0, 1000, 750))
         self.Back.setText("")
-        self.Back.setPixmap(QtGui.QPixmap("Media/Image/Victoire.png"))
+        if self.rocket:
+            self.Back.setPixmap(QtGui.QPixmap("Media/Image/victoire_rocket.png"))
+        else:
+            self.Back.setPixmap(QtGui.QPixmap("Media/Image/Victoire.png"))
         self.Back.setScaledContents(True)
         self.Back.setObjectName("Back")
         
+        if not self.rocket:
+            # Ajout de la Pokéball ouverte
+            self.Pokeball = QtWidgets.QLabel(self.centralwidget)
+            self.Pokeball.setGeometry(QtCore.QRect(388, 271, 224, 293))
+            self.Pokeball.setText("")
+            self.Pokeball.setPixmap(QtGui.QPixmap("Media/Image/PokeballOpen.png"))
+            self.Pokeball.setScaledContents(False)
+            self.Pokeball.setObjectName("Pokeball")
 
-        # Ajout de la Pokéball ouverte
-        self.Pokeball = QtWidgets.QLabel(self.centralwidget)
-        self.Pokeball.setGeometry(QtCore.QRect(388, 271, 224, 293))
-        self.Pokeball.setText("")
-        self.Pokeball.setPixmap(QtGui.QPixmap("Media/Image/PokeballOpen.png"))
-        self.Pokeball.setScaledContents(False)
-        self.Pokeball.setObjectName("Pokeball")
-
-        # Ajout du pokémon capturé
-        self.capture = QtWidgets.QLabel(self.centralwidget)
-        self.capture.setGeometry(QtCore.QRect(390, 300, 231, 241))
-        self.capture.setPixmap(QtGui.QPixmap("Pokemons/"+self.base_name+"/"+self.base_name+"_face.png"))
-        self.capture.setScaledContents(True)
-        self.capture.setObjectName("Pokémon capturé")
+            # Ajout du pokémon capturé
+            self.capture = QtWidgets.QLabel(self.centralwidget)
+            self.capture.setGeometry(QtCore.QRect(390, 300, 231, 241))
+            self.capture.setPixmap(QtGui.QPixmap("Pokemons/"+self.base_name+"/"+self.base_name+"_face.png"))
+            self.capture.setScaledContents(True)
+            self.capture.setObjectName("Pokémon capturé")
 
         # Création du bouton pour partir 
         self.PartirButton = QtWidgets.QPushButton(self.centralwidget)
-        self.PartirButton.setGeometry(QtCore.QRect(250, 675, 495, 40))
+        if self.rocket:
+            self.PartirButton.setGeometry(QtCore.QRect(317, 599, 365, 76))
+        else:
+            self.PartirButton.setGeometry(QtCore.QRect(250, 675, 495, 40))
         self.PartirButton.setObjectName("PartirButton")
 
         
         MainWindow.setCentralWidget(self.centralwidget)
 
+        if not self.rocket:
+            self.Pokeball.enterEvent = self.enter_image
+            self.Pokeball.leaveEvent = self.leave_image
+            self.capture.enterEvent = self.enter_image
+            self.capture.leaveEvent = self.leave_image
+            self.Pokeball.mousePressEvent = self.click_image 
+
         # On rend les boutons invisibles
         self.PartirButton.setStyleSheet("background-color: rgba(255, 255, 255, 0); border: none;")
-
-        self.Pokeball.enterEvent = self.enter_image
-        self.Pokeball.leaveEvent = self.leave_image
-        self.capture.enterEvent = self.enter_image
-        self.capture.leaveEvent = self.leave_image
-        self.Pokeball.mousePressEvent = self.click_image 
 
         self.PartirButton.clicked.connect(self.quitte_sans_pokemon)
     
@@ -107,12 +114,13 @@ class Victoire_ui(object):
 
 
 class Victoire(QMainWindow, Victoire_ui):
-    def __init__(self, adversaire, pokedex_sauvages, inventaire_joueur, pokemon_utilise, pokedex, parent=None):
+    def __init__(self, adversaire, pokedex_sauvages, inventaire_joueur, pokemon_utilise, pokedex, rocket, parent=None):
         self.adversaire = adversaire
         self.pokedex_sauvages = pokedex_sauvages
         self.inventaire_joueur = inventaire_joueur
         self.pokemon_utilise = pokemon_utilise
         self.pokedex = pokedex
+        self.rocket = rocket
         super(Victoire, self).__init__(parent)
         self.setupUi(self)
 
@@ -129,7 +137,7 @@ if __name__ == "__main__":
         pokedex_sauvages.charger_pokedex('pokemon_first_gen.csv') # On le remplit avec notre fichier 
         pokedex = poke.Pokedex()
         pokedex.charger_pokedex('pokemon_first_gen.csv')
-        victoire = Victoire(adversaire, pokedex_sauvages, inventaire, pokemon_utilise, pokedex)
+        victoire = Victoire(adversaire, pokedex_sauvages, inventaire, pokemon_utilise, pokedex, False)
         victoire.show()
         app.exec_()
     run_app()

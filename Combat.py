@@ -429,14 +429,14 @@ class Combat_ui(object):
 
     def open_victory(self):
         self.stop_audio()
-        self.victory_window = v.Victoire(self.adversaire, self.pokedex_sauvages, self.inventaire_joueur, self.pokemon_utilise, self.pokedex)
+        self.victory_window = v.Victoire(self.adversaire, self.pokedex_sauvages, self.inventaire_joueur, self.pokemon_utilise, self.pokedex, False)
         self.victory_window.show()
 
     def open_loose(self):
         self.stop_audio()
         self.Pokedex.setEnabled(False)
         self.Fuite.setEnabled(False)
-        self.victory_window = d.Defaite(self.adversaire, self.pokedex_sauvages, self.inventaire_joueur, self.pokemon_utilise, self.pokedex)
+        self.victory_window = d.Defaite(self.adversaire, self.pokedex_sauvages, self.inventaire_joueur, self.pokemon_utilise, self.pokedex, False)
         self.victory_window.show()
 
     def affichage_attaque(self, chemin_image, attaquant, defenseur, degats, speciale, joueur):

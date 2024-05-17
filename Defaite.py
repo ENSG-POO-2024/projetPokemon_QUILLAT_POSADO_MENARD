@@ -20,13 +20,19 @@ class Defaite_ui(object):
         self.Back = QtWidgets.QLabel(self.centralwidget)
         self.Back.setGeometry(QtCore.QRect(0, 0, 1001, 751))
         self.Back.setText("")
-        self.Back.setPixmap(QtGui.QPixmap("Media/Image/Defaite.png"))
+        if self.rocket:
+             self.Back.setPixmap(QtGui.QPixmap("Media/Image/defaite_rocket.png"))
+        else:
+            self.Back.setPixmap(QtGui.QPixmap("Media/Image/Defaite.png"))
         self.Back.setScaledContents(False)
         self.Back.setObjectName("Back")
 
         # Création du bouton pour sortir de la fenêtre
         self.Sortir = QtWidgets.QPushButton(self.centralwidget)
-        self.Sortir.setGeometry(QtCore.QRect(390, 520, 221, 41))
+        if self.rocket:
+            self.Sortir.setGeometry(QtCore.QRect(317, 599, 365, 76))
+        else:
+             self.Sortir.setGeometry(QtCore.QRect(390, 520, 221, 41))
         self.Sortir.setText("")
         self.Sortir.setObjectName("Sortir")
 
@@ -46,12 +52,13 @@ class Defaite_ui(object):
 
 
 class Defaite(QMainWindow, Defaite_ui):
-    def __init__(self, adversaire, pokedex_sauvages, inventaire_joueur, pokemon_utilise, pokedex, parent=None):
+    def __init__(self, adversaire, pokedex_sauvages, inventaire_joueur, pokemon_utilise, pokedex, rocket, parent=None):
         self.adversaire = adversaire
         self.pokedex_sauvages = pokedex_sauvages
         self.inventaire_joueur = inventaire_joueur
         self.pokemon_utilise = pokemon_utilise
         self.pokedex = pokedex
+        self.rocket = rocket
         super(Defaite, self).__init__(parent)
         self.setupUi(self)
 
@@ -67,7 +74,7 @@ if __name__ == "__main__":
         pokedex_sauvages.charger_pokedex('pokemon_first_gen.csv') # On le remplit avec notre fichier 
         pokedex = poke.Pokedex()
         pokedex.charger_pokedex('pokemon_first_gen.csv')
-        defaite = Defaite(adversaire, pokedex_sauvages, inventaire, pokemon_utilise, pokedex)
+        defaite = Defaite(adversaire, pokedex_sauvages, inventaire, pokemon_utilise, pokedex, False)
         defaite.show()
         app.exec_()
     run_app()
