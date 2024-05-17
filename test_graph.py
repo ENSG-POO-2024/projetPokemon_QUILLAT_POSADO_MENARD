@@ -21,7 +21,7 @@ import coord_pokemon as coo
 import Starter.StarterVis3u as s
 import Combat.CombatVis3u as c
 import Sauvage.SauvageVisu3u as sau
-import ReglesVis3u as r
+import ReglesVis3u as re
 import RencontreRocket as r
 
 ### Import du chemin d'accès au fichier python actuel ###
@@ -46,6 +46,7 @@ class AccueilWindow(QWidget): # On arrive sur la page d'acceuil et on peut cliqu
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update_frame)
         self.timer.start(30)  
+        self.loop_video = True
 
         self.mouse_clicked = False  # Pour suivre si le clic de souris a eu lieu
         self.label.mousePressEvent = self.mousePressEvent  # Redéfinition de la méthode mousePressEvent
@@ -62,6 +63,15 @@ class AccueilWindow(QWidget): # On arrive sur la page d'acceuil et on peut cliqu
             pixmap = QPixmap.fromImage(q_image)
             self.label.setPixmap(pixmap)
 
+        else:
+            if self.loop_video:
+                self.cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
+            else:
+                self.stop_video()
+
+    def stop_video(self):
+        self.timer.stop()
+
     def mousePressEvent(self, event):
         # Si le clic de souris a eu lieu dans une certaine zone de la fenêtre on arrive sur la map
         if event.x() >= 60 and event.x() <= 380 and event.y() >= 295 and event.y() <= 390:
@@ -74,7 +84,7 @@ class AccueilWindow(QWidget): # On arrive sur la page d'acceuil et on peut cliqu
         if event.x() >= 600 and event.x() <= 980 and event.y() >= 306 and event.y() <= 375:
             self.timer.stop()  # On arrête la mise à jour de la vidéo avant d'ouvrir la fenêtre des règles
             self.cap.release()  
-            self.regles_window = r.ReglesWindow()
+            self.regles_window = re.ReglesWindow()
             self.regles_window.show()
             self.close()
 
@@ -99,7 +109,7 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
         self.map_hauteur = 4950 
 
         # Mise en place de l'affichage de la map
-        image_path = os.path.join(script_dir, "Image", "fond2.png")
+        image_path = os.path.join(script_dir, "Media/Image", "map.png")
         self.background_image = QPixmap(image_path) # On charge notre image de fond
         self.background_position_x = 0 # On initialise sa position
         self.background_position_y = 0 
@@ -107,15 +117,15 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
         self.setGeometry(800, 0, self.ecran_largeur, self.ecran_hauteur)  # On place notre fenêtre principale
 
         # Pour retourner sur l'acceuil
-        self.retour_img = QPixmap("Image/retour.png")
+        self.retour_img = QPixmap("Media/Image/retour.png")
 
         # Mise en place de l'affichage du dresseur
         self.image_dresseur = {
-            "up": [QPixmap("Dresseur/Sacha_haut2.png"), QPixmap("Dresseur/Sacha_haut3.png")],
-            "down": [QPixmap("Dresseur/Sacha_bas2.png"), QPixmap("Dresseur/Sacha_bas3.png")],
-            "left": [QPixmap("Dresseur/Sacha_gauche2.png"), QPixmap("Dresseur/Sacha_gauche1.png")],
-            "right": [QPixmap("Dresseur/Sacha_droite2.png"), QPixmap("Dresseur/Sacha_droite1.png")],
-            "static": [QPixmap("Dresseur/Sacha_bas1.png")]
+            "up": [QPixmap("Media/Dresseur/Sacha_haut2.png"), QPixmap("Media/Dresseur/Sacha_haut3.png")],
+            "down": [QPixmap("Media/Dresseur/Sacha_bas2.png"), QPixmap("Media/Dresseur/Sacha_bas3.png")],
+            "left": [QPixmap("Media/Dresseur/Sacha_gauche2.png"), QPixmap("Media/Dresseur/Sacha_gauche1.png")],
+            "right": [QPixmap("Media/Dresseur/Sacha_droite2.png"), QPixmap("Media/Dresseur/Sacha_droite1.png")],
+            "static": [QPixmap("Media/Dresseur/Sacha_bas1.png")]
         }
 
         self.img_fin = ["data/Fin de jeu/1.png", "data/Fin de jeu/2.png", "data/Fin de jeu/3.png", "data/Fin de jeu/4.png",
@@ -149,7 +159,7 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
     def mousePressEvent(self, event):
         # Si le clic de souris a eu lieu dans une certaine zone de la fenêtre on arrive sur la map
         if event.x() >= 0 and event.x() <= 205 and event.y() >= 0 and event.y() <= 50: 
-            video_path = os.path.join(script_dir, "Image", "video.mp4")
+            video_path = os.path.join(script_dir, "Media/Image", "video.mp4")
             self.retour_acceuil = AccueilWindow(video_path)
             self.retour_acceuil.show()
             self.close()
@@ -225,10 +235,6 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
 
         painter.drawPixmap(5, -75, self.retour_img)
 
-        if 1870 <= -self.background_position_x <= 2090 and 1760 <= -self.background_position_y <= 1980:
-            maison_img = QPixmap("Image/maison.png")
-            painter.drawPixmap(self.background_position_x + 2310, self.background_position_y + 2200, maison_img)
-
         if self.current_direction:
             pixmap = self.image_dresseur[self.current_direction][self.current_image_index]
         else:
@@ -261,7 +267,7 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
 if __name__ == "__main__":
     app = QApplication(sys.argv) 
 
-    video_path = os.path.join(script_dir, "Image", "video.mp4")
+    video_path = os.path.join(script_dir, "Media/Image", "video.mp4")
     accueil = AccueilWindow(video_path)
     accueil.show()
 

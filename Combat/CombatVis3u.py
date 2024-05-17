@@ -10,13 +10,11 @@
 
 import sys
 import os
-import playsound
 import pygame
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QPushButton, QMainWindow, QApplication, QLabel, QVBoxLayout
-from PyQt5.QtCore import Qt, QTimer, QUrl, pyqtSignal, QPropertyAnimation, QEasingCurve
-from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent, QSoundEffect
-from PyQt5.QtGui import QColor, QFont, QPainter, QPixmap, QImage
+from PyQt5.QtWidgets import QMainWindow, QApplication, QLabel
+from PyQt5.QtCore import Qt, QTimer
+from PyQt5.QtGui import QFont, QPixmap
 from PyQt5 import *
 
 current_dir = os.path.dirname(__file__)
@@ -24,8 +22,6 @@ parent_dir = os.path.abspath(os.path.join(current_dir, ".."))
 sys.path.append(parent_dir)
 
 import Poke as poke
-import test_graph as t #MODIFIER QUAND FICHIER DEFINITIF
-import fight as f
 import ChoixPokemon.ChoixPokemonVisu3u as ch
 import VictoireVis3u as v
 import DefaiteVis3u as d
@@ -51,7 +47,7 @@ class Combat_ui(object):
 
     def __init__(self):
         pygame.mixer.init()  # Initialisation de pygame.mixer
-        self.sound = pygame.mixer.Sound("Combat/battle.mp3")  # Charger le son
+        self.sound = pygame.mixer.Sound("Media/Image/battle.mp3")  # Charger le son
 
 
     def setupUi(self, MainWindow):
@@ -77,21 +73,21 @@ class Combat_ui(object):
         self.Fond = QtWidgets.QLabel(self.centralwidget)
         self.Fond.setGeometry(QtCore.QRect(0, 0, 1000, 750))
         self.Fond.setText("")
-        self.Fond.setPixmap(QtGui.QPixmap("Combat/BackgroundCombat.png"))
+        self.Fond.setPixmap(QtGui.QPixmap("Media/Image/BackgroundCombat.png"))
         self.Fond.setScaledContents(True)
         self.Fond.setObjectName("Fond")
 
         # Ajout du type du pokemon adverse
         self.TypeEnemy = QtWidgets.QLabel(self.centralwidget)
         self.TypeEnemy.setGeometry(QtCore.QRect(409, 98, 60, 60))
-        self.TypeEnemy.setPixmap(QtGui.QPixmap("data/" + self.adversaire.type.__class__.__name__ + ".png")) #
+        self.TypeEnemy.setPixmap(QtGui.QPixmap("Media/Types/" + self.adversaire.type.__class__.__name__ + ".png")) #
         self.TypeEnemy.setScaledContents(True)
         self.TypeEnemy.setObjectName("TypeEnemy")
 
         # Ajout du type de mon pokemon
         self.TypeAllie = QtWidgets.QLabel(self.centralwidget)
         self.TypeAllie.setGeometry(QtCore.QRect(605, 448, 60, 60))
-        self.TypeAllie.setPixmap(QtGui.QPixmap("data/" + self.pokemon_utilise.type.__class__.__name__ + ".png")) #
+        self.TypeAllie.setPixmap(QtGui.QPixmap("Media/Types/" + self.pokemon_utilise.type.__class__.__name__ + ".png")) #
         self.TypeAllie.setScaledContents(True)
         self.TypeAllie.setObjectName("TypeAllie")
 
@@ -203,7 +199,7 @@ class Combat_ui(object):
         self.points_attaque = QtWidgets.QLabel(self.centralwidget)
         self.points_attaque.setGeometry(QtCore.QRect(0, 0, 1000, 750))
         self.points_attaque.setText("")
-        self.points_attaque.setPixmap(QtGui.QPixmap("Combat/combat.png"))
+        self.points_attaque.setPixmap(QtGui.QPixmap("Media/Image/combat.png"))
         self.points_attaque.setScaledContents(True)
         self.points_attaque.setObjectName("Points d'attaque")
 
@@ -298,7 +294,7 @@ class Combat_ui(object):
             degats = self.pokemon_utilise.attaquer(self.adversaire)
             self.progressBarEnemy.setValue(self.adversaire.hp)
             self.affiche_progress_bar(self.progressBarEnemy, self.label_hp_adversaire, self.adversaire.hp)
-            self.affichage_attaque("Image/test.png", self.pokemon_utilise, self.adversaire, degats, False)
+            self.affichage_attaque("Media/Image/map.png", self.pokemon_utilise, self.adversaire, degats, False)
             
 
             # On désactive le bouton d'attaque pour empêcher les attaques multiples dans le même tour
@@ -328,7 +324,7 @@ class Combat_ui(object):
             degats = self.pokemon_utilise.attaque_speciale_joueur(self.adversaire)
             self.progressBarEnemy.setValue(self.adversaire.hp)
             self.affiche_progress_bar(self.progressBarEnemy, self.label_hp_adversaire, self.adversaire.hp)
-            self.affichage_attaque("Image/test.png", self.pokemon_utilise, self.adversaire, degats, True)
+            self.affichage_attaque("Media/Image/map.png", self.pokemon_utilise, self.adversaire, degats, True)
             
 
             # On désactive le bouton d'attaque spéciale pour empêcher les attaques multiples dans le même tour
@@ -355,7 +351,7 @@ class Combat_ui(object):
             degats = self.adversaire.attaque_speciale_joueur(self.pokemon_utilise)
             self.progressBarAllie.setValue(self.pokemon_utilise.hp)
             self.affiche_progress_bar(self.progressBarAllie, self.label_hp_allie, self.pokemon_utilise.hp)
-            self.affichage_attaque("Image/test.png", self.adversaire, self.pokemon_utilise, degats, True)
+            self.affichage_attaque("Media/Image/map.png", self.adversaire, self.pokemon_utilise, degats, True)
 
             # Mettez à jour l'état de disponibilité de l'attaque spéciale de l'ordinateur
             self.tours_depuis_attaque_ordi = 0  # Réinitialisez le compteur de tours depuis l'attaque spéciale
@@ -366,7 +362,7 @@ class Combat_ui(object):
             degats = self.adversaire.attaquer(self.pokemon_utilise)
             self.progressBarAllie.setValue(self.pokemon_utilise.hp)
             self.affiche_progress_bar(self.progressBarAllie, self.label_hp_allie, self.pokemon_utilise.hp)
-            self.affichage_attaque("Image/test.png", self.adversaire, self.pokemon_utilise, degats, False)
+            self.affichage_attaque("Media/Image/map.png", self.adversaire, self.pokemon_utilise, degats, False)
 
 
             # On incrémente le compteur de tours depuis la dernière attaque spéciale de l'adversaire

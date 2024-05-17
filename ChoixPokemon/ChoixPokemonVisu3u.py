@@ -1,10 +1,9 @@
 
 import sys
 import os
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QApplication, QPushButton, QHBoxLayout, QWidget, QLabel, QMainWindow, QVBoxLayout, QScrollArea, QGridLayout, QStackedWidget
-from PyQt5.QtGui import QPixmap, QIcon
-from PyQt5.QtCore import Qt, QSize, QPoint, pyqtSignal
+from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QApplication, QPushButton, QWidget, QLabel, QMainWindow, QVBoxLayout, QScrollArea, QGridLayout
+from PyQt5.QtGui import QPixmap
 
 import TeamRocket as t
 
@@ -15,8 +14,6 @@ sys.path.append(parent_dir)
 import Poke as poke
 import Combat.CombatVis3u as c
 
-
-  ###OKKKKKK
 
 
 class ChoixPokemon_ui(object):
@@ -33,7 +30,7 @@ class ChoixPokemon_ui(object):
         # Affichage du fond
         self.label = QLabel(self)
         self.label.setGeometry(0, 0, 1000, 750)  # Position et taille de l'image
-        self.pixmap = QPixmap("Image/pokedex.png")
+        self.pixmap = QPixmap("Media/Image/pokedex.png")
         self.label.setPixmap(self.pixmap)
         self.label.setScaledContents(True)
 
@@ -144,12 +141,6 @@ class ChoixPokemon_ui(object):
         # Ajouter la QScrollArea au layout principal
         self.menu_layout.addWidget(self.scroll_area)
 
-    # def obtenir_coordonnees_boutons(self):
-    #     for nom_bouton, bouton in self.boutons.items():
-    #         pos_globale = bouton.mapToGlobal(bouton.pos())
-    #         x = pos_globale.x()
-    #         y = pos_globale.y()
-    #         print(f"Coordonnées du bouton {nom_bouton} : x = {x}, y = {y}")
 
 
 

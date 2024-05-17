@@ -2,17 +2,15 @@
 import sys
 import os
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QPushButton, QMainWindow, QApplication, QLabel
+from PyQt5.QtWidgets import QMainWindow, QApplication, QLabel
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QColor, QFont, QPainter, QPixmap
+from PyQt5.QtGui import QFont
 
 current_dir = os.path.dirname(__file__)
 parent_dir = os.path.abspath(os.path.join(current_dir, ".."))
 sys.path.append(parent_dir)
 
 import Poke as poke
-import test_graph as t #MODIFIER QUAND FICHIER DEFINITIF
-import Combat.CombatVis3u as c
 import ChoixPokemon.ChoixPokemonVisu3u as ch
 
 
@@ -46,7 +44,7 @@ class RencontreRocket_ui(object):
         self.Fond = QtWidgets.QLabel(self.centralwidget)
         self.Fond.setGeometry(QtCore.QRect(0, 0, 1000, 750))
         self.Fond.setText("")
-        self.Fond.setPixmap(QtGui.QPixmap("Image/rencontre.png"))
+        self.Fond.setPixmap(QtGui.QPixmap("Media/Image/rencontre.png"))
         self.Fond.setScaledContents(True)
         self.Fond.setObjectName("Fond")
 

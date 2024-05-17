@@ -1,13 +1,9 @@
-## Partie qui créée les pokémons, le pokedex et permet de créer l'inventaire du joueur
-
 
 ####### Bibliothèques #######
 from math import *
-import numpy as np
 import pandas as pd
 import os
 from abc import *
-
 
 ####### Code #######
 

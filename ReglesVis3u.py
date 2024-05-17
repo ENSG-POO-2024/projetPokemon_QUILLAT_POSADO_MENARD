@@ -2,14 +2,9 @@
 import sys
 import os
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QPushButton, QMainWindow, QApplication
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QMainWindow, QApplication
 
 import test_graph as t
-import Starter.StarterVis3u as s
-import Poke as poke
-import Accueil.AccueilVis3u as ac
 
 script_dir = os.path.dirname(__file__)
 
@@ -46,7 +41,7 @@ class Regles_ui(object):
         self.PartirButton.clicked.connect(self.open_acceuil)
 
     def open_acceuil(self):
-        video_path = os.path.join(script_dir, "Image", "video.mp4")
+        video_path = os.path.join(script_dir, "Media/Image", "video.mp4")
         self.close()
         self.acceuil_window = t.AccueilWindow(video_path)
         self.acceuil_window.show()

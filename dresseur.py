@@ -1,6 +1,5 @@
-#from mael import Pokemon
+
 import numpy as np
-import Poke as poke
 
 
 class Dresseur:

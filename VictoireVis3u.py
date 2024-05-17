@@ -9,12 +9,9 @@
 
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QPushButton, QMainWindow, QApplication
+from PyQt5.QtWidgets import QMainWindow, QApplication
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtCore import Qt
 
-import test_graph as t
-import Starter.StarterVis3u as s
 import Poke as poke
 
 class Victoire_ui(object):
@@ -33,7 +30,7 @@ class Victoire_ui(object):
         self.Back = QtWidgets.QLabel(self.centralwidget)
         self.Back.setGeometry(QtCore.QRect(0, 0, 1000, 750))
         self.Back.setText("")
-        self.Back.setPixmap(QtGui.QPixmap("Combat/Outils/Victoire.png"))
+        self.Back.setPixmap(QtGui.QPixmap("Media/Image/Victoire.png"))
         self.Back.setScaledContents(True)
         self.Back.setObjectName("Back")
         
@@ -42,7 +39,7 @@ class Victoire_ui(object):
         self.Pokeball = QtWidgets.QLabel(self.centralwidget)
         self.Pokeball.setGeometry(QtCore.QRect(388, 271, 224, 293))
         self.Pokeball.setText("")
-        self.Pokeball.setPixmap(QtGui.QPixmap("Combat/Outils/PokeballOpen.png"))
+        self.Pokeball.setPixmap(QtGui.QPixmap("Media/Image/PokeballOpen.png"))
         self.Pokeball.setScaledContents(False)
         self.Pokeball.setObjectName("Pokeball")
 
@@ -77,11 +74,11 @@ class Victoire_ui(object):
     
     
     def enter_image(self, event):
-        self.Pokeball.setPixmap(QPixmap("Combat/Outils/PokeballClosed.png"))
+        self.Pokeball.setPixmap(QPixmap("Media/Image/PokeballClosed.png"))
         self.capture.setPixmap(QPixmap(""))
 
     def leave_image(self, event):
-        self.Pokeball.setPixmap(QPixmap("Combat/Outils/PokeballOpen.png"))
+        self.Pokeball.setPixmap(QPixmap("Media/Image/PokeballOpen.png"))
         self.capture.setPixmap(QPixmap("Pokemons/"+self.base_name+"/"+self.base_name+"_face.png"))
 
     def click_image(self, event):
