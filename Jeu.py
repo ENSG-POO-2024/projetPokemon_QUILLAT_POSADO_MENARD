@@ -88,7 +88,11 @@ class AccueilWindow(QWidget): # On arrive sur la page d'acceuil et on peut cliqu
             self.close()
 
 
-
+class background():
+    def __init__(self, image_path, x, y):
+        self.x = x
+        self.y = y
+        self.image = QPixmap(image_path)
     
 
 
@@ -109,9 +113,9 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
 
         # Mise en place de l'affichage de la map
         image_path = os.path.join(script_dir, "Media/Image", "map.png")
-        self.background_image = QPixmap(image_path) # On charge notre image de fond
-        self.background_position_x = 0 # On initialise sa position
-        self.background_position_y = 0 
+        self.background = background(image_path, 0, 0) # On charge notre image de fond
+        #self.background.x = 0 # On initialise sa position
+        #self.background.y = 0 
         self.setWindowTitle("Votre pokémon starter est " + starter.name)
         self.setGeometry(800, 0, self.ecran_largeur, self.ecran_hauteur)  # On place notre fenêtre principale
 
@@ -174,31 +178,31 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
 
         if np.abs(self.dresseur.x) ==  self.ecran_largeur//2 and np.abs(self.dresseur.y) == self.ecran_hauteur//2:
 
-            if event.key() == Qt.Key_Right and -self.background_position_x <= bord_droit and np.abs(self.dresseur.x):
-                self.background_position_x -= self.dresseur.speed
+            if event.key() == Qt.Key_Right and -self.background.x <= bord_droit and np.abs(self.dresseur.x):
+                self.background.x -= self.dresseur.speed
                 for nom_pokemon, pokemon in self.pokedex_sauvages.pokedex.items():
                     pokemon.x -= self.dresseur.speed
                     self.current_direction = "right"
 
-            elif event.key() == Qt.Key_Left and -self.background_position_x > bord_gauche :
-                self.background_position_x += self.dresseur.speed
+            elif event.key() == Qt.Key_Left and -self.background.x > bord_gauche :
+                self.background.x += self.dresseur.speed
                 for nom_pokemon, pokemon in self.pokedex_sauvages.pokedex.items():
                     pokemon.x += self.dresseur.speed
                     self.current_direction = "left"
 
-            elif event.key() == Qt.Key_Down and -self.background_position_y <= bord_bas and np.abs(self.dresseur.y):
-                self.background_position_y -= self.dresseur.speed
+            elif event.key() == Qt.Key_Down and -self.background.y <= bord_bas and np.abs(self.dresseur.y):
+                self.background.y -= self.dresseur.speed
                 for nom_pokemon, pokemon in self.pokedex_sauvages.pokedex.items():
                     pokemon.y -= self.dresseur.speed
                     self.current_direction = "down"
 
-            elif event.key() == Qt.Key_Up and -self.background_position_y > bord_haut and np.abs(self.dresseur.y):
-                self.background_position_y += self.dresseur.speed
+            elif event.key() == Qt.Key_Up and -self.background.y > bord_haut and np.abs(self.dresseur.y):
+                self.background.y += self.dresseur.speed
                 for nom_pokemon, pokemon in self.pokedex_sauvages.pokedex.items():
                     pokemon.y += self.dresseur.speed
                     self.current_direction = "up"
 
-        if event.key() == Qt.Key_Left and 1760 <= -self.background_position_y <= 1870 and -self.background_position_x <= bord_gauche :
+        if event.key() == Qt.Key_Left and 1760 <= -self.background.y <= 1870 and -self.background.x <= bord_gauche :
                 self.dresseur.x -= self.dresseur.speed
                 self.dresseur.X -= self.dresseur.speed
                 self.current_direction = "left"
@@ -211,7 +215,7 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
             self.pokemon_window = sau.SauvageWindow(self.pokemon_sauvage, self.inventaire_joueur, self.pokedex_sauvages)
             self.pokemon_window.show()
 
-        if  1760 <= -self.background_position_y <= 1980 and -self.background_position_x == 4070:
+        if  1760 <= -self.background.y <= 1980 and -self.background.x == 4070:
             self.rocket_window = r.RencontreRocketWindow()
             self.rocket_window.show()
 
@@ -222,7 +226,7 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
 
     def paintEvent(self, event): # Fonction pour afficher les images 
         painter = QPainter(self)
-        painter.drawPixmap(self.background_position_x, self.background_position_y, self.background_image) # Affichage de la map
+        painter.drawPixmap(self.background.x, self.background.y, self.background.image) # Affichage de la map
         for cle_pokemons, poke_sauvage in self.pokedex_sauvages.pokedex.items(): # On affiche tous les pokémons sauvages
             if self.dresseur.proche_affichage(poke_sauvage):
                 base_name = poke_sauvage.name.split()[0] # Pour gérer le cas avec plusieurs fois le même pokémon
