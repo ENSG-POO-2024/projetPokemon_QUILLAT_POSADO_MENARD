@@ -19,22 +19,6 @@ import Victoire as v
 import Defaite as d
 
 
-def bas_image(image):
-    img = image.toImage()
-    hauteur = img.height()
-    largeur = img.width()
-
-    for h in range(hauteur-1, -1, -1):
-        for l in range(largeur):
-            color = img.pixelColor(l, h)
-
-            if color.alpha() != 0:
-                return h
-            
-    return 0
-
-
-
 class Rocket_ui(object):
 
     def __init__(self):
@@ -247,7 +231,6 @@ class Rocket_ui(object):
 
         else:
             # Ajout du son dès que la fenêtre s'ouvre
-            #playsound.playsound("Combat/battle.mp3", block=False)
             self.play_audio()
 
         if len(self.inventaire_joueur.pokedex) <= 1:

@@ -18,7 +18,6 @@ class RencontreRocket_ui(object):
 
     def setupUi(self, MainWindow):
 
-        #self.pokemon_utilise = list(self.inventaire_joueur.pokedex.values())[0]
         self.adversaire = poke.Pokemon("Mewtwo",0,0,106,110,90,154,90,poke.Psy())
 
         self.pokedex = poke.Pokedex()
@@ -47,8 +46,6 @@ class RencontreRocket_ui(object):
         self.Fond.setPixmap(QtGui.QPixmap("Media/Image/rocket.png"))
         self.Fond.setScaledContents(True)
         self.Fond.setObjectName("Fond")
-
-       
 
         # Affichage du pokemon rencontré
         self.label_poke = QtWidgets.QLabel(self.centralwidget)
@@ -110,7 +107,6 @@ class RencontreRocket(QMainWindow, RencontreRocket_ui):
         self.inventaire_joueur.ajout_inventaire(poke.Pokemon("Mew",0,0,100,100,100,100,100,poke.Psy()))
         self.inventaire_joueur.ajout_inventaire(poke.Pokemon("Dracaufeu",15,12,78,84,78,109,85,poke.Feu()))
         self.inventaire_joueur.ajout_inventaire(poke.Pokemon("Ectoplasma",0,0,60,65,60,130,75, poke.Tenebres()))
-
 
         self.pokedex_sauvages = poke.Pokedex()
         self.pokedex_sauvages.charger_pokedex("pokemon_first_gen.csv")

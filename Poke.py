@@ -68,7 +68,6 @@ class Pokemon:
         return degats
         
 
-        
 
 class Type(Pokemon):
     def __init__(self, name, fort=[], faible=[], neutre=[]):
@@ -167,8 +166,6 @@ class Vol(Type):
         super().__init__("Vol", fort=["Combat", "Insecte", "Plante"], faible=["Acier", "Electrik", "Roche"], neutre=[])
 
 
-
-
 class Pokedex:
     def __init__(self):
         self.pokedex = {}
@@ -249,24 +246,6 @@ class InventaireJoueur(Pokedex):
         adversaire.y = None
         self.ajout_inventaire(adversaire)
 
-
-
-    def creer_equipe(self):
-        equipe = InventaireJoueur()
-        pokemons_disponibles = list(self.pokedex.keys()) # Liste des noms de tous les pokémons disponibles
-        for _ in range(3):  # Sélectionner 3 pokémons pour former l'équipe
-            if not pokemons_disponibles:  # Si l'inventaire est vide
-                break
-            pokemon_choisi = input("Choisissez un Pokémon pour rejoindre votre équipe : ")
-            while pokemon_choisi not in pokemons_disponibles:
-                print("Ce Pokémon n'est pas dans votre inventaire. Veuillez choisir un autre Pokémon.")
-                pokemon_choisi = input("Choisissez un Pokémon pour rejoindre votre équipe : ")
-            equipe.ajout_inventaire(self.pokedex[pokemon_choisi]) 
-            pokemons_disponibles.remove(pokemon_choisi)  # Retirer le pokémon choisi de la liste des pokémons disponibles
-
-        self.afficher_pokedex()
-
-        return equipe
     
     def toujours_vivant(self):
         for nom_poke, pokemon in self.pokedex.items():

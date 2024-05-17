@@ -57,10 +57,6 @@ class ChoixPokemon_ui(object):
 
 
         self.boutons = {} # Pour pouvoir créer plusieurs boutons avec chacun son noms
-        self.x = 65  # Position x initiale du premier bouton
-        self.y = 50  # Position y initiale du premier bouton
-        self.X = 0
-        self.Y = 0
         self.i = 0
         self.largeur = 300  # Largeur des boutons
         self.hauteur = 300  # Hauteur des boutons
@@ -125,26 +121,15 @@ class ChoixPokemon_ui(object):
         self.button_layout.addWidget(self.boutons[pokemon.name], self.i // self.nb_bouton, self.i % self.nb_bouton)
 
         self.boutons[pokemon.name].raise_()
-        #self.boutons[pokemon.name].setToolTip(pokemon.name)
-
-        
-
-        # Incrémentation de la position x 
-        self.x += self.largeur + 10
+    
+        # Incrémentation de i
         self.i += 1
-
-        # Si la position x dépasse la largeur de la fenêtre, réinitialisation de x et incrémentation de y
-        if self.x >= self.width()-65:
-            self.x = 65
-            self.y += self.hauteur + 20
 
         # Définir le widget contenu de la QScrollArea
         self.scroll_area.setWidget(self.button_widget)
 
         # Ajouter la QScrollArea au layout principal
         self.menu_layout.addWidget(self.scroll_area)
-
-
 
 
 
@@ -158,7 +143,6 @@ class ChoixPokemon(QMainWindow, ChoixPokemon_ui):
         self.rocket = rocket
         super(ChoixPokemon, self).__init__(parent)
         self.setupUi(self)
-
 
 
 

@@ -11,13 +11,11 @@ script_dir = os.path.dirname(__file__)
 class Regles_ui(object):
     def setupUi(self, MainWindow):
 
-
         # On crée la fenêtre Victoire
         MainWindow.setWindowTitle("Règles du jeu")
         MainWindow.resize(1000, 750)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-
 
         # Création du fond
         self.Back = QtWidgets.QLabel(self.centralwidget)
@@ -27,7 +25,6 @@ class Regles_ui(object):
         self.Back.setScaledContents(True)
         self.Back.setObjectName("Back")
         
-
         # Création du bouton pour partir 
         self.PartirButton = QtWidgets.QPushButton(self.centralwidget)
         self.PartirButton.setGeometry(QtCore.QRect(0, 0, 145, 35))

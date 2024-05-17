@@ -110,8 +110,6 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
         # Mise en place de l'affichage de la map
         image_path = os.path.join(script_dir, "Media/Image", "map.png")
         self.background = background(image_path, 0, 0) # On charge notre image de fond
-        #self.background.x = 0 # On initialise sa position
-        #self.background.y = 0 
         self.setWindowTitle("Votre pokémon starter est " + starter.name)
         self.setGeometry(800, 0, self.ecran_largeur, self.ecran_hauteur)  # On place notre fenêtre principale
 
@@ -206,7 +204,6 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
 
 
         if self.dresseur.proche(self.pokedex_sauvages)[0]:
-            #self.inventaire_joueur.afficher_pokedex()
             self.pokemon_sauvage = self.dresseur.proche(self.pokedex_sauvages)[1]
             self.pokemon_window = sau.Sauvage(self.pokemon_sauvage, self.inventaire_joueur, self.pokedex_sauvages)
             self.pokemon_window.show()

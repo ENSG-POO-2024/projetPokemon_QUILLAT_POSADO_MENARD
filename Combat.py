@@ -500,9 +500,6 @@ class Combat_ui(object):
 
   
 
-
-
-
 class Fight(QMainWindow, Combat_ui):
     def __init__(self, pokemon_sauvage, pokemon_utilise, pokedex_sauvages, inventaire_joueur, first_combat, parent=None):
         self.pokemon_sauvage = pokemon_sauvage # Le pokémon rencontré
