@@ -213,16 +213,6 @@ class Pokedex:
             texte += "Sp. Attaque: " + str(pokemon.sp_attack) + "\n"
             texte += "Sp. Défense: " + str(pokemon.sp_defense) + "\n"
             texte += "Type: " + pokemon.type.name + "\n" + "\n"
-            # print(f"Nom: {pokemon.name}")
-            # print(f"X: {pokemon.x}")
-            # print(f"Y: {pokemon.y}")
-            # print(f"HP: {pokemon.hp}")
-            # print(f"Attaque: {pokemon.attack}")
-            # print(f"Défense: {pokemon.defense}")
-            # print(f"Sp. Attaque: {pokemon.sp_attack}")
-            # print(f"Sp. Défense: {pokemon.sp_defense}")
-            # print(f"Type: {pokemon.type.name}")
-            # print()  # Ajouter une ligne vide entre chaque Pokémon
         return texte
 
 class InventaireJoueur(Pokedex):
