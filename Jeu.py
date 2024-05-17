@@ -241,6 +241,9 @@ class Map(QWidget): # Si on a cliqué sur Jouer on arrive sur la map
 
         painter.drawPixmap(self.dresseur.x+10, self.dresseur.y, pixmap.scaled(90,90))
 
+        if self.fin:
+            QTimer.singleShot(2000, self.close)
+
 
 
     def update(self):

@@ -53,7 +53,7 @@ class RencontreRocket_ui(object):
         # Affichage du pokemon rencontré
         self.label_poke = QtWidgets.QLabel(self.centralwidget)
         self.label_poke.setAlignment(Qt.AlignCenter)
-        self.label_poke.setGeometry(QtCore.QRect(0, 200, 1000, 270))
+        self.label_poke.setGeometry(QtCore.QRect(45, 200, 1000, 270))
         self.label_poke.setText("")
         self.gif_poke = QtGui.QMovie("Pokemons/"+self.adversaire.name.split()[0]+"/"+self.adversaire.name.split()[0]+"_face.gif")
         self.gif_poke.setScaledSize(QtCore.QSize(250, 250))

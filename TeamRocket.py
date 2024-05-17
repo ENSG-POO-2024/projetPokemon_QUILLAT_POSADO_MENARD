@@ -126,12 +126,12 @@ class Rocket_ui(object):
 
         # Affichage pokémon adverse
         self.image_adv = QtWidgets.QLabel(self.centralwidget)
-        self.image_adv.setGeometry(QtCore.QRect(550, 40, 400, 400))
+        self.image_adv.setGeometry(QtCore.QRect(520, 38, 400, 400))
         self.image_adv.setText("")
         self.image_adv.setPixmap(QtGui.QPixmap("Pokemons/"+self.adversaire.name.split()[0]+"/"+self.adversaire.name.split()[0]+"_face.png"))
         self.img_adv_largeur = QtGui.QPixmap("Pokemons/"+self.adversaire.name.split()[0]+"/"+self.adversaire.name.split()[0]+"_dos.png").width()
         self.bas_img_adv = bas_image(QtGui.QPixmap("Pokemons/"+self.adversaire.name.split()[0]+"/"+self.adversaire.name.split()[0]+"_face.png"))
-        self.image_adv.move(550, 88-self.bas_img_adv)
+        self.image_adv.move(520, 63-self.bas_img_adv)
         self.image_adv.setScaledContents(True)
         self.image_adv.setObjectName("Pokemon adverse")
 
