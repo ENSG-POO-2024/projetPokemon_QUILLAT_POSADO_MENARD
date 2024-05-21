@@ -39,7 +39,7 @@ Pour lancer le jeu, vous devez lancer Jeu.py
 
 * Un fichier StarterVis3u.py qui sert à choisir son pokémon de départ, ce fichier sera appelé au moment voulu
 
-* Des images nécessaires à l'affichage du fichier StarterVis3u.py
+* Des images nécessaires à l'affichage du fichier Starter.py
 
 
 ### D'autres fichiers python sont présents:
@@ -48,6 +48,14 @@ Pour lancer le jeu, vous devez lancer Jeu.py
 
 * Chaque fichier possède un main qui permet de comprendre ce qu'affiche ou produit ce fichier mais ne permet pas de jouer correctement au jeu
 
+
+### Map et Combat
+
+* Les Pokémons apparaissent de manière aléatoire sur la Map et possèdent un taux de rareté ce qui fait qu’un Rattata peut apparaître plusieurs fois alors qu’un Artikodin a peu de chance d’apparaître. Les pokémons présents sur la map sont contenus dans le fichier pokemons_a_capturer.csv qui se ré écrit à chaque fois qu'une partie est lancée pour que les Pokémons ne soient pas toujours les mêmes
+
+* Pour les combats vous avez plusieurs possibilités: utiliser l’attaque normale du Pokémon, utiliser son attaque spéciale ou changer de Pokémon. L’attaque normale du Pokémon repose sur ses statistiques d’attaque normale et les dégâts sont calculés de la manière suivante: partie entière de ((500 * attaque normale * coef de type / défense normale) diviser par 50) le tout + 2 (formule disponible dans la fonction attaquer du fichier Poke.py). Avec attaque normale la statistique d'attaque normale de l’attaquant et défense normale la statistique de défense normale du défenseur. Coef de type correspond au multiplicateur de type, en effet les Pokémons possèdent des types et certains sont forts contre d’autres et faibles contre certains. Le détail des coefficients est donné dans le rapport d'analyse. Pour l’attaque spéciale elle utilise la même formule mais avec les statistiques spéciales des Pokémons, cette attaque spéciale n’est disponible que tous les 2 tours et n’est pas forcément plus efficace car certains Pokémons ont des statistiques d'attaque spéciales plus faibles que l’attaque normale. Au dresseur de bien choisir et de bien connaître ses Pokémons. Pour changer de Pokémon il faut en posséder au moins 2 et le fait de changer vous utilisera un tour. Notre mode de combat fonctionne au tour par tour, on commence par attaquer ou changer de Pokémon ensuite le Pokémon sauvage contre-attaque. Le combat se finit quand le Pokémon adverse n’a plus de HP (point de vie) ou que tous vos Pokémons n’ont plus de HP. Une fois le combat fini vous pouvez choisir entre capturer le Pokémon ou partir sans le capturer.
+
+
 ### Pour jouer pleinement au jeu:
 
 * Il est nécessaire d'installer PyQt5, vous pouvez écrire "pip install PyQt5" dans votre terminal si vous possédez pip
@@ -55,7 +63,7 @@ Pour lancer le jeu, vous devez lancer Jeu.py
 * Il est nécessaire d'installer pygame, vous pouvez écrire "pip install pygame" dans votre terminal si vous possédez pip
 (pygame n'est utilisé que pour emettre un son au moment du combat)
 
-* Il est nécessaire d'installer cv2, vous pouvez écrire "pip install cv2" dans votre terminal si vous possédez pip
+* Il est nécessaire d'installer cv2, vous pouvez écrire "pip install cv2" dans votre terminal si vous possédez pip (cela ne sert qu'à afficher la vidéo de présentation)
 
 * Pour une meilleure expérience visuelle vous pouvez télécharger les polices d'écriture "Minecraft" et "Hello World":
     - https://www.dafont.com/fr/minecraft.font
