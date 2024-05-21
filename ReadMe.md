@@ -37,7 +37,7 @@ Pour lancer le jeu, vous devez lancer Jeu.py
 
 ### Dans le répertoire "Starter", vous avez:
 
-* Un fichier StarterVis3u.py qui sert à choisir son pokémon de départ, ce fichier sera appelé au moment voulu
+* Un fichier Starter.py qui sert à choisir son pokémon de départ, ce fichier sera appelé au moment voulu
 
 * Des images nécessaires à l'affichage du fichier Starter.py
 
